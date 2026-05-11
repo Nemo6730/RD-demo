@@ -1,7 +1,14 @@
 import Link from "next/link";
-import { foundationDetail } from "@/data/mockHeartBoard";
+import type { HeartBoardCategory } from "@/data/mockHeartBoard";
+import { getPostsByIds } from "@/data/mockPosts";
 
-export function HeartBoardDetail() {
+type HeartBoardDetailProps = {
+  category: HeartBoardCategory;
+};
+
+export function HeartBoardDetail({ category }: HeartBoardDetailProps) {
+  const sourcePosts = getPostsByIds(category.sourcePostIds);
+
   return (
     <main className="min-h-screen bg-[#f8f5f3] pb-8">
       <header className="sticky top-0 z-20 flex items-center justify-between bg-[#f8f5f3]/95 px-4 py-3 backdrop-blur">
@@ -18,35 +25,35 @@ export function HeartBoardDetail() {
         <div className="overflow-hidden rounded-3xl border border-[#f2ddd3] bg-[#fffaf7] shadow-[0_10px_26px_rgba(0,0,0,0.08)]">
           <div
             className="h-60 w-full bg-cover bg-center"
-            style={{ backgroundImage: `url(${foundationDetail.heroImage})` }}
+            style={{ backgroundImage: `url(${category.coverImage})` }}
           />
           <div className="space-y-3 p-4">
-            <h1 className="text-4xl font-black text-zinc-900">{foundationDetail.title}</h1>
-            <p className="text-sm text-zinc-500">本周心动 {foundationDetail.weekCount} 篇</p>
+            <h1 className="text-4xl font-black text-zinc-900">{category.title}</h1>
+            <p className="text-sm text-zinc-500">本周心动 {category.postCount} 篇</p>
             <div className="rounded-2xl border border-[#f0d8cc] bg-white p-3">
-              <p className="text-sm text-zinc-700">{foundationDetail.insight}</p>
+              <p className="text-sm text-zinc-700">{category.insight}</p>
             </div>
           </div>
         </div>
       </section>
 
       <section className="space-y-3 px-4 pt-4">
-        <h2 className="text-lg font-semibold text-zinc-900">高频产品</h2>
-        {foundationDetail.products.map((product) => (
+        <h2 className="text-lg font-semibold text-zinc-900">心动要点</h2>
+        {category.items.map((item) => (
           <article
-            key={product.id}
+            key={item.id}
             className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm"
           >
             <div className="flex gap-3 p-3">
               <div
                 className="h-24 w-24 shrink-0 rounded-xl bg-cover bg-center"
-                style={{ backgroundImage: `url(${product.image})` }}
+                style={{ backgroundImage: `url(${item.image})` }}
               />
               <div className="min-w-0 flex-1 space-y-1">
-                <p className="text-base font-semibold text-zinc-900">{product.name}</p>
-                <p className="text-xs text-zinc-500">被提到 {product.mentions} 次</p>
+                <p className="text-base font-semibold text-zinc-900">{item.title}</p>
+                <p className="text-xs text-zinc-500">被提到 {item.mentionCount} 次</p>
                 <div className="flex flex-wrap gap-1">
-                  {product.keywords.map((keyword) => (
+                  {item.keywords.map((keyword) => (
                     <span key={keyword} className="rounded-full bg-zinc-100 px-2 py-1 text-xs text-zinc-700">
                       {keyword}
                     </span>
@@ -56,14 +63,19 @@ export function HeartBoardDetail() {
             </div>
             <div className="space-y-2 border-t border-zinc-100 px-3 py-3 text-sm">
               <p className="text-zinc-700">
-                <span className="font-semibold">优点摘要：</span>
-                {product.pros}
+                <span className="font-semibold">要点总结：</span>
+                {item.summary}
               </p>
-              <p className="text-zinc-700">
+              {item.reminder ? (
+                <p className="text-zinc-700">
                 <span className="font-semibold">真实提醒：</span>
-                {product.reminder}
+                {item.reminder}
               </p>
-              <Link href={product.sourceLink} className="inline-flex text-sm text-[var(--xhs-red)]">
+              ) : null}
+              <Link
+                href={`/heart-board/${category.slug}/sources/${item.id}`}
+                className="inline-flex text-sm text-[var(--xhs-red)]"
+              >
                 相关原帖
               </Link>
             </div>
@@ -74,9 +86,9 @@ export function HeartBoardDetail() {
       <section className="px-4 pt-5">
         <h2 className="text-lg font-semibold text-zinc-900">评论摘要</h2>
         <div className="mt-2 flex flex-wrap gap-2">
-          {foundationDetail.commentSummary.map((item) => (
-            <span key={item} className="rounded-full bg-white px-3 py-1 text-sm text-zinc-700 shadow-sm">
-              {item}
+          {category.commentSummary.map((summary) => (
+            <span key={summary} className="rounded-full bg-white px-3 py-1 text-sm text-zinc-700 shadow-sm">
+              {summary}
             </span>
           ))}
         </div>
@@ -85,11 +97,15 @@ export function HeartBoardDetail() {
       <section className="px-4 pt-5">
         <h2 className="text-lg font-semibold text-zinc-900">原帖来源</h2>
         <div className="mt-2 grid grid-cols-3 gap-2">
-          {foundationDetail.sourcePosts.map((post) => (
-            <Link key={post.id} href={post.href} className="overflow-hidden rounded-xl bg-white shadow-sm">
+          {sourcePosts.map((post) => (
+            <Link
+              key={post.id}
+              href={`/post/${post.id}?from=${encodeURIComponent(`/heart-board/${category.slug}`)}`}
+              className="overflow-hidden rounded-xl bg-white shadow-sm"
+            >
               <div
                 className="h-24 w-full bg-cover bg-center"
-                style={{ backgroundImage: `url(${post.cover})` }}
+                style={{ backgroundImage: `url(${post.coverImage})` }}
               />
               <div className="space-y-1 p-2">
                 <p className="line-clamp-2 text-xs text-zinc-800">{post.title}</p>

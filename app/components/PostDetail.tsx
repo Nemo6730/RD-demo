@@ -2,11 +2,16 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { postDetail } from "@/data/mockPosts";
+import type { MockPost } from "@/data/mockPosts";
 import { HeartButton } from "@/app/components/HeartButton";
 import { Toast } from "@/app/components/Toast";
 
-export function PostDetail() {
+type PostDetailProps = {
+  post: MockPost;
+  backHref: string;
+};
+
+export function PostDetail({ post, backHref }: PostDetailProps) {
   const [toastMessage, setToastMessage] = useState("");
 
   return (
@@ -15,7 +20,7 @@ export function PostDetail() {
 
       <header className="sticky top-0 z-20 border-b border-zinc-100 bg-white/95 px-4 py-3 backdrop-blur">
         <div className="flex items-center justify-between">
-          <Link href="/" className="text-2xl text-zinc-800">
+          <Link href={backHref} className="text-2xl text-zinc-800">
             ←
           </Link>
           <div className="flex items-center gap-3">
@@ -33,8 +38,8 @@ export function PostDetail() {
       </header>
 
       <article className="space-y-4 px-5 py-4">
-        <h1 className="text-[34px] font-extrabold leading-[1.15] text-zinc-900">{postDetail.title}</h1>
-        {postDetail.paragraphs.map((paragraph) => (
+        <h1 className="text-[34px] font-extrabold leading-[1.15] text-zinc-900">{post.title}</h1>
+        {post.paragraphs.map((paragraph) => (
           <p key={paragraph} className="text-base leading-8 text-zinc-800">
             {paragraph}
           </p>
@@ -59,19 +64,19 @@ export function PostDetail() {
           <div className="flex items-center gap-3 text-zinc-500">
             <button type="button" className="inline-flex items-center gap-1 text-sm">
               <span className="text-lg">♡</span>
-              <span className="text-xs">753</span>
+              <span className="text-xs">{post.likes}</span>
             </button>
             <HeartButton
-              postId="1"
+              postId={post.id}
               onHearted={() => setToastMessage("已加入本周心动板，AI 将自动帮你整理")}
             />
             <button type="button" className="inline-flex items-center gap-1 text-sm">
               <span className="text-lg">☆</span>
-              <span className="text-xs">1110</span>
+              <span className="text-xs">{post.favorites}</span>
             </button>
             <button type="button" className="inline-flex items-center gap-1 text-sm">
               <span className="text-lg">💬</span>
-              <span className="text-xs">13</span>
+              <span className="text-xs">{post.comments}</span>
             </button>
           </div>
         </div>

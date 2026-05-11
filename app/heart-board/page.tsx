@@ -12,7 +12,7 @@ export default function HeartBoardPage() {
           </Link>
           <div className="text-center">
             <h1 className="text-[24px] font-black text-zinc-900">本周心动板</h1>
-            <p className="text-xs text-zinc-500">{mockHeartBoard.period}</p>
+            <p className="text-xs text-zinc-500">{mockHeartBoard.weekRange}</p>
           </div>
           <div className="flex items-center gap-3 text-lg text-zinc-700">
             <button type="button" aria-label="更多">
@@ -26,11 +26,11 @@ export default function HeartBoardPage() {
       </header>
 
       <section className="px-5 pb-3 pt-5">
-        <p className="text-[15px] text-zinc-700">本周你点亮了 {mockHeartBoard.totalHearted} 次心动</p>
+        <p className="text-[15px] text-zinc-700">本周你点亮了 {mockHeartBoard.totalHeartCount} 次心动</p>
         <p className="mt-1 text-[15px] text-zinc-700">
-          AI 为你整理出 {mockHeartBoard.totalDirections} 个兴趣方向
+          AI 为你整理出 {mockHeartBoard.categories.length} 个兴趣方向
         </p>
-        <p className="mt-2 text-sm text-zinc-500">{mockHeartBoard.oneLineInsight}</p>
+        <p className="mt-2 text-sm text-zinc-500">{mockHeartBoard.summary}</p>
       </section>
 
       <section className="hide-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto px-4">

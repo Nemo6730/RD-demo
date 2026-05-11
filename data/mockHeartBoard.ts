@@ -1,169 +1,316 @@
-export type HeartBoardCategory = {
+export type HeartBoardItem = {
   id: string;
   title: string;
-  weekCount: number;
-  insight: string;
-  keywords: string[];
-  highlights: string[];
+  type: "product" | "restaurant" | "destination" | "tool" | "style" | "lifestyle" | "other";
   image: string;
-  detailPath: string;
+  mentionCount: number;
+  keywords: string[];
+  summary: string;
+  reminder?: string;
+  sourcePostIds: string[];
 };
 
-export type HeartBoardData = {
-  period: string;
-  totalHearted: number;
-  totalDirections: number;
-  oneLineInsight: string;
+export type HeartBoardCategory = {
+  id: string;
+  slug: string;
+  title: string;
+  type: HeartBoardItem["type"];
+  coverImage: string;
+  postCount: number;
+  insight: string;
+  keywords: string[];
+  commentSummary: string[];
+  items: HeartBoardItem[];
+  sourcePostIds: string[];
+};
+
+export type HeartBoard = {
+  id: string;
+  weekRange: string;
+  totalHeartCount: number;
+  summary: string;
   categories: HeartBoardCategory[];
 };
 
-export type FoundationProduct = {
-  id: string;
-  name: string;
-  mentions: number;
-  keywords: string[];
-  pros: string;
-  reminder: string;
-  image: string;
-  sourceLink: string;
-};
-
-export const mockHeartBoard: HeartBoardData = {
-  period: "5.6 - 5.12",
-  totalHearted: 100,
-  totalDirections: 5,
-  oneLineInsight: "你这周最心动的是底妆、餐厅、旅行和 AI 工具。",
+export const mockHeartBoard: HeartBoard = {
+  id: "hb_2026_w19",
+  weekRange: "5.6 - 5.12",
+  totalHeartCount: 100,
+  summary: "你这周最心动的是底妆、餐厅、旅行和 AI 工具。",
   categories: [
     {
-      id: "foundation",
+      id: "cat_foundation",
+      slug: "foundation",
       title: "想试的底妆",
-      weekCount: 20,
+      type: "product",
+      coverImage:
+        "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1000&q=80",
+      postCount: 20,
       insight: "你最近偏好清透、低饱和、通勤感的底妆。",
       keywords: ["清透", "不卡粉", "自然妆感"],
-      highlights: ["Dior", "Chanel", "NARS"],
-      image:
-        "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1000&q=80",
-      detailPath: "/heart-board/foundation",
+      commentSummary: ["不卡粉", "自然妆感", "干皮需要做好保湿"],
+      sourcePostIds: ["post_001", "post_004", "post_006"],
+      items: [
+        {
+          id: "dior-forever",
+          title: "Dior Forever",
+          type: "product",
+          image:
+            "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80",
+          mentionCount: 17,
+          keywords: ["持妆", "细腻", "通勤"],
+          summary: "妆面稳定、遮瑕适中，全天通勤不易暗沉。",
+          reminder: "干皮在秋冬需加强保湿，否则鼻翼略卡纹。",
+          sourcePostIds: ["post_004", "post_001"],
+        },
+        {
+          id: "chanel-les-beiges",
+          title: "Chanel Les Beiges",
+          type: "product",
+          image:
+            "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=800&q=80",
+          mentionCount: 12,
+          keywords: ["自然", "轻透", "光泽"],
+          summary: "妆感非常自然，适合原生好皮肤路线。",
+          reminder: "遮瑕偏弱，瑕疵多时建议搭配局部遮瑕。",
+          sourcePostIds: ["post_004", "post_006"],
+        },
+        {
+          id: "nars-light-reflecting",
+          title: "NARS Light Reflecting",
+          type: "product",
+          image:
+            "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=800&q=80",
+          mentionCount: 21,
+          keywords: ["清透", "贴肤", "奶油肌"],
+          summary: "上脸服帖快，镜头下肤质表现很稳。",
+          reminder: "夏季出油后建议补压散粉，避免光泽过强。",
+          sourcePostIds: ["post_004", "post_001", "post_006"],
+        },
+      ],
     },
     {
-      id: "restaurant",
+      id: "cat_restaurants",
+      slug: "restaurants",
       title: "周末想去的餐厅",
-      weekCount: 30,
-      insight: "你偏好氛围感强、适合约会和朋友聚餐的餐厅。",
-      keywords: ["约会", "意餐", "提前预约"],
-      highlights: ["Trattoria", "Brunch", "日料"],
-      image:
+      type: "restaurant",
+      coverImage:
         "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1000&q=80",
-      detailPath: "/heart-board/foundation",
+      postCount: 30,
+      insight: "你最近更偏好氛围感强、适合约会和朋友聚餐的餐厅。",
+      keywords: ["约会", "意餐", "提前预约"],
+      commentSummary: ["环境好", "适合聊天", "需要提前订位"],
+      sourcePostIds: ["post_003", "post_001", "post_005"],
+      items: [
+        {
+          id: "trattoria-los-angeles",
+          title: "Trattoria Los Angeles",
+          type: "restaurant",
+          image:
+            "https://images.unsplash.com/photo-1424847651672-bf20a4b0982b?auto=format&fit=crop&w=800&q=80",
+          mentionCount: 18,
+          keywords: ["约会", "氛围感", "意餐"],
+          summary: "适合周末和朋友聚餐，评论多次提到环境好、出片。",
+          reminder: "晚高峰排队较久，建议提前预约。",
+          sourcePostIds: ["post_003", "post_001"],
+        },
+        {
+          id: "brunch-garden",
+          title: "Brunch Garden",
+          type: "restaurant",
+          image:
+            "https://images.unsplash.com/photo-1457666134378-6b77915bd5f2?auto=format&fit=crop&w=800&q=80",
+          mentionCount: 14,
+          keywords: ["Brunch", "阳光", "周末"],
+          summary: "整体节奏松弛，适合午后慢慢聊，拍照友好。",
+          reminder: "热门时段等位时间长，建议错峰。",
+          sourcePostIds: ["post_003", "post_005"],
+        },
+        {
+          id: "sushi-bar-kumo",
+          title: "Sushi Bar Kumo",
+          type: "restaurant",
+          image:
+            "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=800&q=80",
+          mentionCount: 11,
+          keywords: ["日料", "安静", "预约"],
+          summary: "评论普遍认为食材稳定，适合小范围聚会。",
+          reminder: "周末晚餐时段非常紧俏，至少提前两天预约。",
+          sourcePostIds: ["post_003", "post_001"],
+        },
+      ],
     },
     {
-      id: "travel",
+      id: "cat_travel",
+      slug: "travel",
       title: "旅行目的地",
-      weekCount: 15,
-      insight: "更偏向短途、自然风景和拍照友好的目的地。",
-      keywords: ["短途", "海边", "拍照"],
-      highlights: ["Santa Barbara", "Malibu", "San Diego"],
-      image:
+      type: "destination",
+      coverImage:
         "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1000&q=80",
-      detailPath: "/heart-board/foundation",
+      postCount: 15,
+      insight: "你这周收藏的目的地更偏向短途、自然风景和拍照友好。",
+      keywords: ["短途", "海边", "拍照"],
+      commentSummary: ["海边光线好", "周末可达", "自驾更方便"],
+      sourcePostIds: ["post_005", "post_003", "post_001"],
+      items: [
+        {
+          id: "santa-barbara",
+          title: "Santa Barbara",
+          type: "destination",
+          image:
+            "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+          mentionCount: 10,
+          keywords: ["短途", "海边", "拍照"],
+          summary: "本周心动内容偏向短途放松和海岸线景色，出片率高。",
+          reminder: "部分停车点紧张，建议提前规划。",
+          sourcePostIds: ["post_005", "post_003"],
+        },
+        {
+          id: "malibu",
+          title: "Malibu",
+          type: "destination",
+          image:
+            "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=80",
+          mentionCount: 9,
+          keywords: ["海边", "日落", "公路"],
+          summary: "日落时段最受欢迎，评论多提到路线体验感强。",
+          reminder: "高峰路段拥堵，建议提前出发。",
+          sourcePostIds: ["post_005", "post_001"],
+        },
+        {
+          id: "san-diego",
+          title: "San Diego",
+          type: "destination",
+          image:
+            "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=800&q=80",
+          mentionCount: 8,
+          keywords: ["自然风景", "周末", "轻旅行"],
+          summary: "整体节奏轻松，适合 2-3 天恢复型周末出行。",
+          reminder: "跨城移动建议提前确认交通时段。",
+          sourcePostIds: ["post_005", "post_003"],
+        },
+      ],
     },
     {
-      id: "ai-tools",
+      id: "cat_ai_tools",
+      slug: "ai-tools",
       title: "AI 工具灵感",
-      weekCount: 19,
-      insight: "你关注从灵感到落地的生产力工作流。",
-      keywords: ["自动化", "工作流", "提效"],
-      highlights: ["Cursor", "Codex", "MCP"],
-      image:
+      type: "tool",
+      coverImage:
         "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1000&q=80",
-      detailPath: "/heart-board/foundation",
+      postCount: 19,
+      insight: "你最近关注的是如何快速做出可展示的 AI 产品 demo。",
+      keywords: ["自动化", "工作流", "提效"],
+      commentSummary: ["先做 demo", "流程自动化", "重视交付速度"],
+      sourcePostIds: ["post_002", "post_001", "post_006"],
+      items: [
+        {
+          id: "cursor-agent",
+          title: "Cursor Agent",
+          type: "tool",
+          image:
+            "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80",
+          mentionCount: 15,
+          keywords: ["demo", "自动化", "AI 编程"],
+          summary: "更适合快速迭代页面与结构化任务拆解。",
+          reminder: "先锁定最小可运行范围，再扩展能力边界。",
+          sourcePostIds: ["post_002", "post_001"],
+        },
+        {
+          id: "gemini-ai-studio",
+          title: "Gemini AI Studio",
+          type: "tool",
+          image:
+            "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80",
+          mentionCount: 9,
+          keywords: ["多模态", "原型", "验证"],
+          summary: "被频繁用于验证 prompt 方向和交互原型。",
+          reminder: "建议先跑小样本，不要直接全量接入。",
+          sourcePostIds: ["post_002", "post_006"],
+        },
+        {
+          id: "vercel-demo",
+          title: "Vercel Demo",
+          type: "tool",
+          image:
+            "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&q=80",
+          mentionCount: 8,
+          keywords: ["部署", "展示", "MVP"],
+          summary: "用于快速完成可分享的在线演示版本。",
+          reminder: "优先保证核心路径可用，再做性能打磨。",
+          sourcePostIds: ["post_002", "post_001"],
+        },
+      ],
     },
     {
-      id: "lifestyle",
+      id: "cat_lifestyle",
+      slug: "lifestyle",
       title: "生活方式灵感",
-      weekCount: 16,
-      insight: "你在建立更可持续的日常节奏与空间感。",
-      keywords: ["慢生活", "整理", "健康"],
-      highlights: ["早起", "饮食", "空间布置"],
-      image:
+      type: "lifestyle",
+      coverImage:
         "https://images.unsplash.com/photo-1493666438817-866a91353ca9?auto=format&fit=crop&w=1000&q=80",
-      detailPath: "/heart-board/foundation",
+      postCount: 16,
+      insight: "本周生活类心动更偏向恢复状态、整理生活和建立轻量计划。",
+      keywords: ["松弛感", "整理", "效率"],
+      commentSummary: ["先做一点点", "不要过载", "恢复优先"],
+      sourcePostIds: ["post_006", "post_003", "post_005"],
+      items: [
+        {
+          id: "weekend-room-reset",
+          title: "周末整理房间",
+          type: "lifestyle",
+          image:
+            "https://images.unsplash.com/photo-1493666438817-866a91353ca9?auto=format&fit=crop&w=800&q=80",
+          mentionCount: 7,
+          keywords: ["整理", "空间", "恢复"],
+          summary: "通过清理桌面和衣物分区，帮助恢复日常节奏。",
+          reminder: "先从一个小区域开始，不要一次铺太大。",
+          sourcePostIds: ["post_006", "post_005"],
+        },
+        {
+          id: "coffee-study",
+          title: "咖啡店学习",
+          type: "lifestyle",
+          image:
+            "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80",
+          mentionCount: 5,
+          keywords: ["专注", "效率", "轻任务"],
+          summary: "更适合处理轻任务和复盘，不适合重思考深工。",
+          reminder: "提前准备任务清单，避免到店后无目标刷手机。",
+          sourcePostIds: ["post_006", "post_003"],
+        },
+        {
+          id: "low-cost-reset-plan",
+          title: "低成本放松计划",
+          type: "lifestyle",
+          image:
+            "https://images.unsplash.com/photo-1470115636492-6d2b56f9146d?auto=format&fit=crop&w=800&q=80",
+          mentionCount: 6,
+          keywords: ["松弛感", "轻量计划", "恢复"],
+          summary: "优先安排能快速恢复状态的小行动，降低执行门槛。",
+          reminder: "先完成一个具体动作，不必一次改变太多。",
+          sourcePostIds: ["post_006", "post_005", "post_003"],
+        },
+      ],
     },
   ],
 };
 
-export const foundationDetail = {
-  title: "想试的底妆",
-  weekCount: 20,
-  heroImage:
-    "https://images.unsplash.com/photo-1607602132700-06825864fe0f?auto=format&fit=crop&w=1200&q=80",
-  insight:
-    "你收藏的底妆内容更偏向清透、自然、通勤友好路线。高频心动点集中在轻薄延展、不卡粉和贴肤度。",
-  products: [
-    {
-      id: "dior-forever",
-      name: "Dior Forever",
-      mentions: 17,
-      keywords: ["持妆", "细腻", "通勤"],
-      pros: "妆面稳定、遮瑕适中，全天勤通勤不易暗沉。",
-      reminder: "干皮在秋冬需加强保湿，否则鼻翼略卡纹。",
-      image:
-        "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80",
-      sourceLink: "/post/1",
-    },
-    {
-      id: "chanel-les-beiges",
-      name: "Chanel Les Beiges",
-      mentions: 12,
-      keywords: ["自然", "轻透", "光泽"],
-      pros: "妆感非常自然，适合想要原生好皮肤效果。",
-      reminder: "遮瑕偏弱，瑕疵多时建议搭配局部遮瑕。",
-      image:
-        "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=800&q=80",
-      sourceLink: "/post/1",
-    },
-    {
-      id: "nars-light-reflecting",
-      name: "NARS Light Reflecting",
-      mentions: 21,
-      keywords: ["清透", "贴肤", "奶油肌"],
-      pros: "上脸服帖快，镜头下肤质表现很稳。",
-      reminder: "夏季出油后建议补压散粉，避免光泽过强。",
-      image:
-        "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=800&q=80",
-      sourceLink: "/post/1",
-    },
-  ] as FoundationProduct[],
-  commentSummary: ["不卡粉", "自然妆感", "干皮需要做好保湿"],
-  sourcePosts: [
-    {
-      id: 1,
-      title: "混油皮夏季底妆测评：轻薄和遮瑕怎么平衡",
-      author: "莓莓",
-      cover:
-        "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=700&q=80",
-      href: "/post/1",
-    },
-    {
-      id: 2,
-      title: "通勤 10 小时不暗沉底妆清单",
-      author: "KK",
-      cover:
-        "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=700&q=80",
-      href: "/post/1",
-    },
-    {
-      id: 3,
-      title: "妆前打底和定妆喷雾的组合实验",
-      author: "阿柚",
-      cover:
-        "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=700&q=80",
-      href: "/post/1",
-    },
-  ],
-};
+export function getHeartBoardCategoryById(categoryId: string): HeartBoardCategory | undefined {
+  return mockHeartBoard.categories.find(
+    (category) => category.slug === categoryId || category.id === categoryId,
+  );
+}
 
-export async function generateHeartBoard(userId: string): Promise<HeartBoardData> {
-  void userId;
-  return Promise.resolve(mockHeartBoard);
+export function getHeartBoardItem(
+  categoryId: string,
+  itemId: string,
+): { category: HeartBoardCategory; item: HeartBoardItem } | undefined {
+  const category = getHeartBoardCategoryById(categoryId);
+  if (!category) return undefined;
+
+  const item = category.items.find((entry) => entry.id === itemId);
+  if (!item) return undefined;
+
+  return { category, item };
 }

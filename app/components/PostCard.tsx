@@ -3,12 +3,13 @@ import type { FeedPost } from "@/data/mockPosts";
 
 type PostCardProps = {
   post: FeedPost;
+  href?: string;
 };
 
-export function PostCard({ post }: PostCardProps) {
+export function PostCard({ post, href }: PostCardProps) {
   return (
     <Link
-      href={post.link}
+      href={href ?? `/post/${post.id}`}
       className="mb-3 block break-inside-avoid overflow-hidden rounded-2xl border border-zinc-100 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)]"
     >
       <div
