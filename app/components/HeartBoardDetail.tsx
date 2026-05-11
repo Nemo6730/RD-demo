@@ -1,14 +1,11 @@
 import Link from "next/link";
 import type { HeartBoardCategory } from "@/data/mockHeartBoard";
-import { getPostsByIds } from "@/data/mockPosts";
 
 type HeartBoardDetailProps = {
   category: HeartBoardCategory;
 };
 
 export function HeartBoardDetail({ category }: HeartBoardDetailProps) {
-  const sourcePosts = getPostsByIds(category.sourcePostIds);
-
   return (
     <main className="min-h-screen bg-[#f8f5f3] pb-8">
       <header className="sticky top-0 z-20 flex items-center justify-between bg-[#f8f5f3]/95 px-4 py-3 backdrop-blur">
@@ -76,45 +73,13 @@ export function HeartBoardDetail({ category }: HeartBoardDetailProps) {
                 href={`/heart-board/${category.slug}/sources/${item.id}`}
                 className="inline-flex text-sm text-[var(--xhs-red)]"
               >
-                相关原帖
+                相关帖子
               </Link>
             </div>
           </article>
         ))}
       </section>
 
-      <section className="px-4 pt-5">
-        <h2 className="text-lg font-semibold text-zinc-900">评论摘要</h2>
-        <div className="mt-2 flex flex-wrap gap-2">
-          {category.commentSummary.map((summary) => (
-            <span key={summary} className="rounded-full bg-white px-3 py-1 text-sm text-zinc-700 shadow-sm">
-              {summary}
-            </span>
-          ))}
-        </div>
-      </section>
-
-      <section className="px-4 pt-5">
-        <h2 className="text-lg font-semibold text-zinc-900">原帖来源</h2>
-        <div className="mt-2 grid grid-cols-3 gap-2">
-          {sourcePosts.map((post) => (
-            <Link
-              key={post.id}
-              href={`/post/${post.id}?from=${encodeURIComponent(`/heart-board/${category.slug}`)}`}
-              className="overflow-hidden rounded-xl bg-white shadow-sm"
-            >
-              <div
-                className="h-24 w-full bg-cover bg-center"
-                style={{ backgroundImage: `url(${post.coverImage})` }}
-              />
-              <div className="space-y-1 p-2">
-                <p className="line-clamp-2 text-xs text-zinc-800">{post.title}</p>
-                <p className="text-[11px] text-zinc-500">@{post.author}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
     </main>
   );
 }

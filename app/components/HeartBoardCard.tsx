@@ -7,12 +7,12 @@ type HeartBoardCardProps = {
 
 export function HeartBoardCard({ category }: HeartBoardCardProps) {
   return (
-    <article className="w-[84%] shrink-0 snap-center overflow-hidden rounded-3xl border border-[#f2ddd3] bg-[#fffaf7] p-3 shadow-[0_12px_28px_rgba(0,0,0,0.08)]">
+    <article className="flex h-[480px] w-[84%] shrink-0 snap-center flex-col overflow-hidden rounded-3xl border border-[#f2ddd3] bg-[#fffaf7] p-3 shadow-[0_12px_28px_rgba(0,0,0,0.08)]">
       <div
         className="h-44 w-full rounded-2xl bg-cover bg-center"
         style={{ backgroundImage: `url(${category.coverImage})` }}
       />
-      <div className="space-y-3 px-1 pb-1 pt-3">
+      <div className="flex flex-1 flex-col gap-3 px-1 pb-1 pt-3">
         <div>
           <p className="text-xl font-black text-zinc-900">{category.title}</p>
           <p className="text-xs text-zinc-500">本周心动 {category.postCount} 篇</p>
@@ -37,12 +37,14 @@ export function HeartBoardCard({ category }: HeartBoardCardProps) {
           代表内容：{category.items.slice(0, 3).map((item) => item.title).join("、")}
         </p>
 
-        <Link
-          href={`/heart-board/${category.slug}`}
-          className="inline-flex rounded-full bg-[var(--xhs-red)] px-4 py-2 text-sm font-medium text-white"
-        >
-          查看详情
-        </Link>
+        <div className="mt-auto">
+          <Link
+            href={`/heart-board/${category.slug}`}
+            className="inline-flex rounded-full bg-[var(--xhs-red)] px-4 py-2 text-sm font-medium text-white"
+          >
+            查看详情
+          </Link>
+        </div>
       </div>
     </article>
   );

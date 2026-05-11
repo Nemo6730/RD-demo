@@ -23,7 +23,7 @@ export default async function ItemSourcesPage({ params }: SourcesPageProps) {
         <Link href={`/heart-board/${category.slug}`} className="text-2xl text-zinc-800">
           ←
         </Link>
-        <h1 className="text-lg font-semibold text-zinc-900">相关原帖</h1>
+        <h1 className="text-lg font-semibold text-zinc-900">相关帖子</h1>
         <button type="button" className="text-lg text-zinc-600">
           ...
         </button>
