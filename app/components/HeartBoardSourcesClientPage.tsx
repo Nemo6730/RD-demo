@@ -60,12 +60,6 @@ export function HeartBoardSourcesClientPage({ categoryId, itemId }: HeartBoardSo
   const sourcePostIdSet = new Set(item.sourcePostIds);
   const sourcePosts = heartedPosts.filter((post) => sourcePostIdSet.has(post.id));
 
-  // temporary debug logs for data consistency
-  console.log("categoryId", categoryId);
-  console.log("itemId", itemId);
-  console.log("item.sourcePostIds", item.sourcePostIds);
-  console.log("sourcePosts.length", sourcePosts.length);
-
   return (
     <main className="min-h-screen bg-[#f8f5f3] pb-8">
       <header className="sticky top-0 z-20 flex items-center justify-between border-b border-[#f0dfd6] bg-[#f8f5f3]/95 px-4 py-3 backdrop-blur">

@@ -3,6 +3,19 @@ import type { HeartBoard, HeartBoardCategory, HeartBoardItem } from "@/data/mock
 
 type BaseCategory = "beauty" | "restaurant" | "travel" | "study" | "lifestyle" | "misc";
 type HiddenCategory = NonNullable<MockPost["hiddenCategory"]>;
+type EntityRole = "primary" | "secondary" | "mentioned";
+
+export type ExtractedEntity = {
+  name: string;
+  type: "product" | "restaurant" | "destination" | "tool" | "style" | "lifestyle" | "theme" | "other";
+  postId: string;
+  role: EntityRole;
+  positiveSignals: string[];
+  riskSignals: string[];
+  scenes: string[];
+  evidence: string;
+  canSupportItem: boolean;
+};
 
 const MERGED_CATEGORY_MAP: Record<HiddenCategory, BaseCategory> = {
   beauty: "beauty",
@@ -93,6 +106,42 @@ const GENERIC_TERMS = new Set([
   "灵感",
 ]);
 
+const EVALUATION_KEYWORDS: Record<BaseCategory, string[]> = {
+  beauty: ["轻薄", "持妆", "不卡粉", "暗沉", "遮瑕", "干皮", "混油", "妆感", "色号"],
+  restaurant: ["好吃", "环境", "排队", "预约", "停车", "人均", "服务", "氛围", "聊天"],
+  travel: ["日落", "停车", "路线", "拍照", "天气", "短途", "徒步", "拥挤"],
+  study: ["好用", "效率", "部署", "prompt", "面试", "简历", "作品集", "报错", "上手"],
+  lifestyle: ["版型", "材质", "显瘦", "舒服", "耐穿", "整理", "健身", "恢复"],
+  misc: ["喜欢", "细节", "节奏", "体验", "感受", "后劲"],
+};
+
+const POSITIVE_SIGNAL_KEYWORDS: Record<BaseCategory, string[]> = {
+  beauty: ["轻薄", "持妆", "不卡粉", "自然", "服帖", "通勤"],
+  restaurant: ["好吃", "环境", "服务", "氛围", "聊天", "稳定"],
+  travel: ["日落", "拍照", "短途", "放空", "风景", "周末"],
+  study: ["效率", "上手", "demo", "部署", "简历", "面试"],
+  lifestyle: ["舒服", "耐穿", "整理", "健身", "恢复", "通勤"],
+  misc: ["喜欢", "细节", "节奏", "放松", "后劲"],
+};
+
+const RISK_SIGNAL_KEYWORDS: Record<BaseCategory, string[]> = {
+  beauty: ["暗沉", "卡粉", "斑驳", "偏黄", "起皮"],
+  restaurant: ["排队", "预约", "拥挤", "停车难", "偏贵"],
+  travel: ["拥挤", "堵车", "天气", "停车难", "排队"],
+  study: ["报错", "混乱", "不稳定", "卡住", "返工"],
+  lifestyle: ["不耐皱", "变形", "偏松", "偏紧", "不耐穿"],
+  misc: ["拖沓", "踩坑", "一般", "失望"],
+};
+
+const SCENE_KEYWORDS: Record<BaseCategory, string[]> = {
+  beauty: ["通勤", "约会", "开会", "空调房", "赶时间"],
+  restaurant: ["周末", "晚餐", "brunch", "聚餐", "约会"],
+  travel: ["周末", "短途", "日落", "自驾", "徒步"],
+  study: ["面试", "简历", "demo", "作品集", "coffee chat"],
+  lifestyle: ["通勤", "健身", "学习", "收纳", "周日"],
+  misc: ["下班后", "周末", "睡前", "通勤路上", "展览日"],
+};
+
 const KEYWORD_CANDIDATES: Record<BaseCategory, string[]> = {
   beauty: [
     "Dior Forever",
@@ -160,6 +209,11 @@ const KEYWORD_CANDIDATES: Record<BaseCategory, string[]> = {
   ],
   misc: ["Past Lives", "Poor Things", "Before Sunrise", "Moon Archive 展览", "Sunday Radio 歌单"],
 };
+const ENTITY_NAME_SET = new Set(
+  Object.values(KEYWORD_CANDIDATES)
+    .flat()
+    .map((entry) => entry.toLowerCase()),
+);
 
 function slugify(text: string): string {
   return text
@@ -219,6 +273,110 @@ function pickTopSpecificTags(posts: MockPost[], limit: number): string[] {
     .map(([tag]) => tag);
 }
 
+function pickCategoryKeywords(posts: MockPost[], categoryKey: BaseCategory): string[] {
+  const entities = posts.flatMap((post) => extractEntitiesFromPost(post));
+  const signalPool = [
+    ...entities.flatMap((entry) => entry.positiveSignals),
+    ...entities.flatMap((entry) => entry.scenes),
+  ];
+  const topSignals = pickTopByFrequency(signalPool, 4).slice(0, 3);
+  if (topSignals.length > 0) return topSignals;
+
+  const filteredTags = pickTopSpecificTags(posts, 6).filter((tag) => !ENTITY_NAME_SET.has(tag.toLowerCase()));
+  if (filteredTags.length > 0) return filteredTags.slice(0, 3);
+  return [CATEGORY_META[categoryKey].fallbackKeyword];
+}
+
+function pickSignals(text: string, signalPool: string[]): string[] {
+  const lowerText = text.toLowerCase();
+  return signalPool.filter((entry) => lowerText.includes(entry.toLowerCase()));
+}
+
+function inferEntityType(category: BaseCategory): ExtractedEntity["type"] {
+  if (category === "beauty") return "product";
+  if (category === "restaurant") return "restaurant";
+  if (category === "travel") return "destination";
+  if (category === "study") return "tool";
+  if (category === "lifestyle") return "lifestyle";
+  if (category === "misc") return "theme";
+  return "other";
+}
+
+function inferEntityRole(post: MockPost, entityName: string, category: BaseCategory): EntityRole {
+  const title = post.title.toLowerCase();
+  const tags = post.tags.join(" ").toLowerCase();
+  const body = `${post.content} ${post.comments.map((entry) => entry.content).join(" ")}`.toLowerCase();
+  const entityLower = entityName.toLowerCase();
+
+  if (title.includes(entityLower) || tags.includes(entityLower)) {
+    return "primary";
+  }
+
+  if (!body.includes(entityLower)) {
+    return "mentioned";
+  }
+
+  const hasEvaluationSignals = EVALUATION_KEYWORDS[category].some((keyword) =>
+    body.includes(keyword.toLowerCase()),
+  );
+  return hasEvaluationSignals ? "secondary" : "mentioned";
+}
+
+export function extractEntitiesFromPost(post: MockPost): ExtractedEntity[] {
+  const baseCategory = MERGED_CATEGORY_MAP[post.hiddenCategory ?? "misc"];
+  const candidates = KEYWORD_CANDIDATES[baseCategory];
+  const textCorpus = getPostCorpus(post);
+  const entities: ExtractedEntity[] = [];
+
+  candidates.forEach((candidate) => {
+    if (!matchesKeyword(post, candidate)) return;
+    const role = inferEntityRole(post, candidate, baseCategory);
+    const positiveSignals = pickSignals(textCorpus, POSITIVE_SIGNAL_KEYWORDS[baseCategory]);
+    const riskSignals = pickSignals(textCorpus, RISK_SIGNAL_KEYWORDS[baseCategory]);
+    const scenes = pickSignals(textCorpus, SCENE_KEYWORDS[baseCategory]);
+
+    entities.push({
+      name: candidate,
+      type: inferEntityType(baseCategory),
+      postId: post.id,
+      role,
+      positiveSignals,
+      riskSignals,
+      scenes,
+      evidence: `${post.title}｜${post.content.slice(0, 56)}`,
+      canSupportItem: role === "primary" || role === "secondary",
+    });
+  });
+
+  return entities;
+}
+
+function pickTopByFrequency(entries: string[], limit: number): string[] {
+  const counter = new Map<string, number>();
+  entries.forEach((entry) => {
+    const key = entry.trim();
+    if (!key) return;
+    counter.set(key, (counter.get(key) ?? 0) + 1);
+  });
+  return [...counter.entries()]
+    .sort((a, b) => (b[1] === a[1] ? a[0].localeCompare(b[0], "zh-CN") : b[1] - a[1]))
+    .slice(0, limit)
+    .map(([entry]) => entry);
+}
+
+function getHeartedTime(post: MockPost): number {
+  return post.heartedAt ? new Date(post.heartedAt).getTime() : 0;
+}
+
+function getEngagementValue(post: MockPost): number {
+  return post.likeCount * 0.45 + post.collectCount * 0.35 + (post.comments.length || post.commentCount) * 18;
+}
+
+function normalizeScore(rawValue: number, maxValue: number): number {
+  if (maxValue <= 0) return 0;
+  return Math.min(100, (rawValue / maxValue) * 100);
+}
+
 function buildStudyItemTitle(keyword: string): string {
   const lower = keyword.toLowerCase();
   if (lower.includes("cursor")) return "Cursor 做 demo";
@@ -247,64 +405,163 @@ function buildItemTitle(category: BaseCategory, keyword: string): string {
   return keyword;
 }
 
-function extractItemKeywords(posts: MockPost[], category: BaseCategory): string[] {
-  const candidateCounts = new Map<string, number>();
-  KEYWORD_CANDIDATES[category].forEach((keyword) => {
-    const count = posts.filter((post) => matchesKeyword(post, keyword)).length;
-    if (count > 0) candidateCounts.set(keyword, count);
+function generateItemsFromCategoryPosts(
+  categoryPosts: MockPost[],
+  category: HeartBoardCategory,
+  categoryKey: BaseCategory,
+): HeartBoardItem[] {
+  const entities = categoryPosts.flatMap((post) => extractEntitiesFromPost(post));
+  const supportEntities = entities.filter((entity) => entity.canSupportItem && entity.role !== "mentioned");
+  const grouped = new Map<string, ExtractedEntity[]>();
+
+  supportEntities.forEach((entity) => {
+    const current = grouped.get(entity.name) ?? [];
+    grouped.set(entity.name, [...current, entity]);
   });
 
-  const rankedCandidates = [...candidateCounts.entries()]
-    .sort((a, b) => (b[1] === a[1] ? a[0].localeCompare(b[0], "zh-CN") : b[1] - a[1]))
-    .map(([keyword]) => keyword);
+  const rawItemCandidates: Array<HeartBoardItem | null> = [...grouped.entries()]
+    .map(([entityName, relatedEntities], index) => {
+      const sourcePostIds = [...new Set(relatedEntities.map((entry) => entry.postId))];
+      if (sourcePostIds.length === 0) return null;
 
-  if (rankedCandidates.length > 0) return rankedCandidates.slice(0, 3);
-
-  return pickTopSpecificTags(posts, 3);
-}
-
-function buildCategoryItems(posts: MockPost[], category: HeartBoardCategory, categoryKey: BaseCategory): HeartBoardItem[] {
-  const candidateKeywords = extractItemKeywords(posts, categoryKey);
-  const itemMap = new Map<string, HeartBoardItem>();
-
-  candidateKeywords.forEach((keyword, index) => {
-    const sourcePosts = posts.filter((post) => matchesKeyword(post, keyword));
-    const sourcePostIds = [...new Set(sourcePosts.map((post) => post.id))];
-    if (sourcePostIds.length === 0) return;
-
-    const itemTitle = buildItemTitle(categoryKey, keyword);
-    const dedupeSeed = itemTitle || keyword;
-    const itemId = toItemId(`${category.slug}-${dedupeSeed}`) || `${category.slug}-item-${index + 1}`;
-    const itemKeywords = pickTopSpecificTags(sourcePosts, 3);
-    const existing = itemMap.get(itemId);
-
-    if (existing) {
-      const mergedIds = [...new Set([...existing.sourcePostIds, ...sourcePostIds])];
-      const mergedKeywords = [...new Set([...existing.keywords, ...itemKeywords])].slice(0, 3);
-      itemMap.set(itemId, {
-        ...existing,
-        mentionCount: mergedIds.length,
-        sourcePostIds: mergedIds,
-        keywords: mergedKeywords.length > 0 ? mergedKeywords : existing.keywords,
+      const sourcePosts = categoryPosts.filter((post) => sourcePostIds.includes(post.id));
+      const sortedByHeartedAt = [...sourcePosts].sort((a, b) => {
+        const aTime = a.heartedAt ? new Date(a.heartedAt).getTime() : 0;
+        const bTime = b.heartedAt ? new Date(b.heartedAt).getTime() : 0;
+        return bTime - aTime;
       });
+      const image = sortedByHeartedAt[0]?.coverImage ?? category.coverImage;
+      const positiveSignals = pickTopByFrequency(
+        relatedEntities.flatMap((entry) => entry.positiveSignals),
+        3,
+      );
+      const sceneSignals = pickTopByFrequency(
+        relatedEntities.flatMap((entry) => entry.scenes),
+        3,
+      );
+      const riskSignals = pickTopByFrequency(
+        relatedEntities.flatMap((entry) => entry.riskSignals),
+        2,
+      );
+      const mergedKeywords = [...new Set([...positiveSignals, ...sceneSignals])].slice(0, 3);
+      const itemTitle = buildItemTitle(categoryKey, entityName);
+      const itemId = toItemId(`${category.slug}-${itemTitle || entityName}`) || `${category.slug}-item-${index + 1}`;
+
+      return {
+        id: itemId,
+        title: itemTitle || entityName,
+        type: category.type,
+        image,
+        mentionCount: sourcePostIds.length,
+        keywords: mergedKeywords.length > 0 ? mergedKeywords : [entityName],
+        summary: `有 ${sourcePostIds.length} 篇本周心动笔记对「${itemTitle || entityName}」给出实质评价，主要集中在${(mergedKeywords[0] ?? "使用体验")}。`,
+        reminder: riskSignals.length > 0 ? `注意：${riskSignals.join("、")}` : undefined,
+        sourcePostIds,
+      };
+    })
+    .filter((item) => Boolean(item));
+
+  const itemCandidates = rawItemCandidates.filter((item): item is HeartBoardItem => item !== null);
+  const dedupedById = new Map<string, HeartBoardItem>();
+  const supportMetaById = new Map<
+    string,
+    { positiveSignals: Set<string>; riskSignals: Set<string>; scenes: Set<string> }
+  >();
+
+  itemCandidates.forEach((item) => {
+    const sourcePosts = categoryPosts.filter((post) => item.sourcePostIds.includes(post.id));
+    const baseEvidenceText = sourcePosts.map((post) => getPostCorpus(post)).join(" ");
+    const positiveSignals = new Set(pickSignals(baseEvidenceText, POSITIVE_SIGNAL_KEYWORDS[categoryKey]));
+    const riskSignals = new Set(pickSignals(baseEvidenceText, RISK_SIGNAL_KEYWORDS[categoryKey]));
+    const scenes = new Set(pickSignals(baseEvidenceText, SCENE_KEYWORDS[categoryKey]));
+
+    const existing = dedupedById.get(item.id);
+    if (!existing) {
+      dedupedById.set(item.id, item);
+      supportMetaById.set(item.id, { positiveSignals, riskSignals, scenes });
       return;
     }
 
-    itemMap.set(itemId, {
-      id: itemId,
-      title: itemTitle || keyword,
-      type: category.type,
-      image: sourcePosts[0]?.coverImage ?? category.coverImage,
-      mentionCount: sourcePostIds.length,
-      keywords: itemKeywords.length > 0 ? itemKeywords : [keyword],
-      summary: `本周有 ${sourcePostIds.length} 篇心动笔记围绕「${itemTitle || keyword}」，可作为你下一步重点关注方向。`,
-      reminder: sourcePostIds.length >= 2 ? "先看最相关的 1-2 篇，执行会更快。" : undefined,
-      sourcePostIds,
+    const mergedSourcePostIds = [...new Set([...existing.sourcePostIds, ...item.sourcePostIds])];
+    const mergedKeywords = [...new Set([...existing.keywords, ...item.keywords])].slice(0, 3);
+    const existingMeta = supportMetaById.get(item.id);
+    const mergedMeta = {
+      positiveSignals: new Set([
+        ...(existingMeta ? [...existingMeta.positiveSignals] : []),
+        ...[...positiveSignals],
+      ]),
+      riskSignals: new Set([
+        ...(existingMeta ? [...existingMeta.riskSignals] : []),
+        ...[...riskSignals],
+      ]),
+      scenes: new Set([...(existingMeta ? [...existingMeta.scenes] : []), ...[...scenes]]),
+    };
+    supportMetaById.set(item.id, mergedMeta);
+    dedupedById.set(item.id, {
+      ...existing,
+      mentionCount: mergedSourcePostIds.length,
+      sourcePostIds: mergedSourcePostIds,
+      keywords: mergedKeywords.length > 0 ? mergedKeywords : existing.keywords,
     });
   });
 
-  const items = [...itemMap.values()];
-  if (items.length > 0) return items.slice(0, 3);
+  const dedupedItemCandidates = [...dedupedById.values()];
+
+  if (dedupedItemCandidates.length > 0) {
+    const postIndex = new Map(categoryPosts.map((post) => [post.id, post]));
+    const maxSourcePostCount = Math.max(...dedupedItemCandidates.map((item) => item.sourcePostIds.length), 1);
+    const itemLatestTimes = dedupedItemCandidates.map((item) => {
+      const latest = Math.max(
+        ...item.sourcePostIds.map((postId) => {
+          const post = postIndex.get(postId);
+          return post ? getHeartedTime(post) : 0;
+        }),
+        0,
+      );
+      return latest;
+    });
+    const maxLatestTime = Math.max(...itemLatestTimes, 0);
+    const minLatestTime = Math.min(...itemLatestTimes, 0);
+    const rawEngagementScores = dedupedItemCandidates.map((item) => {
+      const sourcePosts = item.sourcePostIds.map((postId) => postIndex.get(postId)).filter((post): post is MockPost => Boolean(post));
+      if (sourcePosts.length === 0) return 0;
+      const total = sourcePosts.reduce((acc, post) => acc + getEngagementValue(post), 0);
+      return total / sourcePosts.length;
+    });
+    const maxEngagementScore = Math.max(...rawEngagementScores, 1);
+
+    const scoredItems = dedupedItemCandidates.map((item, index) => {
+      const latestTime = itemLatestTimes[index] ?? 0;
+      const latestHeartedAt = latestTime > 0 ? new Date(latestTime).toISOString() : undefined;
+      const sourcePostCount = item.sourcePostIds.length;
+      const sourcePostCountScore = normalizeScore(sourcePostCount, maxSourcePostCount);
+      const recencyScore =
+        maxLatestTime === minLatestTime
+          ? 100
+          : normalizeScore(latestTime - minLatestTime, maxLatestTime - minLatestTime);
+      const engagementScore = normalizeScore(rawEngagementScores[index] ?? 0, maxEngagementScore);
+      const meta = supportMetaById.get(item.id);
+      const evidenceQualityRaw =
+        (meta?.positiveSignals.size ?? 0) * 28 + (meta?.riskSignals.size ?? 0) * 22 + (meta?.scenes.size ?? 0) * 18;
+      const evidenceQualityScore = Math.min(100, evidenceQualityRaw);
+      const priorityScore =
+        sourcePostCountScore * 0.5 +
+        recencyScore * 0.15 +
+        engagementScore * 0.2 +
+        evidenceQualityScore * 0.15;
+
+      return {
+        ...item,
+        sourcePostCount,
+        latestHeartedAt,
+        priorityScore: Number(priorityScore.toFixed(2)),
+      };
+    });
+
+    return scoredItems
+      .sort((a, b) => (b.priorityScore ?? 0) - (a.priorityScore ?? 0))
+      .slice(0, 3);
+  }
 
   return [
     {
@@ -312,11 +569,14 @@ function buildCategoryItems(posts: MockPost[], category: HeartBoardCategory, cat
       title: `${category.title}本周重点`,
       type: category.type,
       image: category.coverImage,
-      mentionCount: posts.length,
+      mentionCount: categoryPosts.length,
+      sourcePostCount: categoryPosts.length,
+      latestHeartedAt: categoryPosts[0]?.heartedAt,
+      priorityScore: 60,
       keywords: category.keywords,
       summary: "AI 根据这些笔记整理出本类心动内容。",
       reminder: "建议先从最容易落地的一篇开始。",
-      sourcePostIds: posts.map((post) => post.id),
+      sourcePostIds: categoryPosts.map((post) => post.id),
     },
   ];
 }
@@ -342,8 +602,7 @@ export function generateMockHeartBoardFromPosts(posts: MockPost[], weekId: strin
         const bTime = b.heartedAt ? new Date(b.heartedAt).getTime() : 0;
         return bTime - aTime;
       });
-      const keywords = pickTopSpecificTags(sortedByHeartedTime, 3);
-      const resolvedKeywords = keywords.length > 0 ? keywords : [meta.fallbackKeyword];
+      const resolvedKeywords = pickCategoryKeywords(sortedByHeartedTime, categoryKey);
       const coverImage = sortedByHeartedTime[0]?.coverImage ?? categoryPosts[0]?.coverImage ?? "";
       const sourcePostIds = [...new Set(categoryPosts.map((post) => post.id))];
       const latestHeartedAt = sortedByHeartedTime[0]?.heartedAt
@@ -359,12 +618,13 @@ export function generateMockHeartBoardFromPosts(posts: MockPost[], weekId: strin
         postCount: sourcePostIds.length,
         insight: meta.insight,
         keywords: resolvedKeywords,
+        representativeItems: [],
         commentSummary: [],
         items: [],
         sourcePostIds,
       };
 
-      category.items = buildCategoryItems(sortedByHeartedTime, category, categoryKey)
+      category.items = generateItemsFromCategoryPosts(sortedByHeartedTime, category, categoryKey)
         .filter((item) => item.sourcePostIds.length > 0)
         .slice(0, 3);
       if (category.items.length === 0 && category.sourcePostIds.length > 0) {
@@ -381,6 +641,7 @@ export function generateMockHeartBoardFromPosts(posts: MockPost[], weekId: strin
           },
         ];
       }
+      category.representativeItems = category.items.slice(0, 3).map((item) => item.title);
 
       return { category, latestHeartedAt, priority: CATEGORY_PRIORITY.indexOf(categoryKey) };
     })
@@ -403,6 +664,23 @@ export function generateMockHeartBoardFromPosts(posts: MockPost[], weekId: strin
         : "本周还没有心动内容，去发现页点亮几篇后再回来看看。",
     categories,
   };
+}
+
+export function buildEntityExtractionPrompt(posts: MockPost[]): string {
+  return `
+你需要逐篇分析用户本周心动的帖子。
+同一篇帖子可以提到多个对象。
+请为每个对象判断 role：
+- primary：主要讨论对象
+- secondary：有实质评价的对比对象
+- mentioned：只是顺带提到
+
+只有 primary 和 secondary 能支持心动要点。
+每个对象需要返回 positiveSignals、riskSignals、scenes、evidence、sourcePostIds。
+不要把只是出现名字但没有评价的对象当作心动要点。
+
+当前分析帖子数：${posts.length}
+`;
 }
 
 export async function generateHeartBoardFromPosts(

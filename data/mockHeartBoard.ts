@@ -4,6 +4,9 @@ export type HeartBoardItem = {
   type: "product" | "restaurant" | "destination" | "tool" | "style" | "lifestyle" | "other";
   image: string;
   mentionCount: number;
+  sourcePostCount?: number;
+  latestHeartedAt?: string;
+  priorityScore?: number;
   keywords: string[];
   summary: string;
   reminder?: string;
@@ -18,7 +21,8 @@ export type HeartBoardCategory = {
   coverImage: string;
   postCount: number;
   insight: string;
-  keywords: string[];
+  keywords: string[]; // 心动关键词：评价标准/场景/需求
+  representativeItems?: string[]; // 代表内容：具体对象/品牌/地点/工具
   commentSummary: string[];
   items: HeartBoardItem[];
   sourcePostIds: string[];
