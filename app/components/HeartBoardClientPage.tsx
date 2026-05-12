@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { HeartBoardCard, HEART_BOARD_CARD_THEMES } from "@/app/components/HeartBoardCard";
+import { HeartBoardCard } from "@/app/components/HeartBoardCard";
+import { HEART_BOARD_CARD_THEMES } from "@/lib/heartBoardCardThemes";
 import { getHeartedPostsByWeek } from "@/data/mockPosts";
 import { getActiveHeartboardPosts } from "@/data/testDatasets";
 import type { HeartBoard, HeartBoardCategory } from "@/data/mockHeartBoard";
@@ -191,27 +192,41 @@ export function HeartBoardClientPage() {
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[linear-gradient(180deg,#fff8f4_0%,#fff5f7_48%,#fffaf6_100%)] pb-8">
-      <header className="relative border-b border-[#f0e6e0]/90 bg-gradient-to-b from-[#fffbf9] to-[#fff8f6] px-6 pb-8 pt-4">
-        <div className="relative z-10 flex items-center justify-between">
+      <header
+        className="relative px-4 pb-8 pt-3"
+        style={{
+          background: `linear-gradient(180deg, ${activeDeckTheme.accentSoft} 0%, #fffbf9 55%, #fff8f6 100%)`,
+        }}
+      >
+        <div className="relative z-10 flex h-12 items-center justify-between">
           <Link
             href="/me"
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-white/65 text-lg text-[#6d4f45] shadow-sm backdrop-blur"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/80 bg-white/70 text-2xl leading-none shadow-sm backdrop-blur"
+            style={{
+              color: activeDeckTheme.accent,
+              borderColor: `color-mix(in srgb, ${activeDeckTheme.accent} 28%, #fff)`,
+            }}
           >
             ←
           </Link>
-          <span className="pointer-events-none h-7 w-7" />
-          <div className="flex items-center gap-2 text-[#6d4f45]">
+          <div className="flex items-center gap-1.5">
             <button
               type="button"
               aria-label="更多"
-              className="flex h-7 w-7 items-center justify-center rounded-full bg-white/60 text-xs shadow-sm backdrop-blur"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border bg-white/70 text-sm shadow-sm backdrop-blur text-zinc-700"
+              style={{
+                borderColor: `color-mix(in srgb, ${activeDeckTheme.accent} 32%, #fff)`,
+              }}
             >
               ...
             </button>
             <button
               type="button"
               aria-label="分享"
-              className="flex h-7 w-7 items-center justify-center rounded-full bg-white/60 text-sm shadow-sm backdrop-blur"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border bg-white/70 text-base shadow-sm backdrop-blur text-zinc-700"
+              style={{
+                borderColor: `color-mix(in srgb, ${activeDeckTheme.accent} 32%, #fff)`,
+              }}
             >
               ↗
             </button>
@@ -219,7 +234,7 @@ export function HeartBoardClientPage() {
         </div>
 
         <div className="relative z-10 mx-auto mt-7 max-w-md text-center">
-          <h1 className="text-[1.375rem] font-semibold leading-snug tracking-tight text-[var(--xhs-red)] [text-shadow:0_1px_1px_rgba(255,255,255,0.92),0_2px_10px_rgba(255,36,66,0.32),0_5px_28px_rgba(255,36,66,0.42)] sm:text-2xl sm:leading-tight">
+          <h1 className="text-[1.375rem] font-semibold leading-snug tracking-tight text-zinc-900 sm:text-2xl sm:leading-tight">
             本周心动
           </h1>
           <p className="mx-auto mt-2.5 max-w-[18rem] text-[13px] font-normal leading-relaxed text-zinc-600">

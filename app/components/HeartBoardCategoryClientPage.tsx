@@ -59,5 +59,10 @@ export function HeartBoardCategoryClientPage({ categoryId }: HeartBoardCategoryC
     );
   }
 
-  return <HeartBoardDetail category={category} />;
+  const categoryThemeIndex = Math.max(
+    0,
+    heartBoard.categories.findIndex((entry) => entry.id === category.id),
+  );
+
+  return <HeartBoardDetail category={category} themeIndex={categoryThemeIndex} />;
 }

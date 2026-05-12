@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useLayoutEffect, useRef, useState } from "react";
 import type { HeartBoardCategory } from "@/data/mockHeartBoard";
+import { getHeartBoardCardTheme } from "@/lib/heartBoardCardThemes";
 
 type HeartBoardCardProps = {
   category: HeartBoardCategory;
@@ -9,39 +10,8 @@ type HeartBoardCardProps = {
   themeIndex: number;
 };
 
-/** 与 swipe 卡片主题一致；供心动板页指示器、提示条等复用 */
-export const HEART_BOARD_CARD_THEMES = [
-  {
-    accent: "#FF5A6B",
-    accentSoft: "#FFF1F3",
-    accentSofter: "#FFF7F8",
-    shadow: "rgba(255,90,107,0.22)",
-  },
-  {
-    accent: "#F4A261",
-    accentSoft: "#FFF5EC",
-    accentSofter: "#FFF9F2",
-    shadow: "rgba(244,162,97,0.22)",
-  },
-  {
-    accent: "#7BAE7F",
-    accentSoft: "#F2F8F2",
-    accentSofter: "#F8FBF6",
-    shadow: "rgba(123,174,127,0.22)",
-  },
-  {
-    accent: "#9C8ACD",
-    accentSoft: "#F6F2FB",
-    accentSofter: "#FAF7FD",
-    shadow: "rgba(156,138,205,0.22)",
-  },
-  {
-    accent: "#6C9BCF",
-    accentSoft: "#F0F6FC",
-    accentSofter: "#F7FBFF",
-    shadow: "rgba(108,155,207,0.2)",
-  },
-] as const;
+/** Re-export：与 `HeartBoardCard` 同路径引用时仍可使用 */
+export { HEART_BOARD_CARD_THEMES } from "@/lib/heartBoardCardThemes";
 
 export function HeartBoardCard({ category, isInsightExpanded, onToggleInsight, themeIndex }: HeartBoardCardProps) {
   const insightBodyRef = useRef<HTMLParagraphElement>(null);
@@ -52,7 +22,7 @@ export function HeartBoardCard({ category, isInsightExpanded, onToggleInsight, t
       : category.items.slice(0, 3).map((item) => item.title);
   const visibleKeywords = category.keywords.slice(0, 3);
   const visibleItems = representativeItems.slice(0, 3);
-  const theme = HEART_BOARD_CARD_THEMES[themeIndex % HEART_BOARD_CARD_THEMES.length];
+  const theme = getHeartBoardCardTheme(themeIndex);
 
   useLayoutEffect(() => {
     if (isInsightExpanded) return;
