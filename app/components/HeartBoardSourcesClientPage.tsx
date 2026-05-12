@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import type { HeartBoard } from "@/data/mockHeartBoard";
 import { getPostExcerpt, mockPosts } from "@/data/mockPosts";
 import { generateMockHeartBoardFromPosts } from "@/lib/generateHeartBoard";
+import { loadGeneratedHeartBoard } from "@/lib/heartBoardCache";
 import { getCurrentWeekId, getMergedHeartedPosts } from "@/lib/heartStorage";
 
 type HeartBoardSourcesClientPageProps = {
@@ -34,7 +36,13 @@ export function HeartBoardSourcesClientPage({ categoryId, itemId }: HeartBoardSo
   }
 
   const heartedPosts = getMergedHeartedPosts(mockPosts, weekId);
-  const heartBoard = generateMockHeartBoardFromPosts(heartedPosts, weekId);
+  const fallbackHeartBoard = generateMockHeartBoardFromPosts(heartedPosts, weekId);
+  const cachedHeartBoard =
+    loadGeneratedHeartBoard(
+      weekId,
+      heartedPosts.map((post) => post.id),
+    ) ?? null;
+  const heartBoard: HeartBoard = cachedHeartBoard ?? fallbackHeartBoard;
   const category = heartBoard.categories.find((entry) => entry.slug === categoryId || entry.id === categoryId);
   const normalizedItemId = normalizeItemId(itemId);
   const item = category?.items.find((entry) => normalizeItemId(entry.id) === normalizedItemId);

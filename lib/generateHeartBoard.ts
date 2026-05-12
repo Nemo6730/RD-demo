@@ -43,7 +43,7 @@ const CATEGORY_META: Record<
   beauty: {
     id: "cat_beauty",
     slug: "foundation",
-    title: "美妆种草",
+    title: "想试的轻薄底妆",
     type: "product",
     insight: "你本周偏好通勤友好、自然妆感的底妆和修容路线。",
     fallbackKeyword: "底妆",
@@ -59,7 +59,7 @@ const CATEGORY_META: Record<
   travel: {
     id: "cat_travel",
     slug: "travel",
-    title: "旅行目的地",
+    title: "海边和短途旅行",
     type: "destination",
     insight: "这周你心动的路线以周末短途和风景点位为主。",
     fallbackKeyword: "周末短途",
@@ -67,7 +67,7 @@ const CATEGORY_META: Record<
   study: {
     id: "cat_study",
     slug: "study",
-    title: "学习与求职灵感",
+    title: "AI Demo 与求职准备",
     type: "tool",
     insight: "你在学习和求职上更关注可快速落地的工具与方法。",
     fallbackKeyword: "学习效率",
@@ -75,7 +75,7 @@ const CATEGORY_META: Record<
   lifestyle: {
     id: "cat_lifestyle",
     slug: "lifestyle",
-    title: "生活方式灵感",
+    title: "通勤穿搭与生活状态",
     type: "style",
     insight: "你本周的心动内容聚焦在穿搭舒适度、恢复状态和轻量生活调整。",
     fallbackKeyword: "状态恢复",
@@ -83,7 +83,7 @@ const CATEGORY_META: Record<
   misc: {
     id: "cat_misc",
     slug: "misc",
-    title: "其他零碎心动",
+    title: "零碎灵感收藏",
     type: "other",
     insight: "这些零碎心动记录了你当周的即时兴趣和灵感。",
     fallbackKeyword: "灵感碎片",

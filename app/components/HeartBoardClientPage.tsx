@@ -4,12 +4,17 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { HeartBoardCard } from "@/app/components/HeartBoardCard";
 import { getHeartedPostsByWeek, mockPosts } from "@/data/mockPosts";
+import type { HeartBoard } from "@/data/mockHeartBoard";
+import type { AIHeartBoard } from "@/lib/ai/heartBoardSchema";
+import { adaptHeartBoardForUI } from "@/lib/ai/adaptHeartBoardForUI";
 import { generateMockHeartBoardFromPosts } from "@/lib/generateHeartBoard";
+import { clearGeneratedHeartBoard, loadGeneratedHeartBoard, saveGeneratedHeartBoard } from "@/lib/heartBoardCache";
 import { getCurrentWeekId, getMergedHeartedPosts } from "@/lib/heartStorage";
 
 export function HeartBoardClientPage() {
   const weekId = useMemo(() => getCurrentWeekId(new Date()), []);
   const [hydrated, setHydrated] = useState(false);
+  const [isRegenerating, setIsRegenerating] = useState(false);
 
   useEffect(() => {
     setHydrated(true);
@@ -19,7 +24,67 @@ export function HeartBoardClientPage() {
     () => (hydrated ? getMergedHeartedPosts(mockPosts, weekId) : getHeartedPostsByWeek(mockPosts, weekId)),
     [hydrated, weekId],
   );
-  const heartBoard = useMemo(() => generateMockHeartBoardFromPosts(heartedPosts, weekId), [heartedPosts, weekId]);
+  const fallbackHeartBoard = useMemo(() => generateMockHeartBoardFromPosts(heartedPosts, weekId), [heartedPosts, weekId]);
+  const [heartBoard, setHeartBoard] = useState<HeartBoard>(fallbackHeartBoard);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    if (heartedPosts.length === 0) {
+      clearGeneratedHeartBoard(weekId);
+      setHeartBoard(fallbackHeartBoard);
+      return;
+    }
+
+    const cached = loadGeneratedHeartBoard(
+      weekId,
+      heartedPosts.map((post) => post.id),
+    );
+    setHeartBoard(cached ?? fallbackHeartBoard);
+  }, [hydrated, weekId, heartedPosts, fallbackHeartBoard]);
+
+  const handleRegenerateWithGemini = async () => {
+    if (heartedPosts.length === 0 || isRegenerating) return;
+    setIsRegenerating(true);
+    try {
+      const response = await fetch("/api/heart-board/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          weekId,
+          posts: heartedPosts,
+        }),
+      });
+      const data = (await response.json()) as {
+        heartBoard?: HeartBoard | AIHeartBoard;
+        usedFallback?: boolean;
+        error?: string;
+      };
+
+      if (!response.ok || !data.heartBoard) {
+        throw new Error(data.error || "Failed to regenerate with Gemini");
+      }
+
+      const nextBoard = adaptHeartBoardForUI(data.heartBoard, heartedPosts, weekId);
+      setHeartBoard(nextBoard);
+      saveGeneratedHeartBoard(
+        weekId,
+        heartedPosts.map((post) => post.id),
+        nextBoard,
+      );
+
+      if (data.usedFallback) {
+        console.warn("Gemini regeneration used fallback heart board.");
+      }
+    } catch (error) {
+      console.error("Failed to regenerate heart board:", error);
+      setHeartBoard(fallbackHeartBoard);
+    } finally {
+      setIsRegenerating(false);
+    }
+  };
+
   const directionCount = heartBoard.categories.length;
 
   return (
@@ -47,7 +112,14 @@ export function HeartBoardClientPage() {
       <section className="px-5 pb-3 pt-5">
         <p className="text-[15px] text-zinc-700">本周你点亮了 {heartedPosts.length} 次心动</p>
         <p className="mt-1 text-[15px] text-zinc-700">AI 为你整理出 {directionCount} 个兴趣方向</p>
-        <p className="mt-2 text-sm text-zinc-500">{heartBoard.summary}</p>
+        <button
+          type="button"
+          onClick={handleRegenerateWithGemini}
+          disabled={isRegenerating || heartedPosts.length === 0}
+          className="mt-3 inline-flex rounded-full border border-[#f0cdc3] bg-white px-3 py-1 text-xs text-zinc-700 disabled:opacity-60"
+        >
+          {isRegenerating ? "AI 正在整理本周心动..." : "用 Gemini 重新生成"}
+        </button>
       </section>
 
       {heartedPosts.length === 0 ? (
