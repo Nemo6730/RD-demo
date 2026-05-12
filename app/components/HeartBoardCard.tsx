@@ -64,7 +64,7 @@ export function HeartBoardCard({ category, isInsightExpanded, onToggleInsight, t
           </div>
         </div>
 
-        <div className="hide-scrollbar mt-2 min-h-0 flex-1 space-y-2.5 overflow-y-auto pr-0.5">
+        <div className="hide-scrollbar touch-pan-y mt-2 min-h-0 flex-1 space-y-2.5 overflow-y-auto pr-0.5">
           <div className="rounded-2xl p-3 text-left" style={{ backgroundColor: theme.accentSofter }}>
             <p className="mb-1.5 text-[12px] font-semibold leading-snug" style={{ color: theme.accent }}>
               AI 洞察

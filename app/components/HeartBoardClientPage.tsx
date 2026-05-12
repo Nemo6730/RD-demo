@@ -16,6 +16,8 @@ import { getCurrentWeekId, getMergedHeartedPosts } from "@/lib/heartStorage";
 const SWIPE_THRESHOLD = 80;
 const SWIPE_OUT_DISTANCE = 360;
 const SWIPE_ANIMATION_MS = 320;
+/** 超过此位移才判定水平/垂直意图，避免误挡卡片内纵向滚动 */
+const GESTURE_COMMIT_PX = 10;
 
 export function HeartBoardClientPage() {
   const activePosts = useMemo(() => getActiveHeartboardPosts(), []);
@@ -25,9 +27,12 @@ export function HeartBoardClientPage() {
   const [cardOrder, setCardOrder] = useState<string[]>([]);
   const [dragX, setDragX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-  const [isSwipingOut, setIsSwipingOut] = useState(false);
+  const isSwipingOutRef = useRef(false);
   const [expandedInsightCardId, setExpandedInsightCardId] = useState<string | null>(null);
   const dragStartXRef = useRef<number | null>(null);
+  const dragStartYRef = useRef<number | null>(null);
+  const dragXRef = useRef(0);
+  const swipeCommittedRef = useRef(false);
   const swipeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -122,7 +127,8 @@ export function HeartBoardClientPage() {
     };
   }, []);
 
-  const rotateDeck = () => {
+  /** 1：顶卡移到最后（下一张）；-1：最后一张顶到最前（上一张） */
+  const rotateDeck = (deckStep: 1 | -1 = 1) => {
     setExpandedInsightCardId(null);
     setCardOrder((currentOrder) => {
       const normalizedOrder = [
@@ -130,7 +136,11 @@ export function HeartBoardClientPage() {
         ...categoryIds.filter((id) => !currentOrder.includes(id)),
       ];
       if (normalizedOrder.length <= 1) return normalizedOrder;
-      return [...normalizedOrder.slice(1), normalizedOrder[0]];
+      if (deckStep === 1) {
+        return [...normalizedOrder.slice(1), normalizedOrder[0]!];
+      }
+      const last = normalizedOrder[normalizedOrder.length - 1]!;
+      return [last, ...normalizedOrder.slice(0, -1)];
     });
   };
 
@@ -147,43 +157,106 @@ export function HeartBoardClientPage() {
     });
   };
 
-  const completeSwipe = (direction: 1 | -1) => {
-    if (isSwipingOut) return;
+  /** 视觉飞出方向；deckStep 与轮播顺序对应（左滑下一张 / 右滑上一张） */
+  const completeSwipe = (visualDirection: 1 | -1, deckStep: 1 | -1) => {
+    if (isSwipingOutRef.current) return;
+    isSwipingOutRef.current = true;
     setIsDragging(false);
-    setIsSwipingOut(true);
-    setDragX(direction * SWIPE_OUT_DISTANCE);
+    swipeCommittedRef.current = false;
+    const endX = visualDirection * SWIPE_OUT_DISTANCE;
+    dragXRef.current = endX;
+    setDragX(endX);
     if (swipeTimeoutRef.current) {
       clearTimeout(swipeTimeoutRef.current);
     }
     swipeTimeoutRef.current = setTimeout(() => {
-      rotateDeck();
+      rotateDeck(deckStep);
+      dragXRef.current = 0;
       setDragX(0);
-      setIsSwipingOut(false);
+      isSwipingOutRef.current = false;
       dragStartXRef.current = null;
+      dragStartYRef.current = null;
     }, SWIPE_ANIMATION_MS);
   };
 
+  const releaseSwipeCapture = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!swipeCommittedRef.current) return;
+    try {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    } catch {
+      /* already released */
+    }
+  };
+
   const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-    if ((event.target as Element).closest("a,button") || isSwipingOut) return;
+    if ((event.target as Element).closest("a, button") || isSwipingOutRef.current) return;
     dragStartXRef.current = event.clientX;
-    setIsDragging(true);
+    dragStartYRef.current = event.clientY;
+    dragXRef.current = 0;
+    swipeCommittedRef.current = false;
     setDragX(0);
-    event.currentTarget.setPointerCapture(event.pointerId);
+    setIsDragging(false);
   };
 
   const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (dragStartXRef.current === null || isSwipingOut) return;
-    setDragX(event.clientX - dragStartXRef.current);
+    if (dragStartXRef.current === null || dragStartYRef.current === null || isSwipingOutRef.current) return;
+
+    const dx = event.clientX - dragStartXRef.current;
+    const dy = event.clientY - dragStartYRef.current;
+
+    if (!swipeCommittedRef.current) {
+      if (Math.max(Math.abs(dx), Math.abs(dy)) < GESTURE_COMMIT_PX) return;
+      if (Math.abs(dy) >= Math.abs(dx)) {
+        dragStartXRef.current = null;
+        dragStartYRef.current = null;
+        return;
+      }
+      swipeCommittedRef.current = true;
+      setIsDragging(true);
+      event.currentTarget.setPointerCapture(event.pointerId);
+    }
+
+    dragXRef.current = dx;
+    setDragX(dx);
   };
 
-  const handlePointerEnd = () => {
-    if (dragStartXRef.current === null || isSwipingOut) return;
-    const direction = dragX >= 0 ? 1 : -1;
-    if (Math.abs(dragX) >= SWIPE_THRESHOLD) {
-      completeSwipe(direction);
+  const handlePointerEnd = (event: React.PointerEvent<HTMLDivElement>) => {
+    const x = dragXRef.current;
+    const hadCommitted = swipeCommittedRef.current;
+
+    releaseSwipeCapture(event);
+    swipeCommittedRef.current = false;
+
+    if (!hadCommitted) {
+      dragStartXRef.current = null;
+      dragStartYRef.current = null;
       return;
     }
+
+    if (isSwipingOutRef.current) return;
+
+    if (Math.abs(x) >= SWIPE_THRESHOLD) {
+      if (x < 0) {
+        completeSwipe(-1, 1);
+      } else {
+        completeSwipe(1, -1);
+      }
+      return;
+    }
+
     dragStartXRef.current = null;
+    dragStartYRef.current = null;
+    dragXRef.current = 0;
+    setIsDragging(false);
+    setDragX(0);
+  };
+
+  const handleLostPointerCapture = () => {
+    if (isSwipingOutRef.current) return;
+    swipeCommittedRef.current = false;
+    dragStartXRef.current = null;
+    dragStartYRef.current = null;
+    dragXRef.current = 0;
     setIsDragging(false);
     setDragX(0);
   };
@@ -331,6 +404,7 @@ export function HeartBoardClientPage() {
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerEnd}
             onPointerCancel={handlePointerEnd}
+            onLostPointerCapture={handleLostPointerCapture}
           >
             <HeartBoardCard
               category={activeCategory}

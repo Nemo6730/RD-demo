@@ -14,7 +14,7 @@ export function HeartBoardEntry() {
         <div className="mt-2.5 flex items-center justify-between gap-3">
           <p className="heartboard-subtitle min-w-0 text-[13px] font-medium leading-5 text-zinc-700">
             把本周
-            <span className="heartboard-highlight mx-0.5 rounded-full bg-[rgba(255,36,66,0.08)] px-1 font-semibold text-[var(--xhs-red)]">
+            <span className="mx-0.5 bg-gradient-to-r from-[#ff2442] to-[#f59ab0] bg-clip-text font-semibold text-transparent">
               点亮
             </span>
             过的

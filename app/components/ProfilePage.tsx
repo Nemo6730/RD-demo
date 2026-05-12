@@ -7,9 +7,9 @@ export function ProfilePage() {
   const visibleProfileNotes = profileNotes.filter((note) => note.title !== "燕云男女主之争");
 
   return (
-    <main className="min-h-screen bg-[#f7f7f7] pb-24 font-sans">
-      <section className="mx-4 mt-3 rounded-3xl bg-[linear-gradient(180deg,#4d5b7f_0%,#6c5e69_55%,#7d6f79_100%)] px-4 pb-4 pt-3 text-white">
-        <div className="mb-4 flex items-center justify-between text-lg">
+    <main className="min-h-screen bg-[#FFFBF8] pb-24 font-sans">
+      <section className="mx-4 mt-3 rounded-3xl bg-[linear-gradient(to_bottom_left,#ffffff_0%,#fff9fb_42%,#fdeef2_100%)] px-4 pb-4 pt-3 text-zinc-900 shadow-[0_8px_30px_rgba(225,190,200,0.12)]">
+        <div className="mb-4 flex items-center justify-between text-lg text-zinc-800">
           <button type="button" aria-label="菜单">
             ☰
           </button>
@@ -25,58 +25,58 @@ export function ProfilePage() {
 
         <div className="flex items-center gap-3">
           <div
-            className="h-20 w-20 shrink-0 rounded-full border-2 border-white/80 bg-cover bg-center"
+            className="h-20 w-20 shrink-0 rounded-full border-2 border-white bg-cover bg-center shadow-[0_4px_14px_rgba(225,190,200,0.22)]"
             style={{
               backgroundImage:
                 "url(https://images.unsplash.com/photo-1519052537078-e6302a4968d4?auto=format&fit=crop&w=300&q=80)",
             }}
           />
           <div className="flex-1">
-            <p className="text-[28px] font-semibold leading-tight">momo</p>
-            <p className="mt-2 text-xs leading-5 text-white/80">小红书号: 2333333</p>
-            <p className="text-xs leading-5 text-white/80">IP 属地: 美国</p>
+            <p className="text-[21px] font-semibold leading-snug tracking-tight text-zinc-900">momo</p>
+            <p className="mt-2 text-xs leading-5 text-zinc-500">小红书号: 2333333</p>
+            <p className="text-xs leading-5 text-zinc-500">IP 属地: 美国</p>
           </div>
         </div>
 
-        <p className="mt-4 text-xs leading-5 text-white/85">点击这里，填写简介</p>
+        <p className="mt-4 text-xs leading-5 text-zinc-500">点击这里，填写简介</p>
 
         <div className="mt-4 flex items-center justify-between gap-3">
-          <div className="flex min-w-0 items-baseline gap-4 text-[13px] leading-none text-white/90">
+          <div className="flex min-w-0 items-baseline gap-4 text-[13px] leading-none text-zinc-600">
             <p className="flex items-baseline gap-1 whitespace-nowrap">
-              <span className="text-base font-semibold">0</span>关注
+              <span className="text-base font-semibold text-zinc-900">0</span>关注
             </p>
             <p className="flex items-baseline gap-1 whitespace-nowrap">
-              <span className="text-base font-semibold">1</span>粉丝
+              <span className="text-base font-semibold text-zinc-900">1</span>粉丝
             </p>
             <p className="flex items-baseline gap-1 whitespace-nowrap">
-              <span className="text-base font-semibold">76</span>获赞与收藏
+              <span className="text-base font-semibold text-zinc-900">76</span>获赞与收藏
             </p>
           </div>
           <div className="flex shrink-0 items-center gap-2">
             <button
               type="button"
-              className="h-8 whitespace-nowrap rounded-full border border-white/50 px-4 text-xs font-medium"
+              className="h-8 whitespace-nowrap rounded-full border border-zinc-200/90 bg-white/70 px-4 text-xs font-medium text-zinc-800 backdrop-blur-sm"
             >
               编辑资料
             </button>
             <button
               type="button"
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/50 text-base"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-zinc-200/90 bg-white/70 text-base text-zinc-800 backdrop-blur-sm"
             >
               ⚙
             </button>
           </div>
         </div>
-      </section>
 
-      <section className="grid grid-cols-2 gap-3 px-4 py-3">
-        <div className="rounded-2xl bg-white p-4 shadow-sm">
-          <p className="text-[15px] font-semibold text-zinc-900">创作灵感</p>
-          <p className="mt-1 text-xs text-zinc-500">学创作找灵感</p>
-        </div>
-        <div className="rounded-2xl bg-white p-4 shadow-sm">
-          <p className="text-[15px] font-semibold text-zinc-900">浏览记录</p>
-          <p className="mt-1 text-xs text-zinc-500">看过的笔记</p>
+        <div className="mt-4 grid grid-cols-2 gap-3">
+          <div className="rounded-2xl border border-white/70 bg-white/45 p-4 backdrop-blur-sm">
+            <p className="text-[15px] font-semibold text-zinc-900">创作灵感</p>
+            <p className="mt-1 text-xs text-zinc-500">学创作找灵感</p>
+          </div>
+          <div className="rounded-2xl border border-white/70 bg-white/45 p-4 backdrop-blur-sm">
+            <p className="text-[15px] font-semibold text-zinc-900">浏览记录</p>
+            <p className="mt-1 text-xs text-zinc-500">看过的笔记</p>
+          </div>
         </div>
       </section>
 
