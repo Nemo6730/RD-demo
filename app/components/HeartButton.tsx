@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { isPostHearted, setPostHearted } from "@/lib/heartStorage";
+import { useEffect, useMemo, useState } from "react";
+import { isPostHearted, removeHeartAction, saveHeartAction } from "@/lib/heartStorage";
 
 type HeartButtonProps = {
   postId: string;
@@ -13,10 +13,18 @@ export function HeartButton({ postId, defaultHearted = false, onStateChange }: H
   const initialHearted = useMemo(() => isPostHearted(postId, defaultHearted), [postId, defaultHearted]);
   const [hearted, setHearted] = useState(initialHearted);
 
+  useEffect(() => {
+    setHearted(isPostHearted(postId, defaultHearted));
+  }, [postId, defaultHearted]);
+
   const handleClick = () => {
     const next = !hearted;
+    if (next) {
+      saveHeartAction(postId);
+    } else {
+      removeHeartAction(postId);
+    }
     setHearted(next);
-    setPostHearted(postId, next);
     onStateChange?.(next);
   };
 

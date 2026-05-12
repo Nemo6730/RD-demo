@@ -1,9 +1,5 @@
-import { HeartBoardDetail } from "@/app/components/HeartBoardDetail";
-import { getHeartBoardCategoryById } from "@/data/mockHeartBoard";
-import { notFound } from "next/navigation";
+import { HeartBoardCategoryClientPage } from "@/app/components/HeartBoardCategoryClientPage";
 
 export default function FoundationDetailPage() {
-  const category = getHeartBoardCategoryById("foundation");
-  if (!category) notFound();
-  return <HeartBoardDetail category={category} />;
+  return <HeartBoardCategoryClientPage categoryId="foundation" />;
 }

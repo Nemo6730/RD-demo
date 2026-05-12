@@ -6,6 +6,8 @@ type HeartBoardDetailProps = {
 };
 
 export function HeartBoardDetail({ category }: HeartBoardDetailProps) {
+  const visibleItems = category.items.filter((item) => item.sourcePostIds.length > 0);
+
   return (
     <main className="min-h-screen bg-[#f8f5f3] pb-8">
       <header className="sticky top-0 z-20 flex items-center justify-between bg-[#f8f5f3]/95 px-4 py-3 backdrop-blur">
@@ -36,7 +38,7 @@ export function HeartBoardDetail({ category }: HeartBoardDetailProps) {
 
       <section className="space-y-3 px-4 pt-4">
         <h2 className="text-lg font-semibold text-zinc-900">心动要点</h2>
-        {category.items.map((item) => (
+        {visibleItems.map((item) => (
           <article
             key={item.id}
             className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm"
@@ -63,21 +65,20 @@ export function HeartBoardDetail({ category }: HeartBoardDetailProps) {
                 <span className="font-semibold">要点总结：</span>
                 {item.summary}
               </p>
-              {item.reminder ? (
-                <p className="text-zinc-700">
-                <span className="font-semibold">真实提醒：</span>
-                {item.reminder}
-              </p>
-              ) : null}
               <Link
                 href={`/heart-board/${category.slug}/sources/${item.id}`}
                 className="inline-flex text-sm text-[var(--xhs-red)]"
               >
-                相关帖子
+                相关原帖 {item.sourcePostIds.length} 篇
               </Link>
             </div>
           </article>
         ))}
+        {visibleItems.length === 0 ? (
+          <div className="rounded-2xl border border-zinc-200 bg-white p-4 text-sm text-zinc-600">
+            暂时没有找到相关原帖
+          </div>
+        ) : null}
       </section>
 
     </main>

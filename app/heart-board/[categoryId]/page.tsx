@@ -1,6 +1,4 @@
-import { notFound } from "next/navigation";
-import { HeartBoardDetail } from "@/app/components/HeartBoardDetail";
-import { getHeartBoardCategoryById } from "@/data/mockHeartBoard";
+import { HeartBoardCategoryClientPage } from "@/app/components/HeartBoardCategoryClientPage";
 
 type CategoryPageProps = {
   params: Promise<{ categoryId: string }>;
@@ -8,11 +6,5 @@ type CategoryPageProps = {
 
 export default async function CategoryDetailPage({ params }: CategoryPageProps) {
   const { categoryId } = await params;
-  const category = getHeartBoardCategoryById(categoryId);
-
-  if (!category) {
-    notFound();
-  }
-
-  return <HeartBoardDetail category={category} />;
+  return <HeartBoardCategoryClientPage categoryId={categoryId} />;
 }

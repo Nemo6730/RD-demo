@@ -148,6 +148,8 @@ export function PostDetail({ post, backHref }: PostDetailProps) {
               onStateChange={(next) => {
                 if (next) {
                   setToastMessage("已加入本周心动板，AI 将自动帮你整理");
+                } else {
+                  setToastMessage("已从本周心动板移除");
                 }
               }}
             />

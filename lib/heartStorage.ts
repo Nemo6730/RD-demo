@@ -1,3 +1,5 @@
+import type { MockPost } from "@/data/mockPosts";
+
 const HEART_STORAGE_KEY = "heart-board-actions";
 const UNHEART_STORAGE_KEY = "heart-board-unhearted-overrides";
 
@@ -61,6 +63,10 @@ export function getHeartActions(): HeartAction[] {
   return readActions();
 }
 
+export function getStoredHeartActions(): HeartAction[] {
+  return readActions();
+}
+
 export function getHeartedPostIds(): string[] {
   return readActions().map((action) => action.postId);
 }
@@ -108,4 +114,83 @@ export function setPostHearted(postId: string, value: boolean, date = new Date()
     writeUnheartedOverrides([...unheartedOverrides, postId]);
   }
   return false;
+}
+
+export function saveHeartAction(postId: string): HeartAction {
+  const now = new Date();
+  const action: HeartAction = {
+    postId,
+    heartedAt: now.toISOString(),
+    weekId: getCurrentWeekId(now),
+  };
+  const actions = readActions();
+  const existingIndex = actions.findIndex((entry) => entry.postId === postId);
+  const nextActions =
+    existingIndex >= 0
+      ? actions.map((entry, index) => (index === existingIndex ? action : entry))
+      : [...actions, action];
+  writeActions(nextActions);
+
+  const unheartedOverrides = readUnheartedOverrides();
+  if (unheartedOverrides.includes(postId)) {
+    writeUnheartedOverrides(unheartedOverrides.filter((id) => id !== postId));
+  }
+  return action;
+}
+
+export function removeHeartAction(postId: string): void {
+  const nextActions = readActions().filter((action) => action.postId !== postId);
+  writeActions(nextActions);
+  const unheartedOverrides = readUnheartedOverrides();
+  if (!unheartedOverrides.includes(postId)) {
+    writeUnheartedOverrides([...unheartedOverrides, postId]);
+  }
+}
+
+export function getMergedHeartedPosts(posts: MockPost[], weekId: string): MockPost[] {
+  const actionMap = new Map(readActions().map((action) => [action.postId, action]));
+  const unheartedOverrides = new Set(readUnheartedOverrides());
+
+  const mergedPosts: MockPost[] = posts.map((post) => {
+      const action = actionMap.get(post.id);
+      if (action) {
+        return {
+          ...post,
+          isHearted: true,
+          heartedAt: action.heartedAt,
+          weekId: action.weekId || getCurrentWeekId(new Date(action.heartedAt)),
+        };
+      }
+
+      if (unheartedOverrides.has(post.id)) {
+        return {
+          ...post,
+          isHearted: false,
+          heartedAt: undefined,
+          weekId: undefined,
+        };
+      }
+
+      if (!post.isHearted || !post.heartedAt) {
+        return {
+          ...post,
+          isHearted: false,
+          heartedAt: undefined,
+          weekId: undefined,
+        };
+      }
+
+      return {
+        ...post,
+        isHearted: true,
+        weekId: post.weekId ?? getCurrentWeekId(new Date(post.heartedAt)),
+      };
+    });
+
+  return mergedPosts.filter((post) => {
+    const heartedAt = post.heartedAt;
+    if (!post.isHearted || !heartedAt) return false;
+    const resolvedWeekId = post.weekId ?? getCurrentWeekId(new Date(heartedAt));
+    return resolvedWeekId === weekId;
+  });
 }
