@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "心动板 Demo",
-  description: "小红书风格移动端心动板演示",
+  title: "本周灵感 Demo",
+  description: "小红书风格移动端本周灵感演示",
 };
 
 export default function RootLayout({

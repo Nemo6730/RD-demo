@@ -61,7 +61,7 @@ const CATEGORY_META: Record<
     slug: "travel",
     title: "海边和短途旅行",
     type: "destination",
-    insight: "这周你心动的路线以周末短途和风景点位为主。",
+    insight: "这周你的灵感路线以周末短途和风景点位为主。",
     fallbackKeyword: "周末短途",
   },
   study: {
@@ -77,7 +77,7 @@ const CATEGORY_META: Record<
     slug: "lifestyle",
     title: "通勤穿搭与生活状态",
     type: "style",
-    insight: "你本周的心动内容聚焦在穿搭舒适度、恢复状态和轻量生活调整。",
+    insight: "你本周的灵感内容聚焦在穿搭舒适度、恢复状态和轻量生活调整。",
     fallbackKeyword: "状态恢复",
   },
   misc: {
@@ -85,7 +85,7 @@ const CATEGORY_META: Record<
     slug: "misc",
     title: "零碎灵感收藏",
     type: "other",
-    insight: "这些零碎心动记录了你当周的即时兴趣和灵感。",
+    insight: "这些零碎收藏记录了你当周的即时兴趣和灵感。",
     fallbackKeyword: "灵感碎片",
   },
 };
@@ -454,7 +454,7 @@ function generateItemsFromCategoryPosts(
         image,
         mentionCount: sourcePostIds.length,
         keywords: mergedKeywords.length > 0 ? mergedKeywords : [entityName],
-        summary: `有 ${sourcePostIds.length} 篇本周心动笔记对「${itemTitle || entityName}」给出实质评价，主要集中在${(mergedKeywords[0] ?? "使用体验")}。`,
+        summary: `有 ${sourcePostIds.length} 篇本周点亮笔记对「${itemTitle || entityName}」给出实质评价，主要集中在${(mergedKeywords[0] ?? "使用体验")}。`,
         reminder: riskSignals.length > 0 ? `注意：${riskSignals.join("、")}` : undefined,
         sourcePostIds,
       };
@@ -574,7 +574,7 @@ function generateItemsFromCategoryPosts(
       latestHeartedAt: categoryPosts[0]?.heartedAt,
       priorityScore: 60,
       keywords: category.keywords,
-      summary: "AI 根据这些笔记整理出本类心动内容。",
+      summary: "AI 根据这些笔记整理出本类灵感内容。",
       reminder: "建议先从最容易落地的一篇开始。",
       sourcePostIds: categoryPosts.map((post) => post.id),
     },
@@ -631,12 +631,12 @@ export function generateMockHeartBoardFromPosts(posts: MockPost[], weekId: strin
         category.items = [
           {
             id: `${category.slug}-collection`,
-            title: "本类心动合集",
+            title: "本类灵感合集",
             type: category.type,
             image: category.coverImage,
             mentionCount: category.sourcePostIds.length,
             keywords: category.keywords,
-            summary: "AI 根据这些笔记整理出本类心动内容。",
+            summary: "AI 根据这些笔记整理出本类灵感内容。",
             sourcePostIds: category.sourcePostIds,
           },
         ];
@@ -661,23 +661,23 @@ export function generateMockHeartBoardFromPosts(posts: MockPost[], weekId: strin
     summary:
       heartedPostsThisWeek.length > 0
         ? "这里汇总了你本周点亮的内容，后续会升级为 AI 自动聚类与总结。"
-        : "本周还没有心动内容，去发现页点亮几篇后再回来看看。",
+        : "本周还没有灵感内容，去发现页点亮几篇后再回来看看。",
     categories,
   };
 }
 
 export function buildEntityExtractionPrompt(posts: MockPost[]): string {
   return `
-你需要逐篇分析用户本周心动的帖子。
+你需要逐篇分析用户本周点亮的帖子。
 同一篇帖子可以提到多个对象。
 请为每个对象判断 role：
 - primary：主要讨论对象
 - secondary：有实质评价的对比对象
 - mentioned：只是顺带提到
 
-只有 primary 和 secondary 能支持心动要点。
+只有 primary 和 secondary 能支持灵感要点。
 每个对象需要返回 positiveSignals、riskSignals、scenes、evidence、sourcePostIds。
-不要把只是出现名字但没有评价的对象当作心动要点。
+不要把只是出现名字但没有评价的对象当作灵感要点。
 
 当前分析帖子数：${posts.length}
 `;

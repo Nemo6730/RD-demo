@@ -11,7 +11,7 @@ export type ActiveTestDataset =
 
 // Test-only dataset switch for evaluating Heartboard behavior across different inputs.
 // Keep "original" for normal demo experience.
-export const ACTIVE_TEST_DATASET: ActiveTestDataset = "original";
+export const ACTIVE_TEST_DATASET: ActiveTestDataset = "dataset_3_open_topics";
 
 type RawDatasetPost = {
   id: string;
@@ -144,11 +144,6 @@ function toMockComments(postId: string, entry: RawDatasetPost, likeCount: number
     if (!normalized || usedContents.has(normalized)) continue;
     usedContents.add(normalized);
     drafts.push(normalized);
-  }
-
-  while (drafts.length < targetCount) {
-    const fallback = `补一个细节：第 ${drafts.length + 1} 次看这个主题，感受比第一次更稳定。`;
-    drafts.push(fallback);
   }
 
   return drafts.map((content, index) => ({

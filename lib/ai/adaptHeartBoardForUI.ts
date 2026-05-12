@@ -107,7 +107,7 @@ export function adaptHeartBoardForUI(board: HeartBoard | AIHeartBoard, posts: Mo
     id: board.id || `heart-board-${weekId}`,
     weekRange: board.weekRange || weekId,
     totalHeartCount: posts.length,
-    summary: board.summary || "AI 已根据本周心动内容整理出心动板。",
+    summary: board.summary || "AI 已为你整理本周灵感。",
     categories,
   };
 }

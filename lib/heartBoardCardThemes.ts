@@ -1,5 +1,5 @@
 /**
- * 心动板分类卡片主题（与列表 swipe 卡一致）。
+ * 灵感板分类卡片主题（与列表 swipe 卡一致）。
  * themeIndex = heartBoard.categories 中该分类的稳定下标（与滑动排序无关）。
  */
 export const HEART_BOARD_CARD_THEMES = [

@@ -49,7 +49,7 @@ export function HeartBoardWeeklyStats() {
 
   return (
     <>
-      <p className="text-[15px] text-zinc-700">本周你点亮了 {stats.heartCount} 次心动</p>
+      <p className="text-[15px] text-zinc-700">本周你点亮了 {stats.heartCount} 条灵感</p>
       <p className="mt-1 text-[15px] text-zinc-700">AI 根据这些笔记整理出 {stats.directionCount} 个方向</p>
     </>
   );

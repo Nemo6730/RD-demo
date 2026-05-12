@@ -35,10 +35,10 @@ export function HeartButton({ postId, defaultHearted = false, onStateChange }: H
       className={`inline-flex items-center gap-1 text-sm transition-transform active:scale-95 ${
         hearted ? "text-[var(--xhs-red)]" : "text-zinc-400"
       }`}
-      aria-label="心动"
+      aria-label={hearted ? "已加灵感" : "加灵感"}
     >
       <span className="text-base leading-none">✨</span>
-      <span className="text-xs">{hearted ? "已心动" : "心动"}</span>
+      <span className="text-xs">{hearted ? "已加灵感" : "加灵感"}</span>
     </button>
   );
 }

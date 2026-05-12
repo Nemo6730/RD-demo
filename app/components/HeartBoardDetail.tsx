@@ -107,7 +107,7 @@ export function HeartBoardDetail({ category, themeIndex }: HeartBoardDetailProps
       </section>
 
       <section className="space-y-3 px-4 pt-5">
-        <h2 className="text-lg font-semibold text-zinc-900">心动要点</h2>
+        <h2 className="text-lg font-semibold text-zinc-900">灵感要点</h2>
         {visibleItems.map((item) => (
           <article
             key={item.id}

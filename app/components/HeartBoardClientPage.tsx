@@ -235,7 +235,7 @@ export function HeartBoardClientPage() {
 
         <div className="relative z-10 mx-auto mt-7 max-w-md text-center">
           <h1 className="text-[1.375rem] font-semibold leading-snug tracking-tight text-zinc-900 sm:text-2xl sm:leading-tight">
-            本周心动
+            本周灵感
           </h1>
           <p className="mx-auto mt-2.5 max-w-[18rem] text-[13px] font-normal leading-relaxed text-zinc-600">
             根据你本周点亮的内容生成
@@ -244,28 +244,63 @@ export function HeartBoardClientPage() {
       </header>
 
       <section className="px-5 pb-3 pt-2">
-        <div className="relative overflow-hidden rounded-[28px] border border-white/75 bg-[linear-gradient(135deg,#fff7f8_0%,#fff_52%,#fff1f3_100%)] px-5 py-3 shadow-[0_14px_32px_rgba(242,85,75,0.10)]">
-          <span className="pointer-events-none absolute -right-8 top-2 h-28 w-28 rounded-full bg-[#ffd6dc]/55 blur-3xl" />
-          <span className="pointer-events-none absolute right-8 top-8 text-4xl text-[#f2554b]/16">♡</span>
-          <span className="pointer-events-none absolute right-20 bottom-5 h-1.5 w-20 -rotate-6 rounded-full bg-[#f2554b]/20" />
-          <span className="relative inline-flex items-center gap-1 rounded-full bg-[#f2554b] px-2 py-0.5 text-[9px] font-semibold text-white shadow-[0_6px_14px_rgba(242,85,75,0.18)]">
-            ❤ AI 回顾
-          </span>
+        <div
+          className="relative overflow-hidden rounded-[28px] border bg-white/40 px-5 py-4 backdrop-blur-[2px] transition-[background,box-shadow,border-color] duration-[250ms] ease-out"
+          style={
+            {
+              "--summary-accent": activeDeckTheme.accent,
+              "--summary-accent-soft": activeDeckTheme.accentSoft,
+              "--summary-accent-softer": activeDeckTheme.accentSofter,
+              borderColor: `color-mix(in srgb, ${activeDeckTheme.accent} 18%, #ffffff)`,
+              background: `linear-gradient(135deg, ${activeDeckTheme.accentSofter} 0%, #ffffff 52%, ${activeDeckTheme.accentSoft} 100%)`,
+              boxShadow: `0 14px 32px ${activeDeckTheme.shadow}`,
+            } as React.CSSProperties
+          }
+        >
+          <span
+            className="pointer-events-none absolute -right-8 top-2 h-28 w-28 rounded-full blur-3xl transition-[background] duration-[250ms] ease-out"
+            style={{
+              backgroundColor: `color-mix(in srgb, ${activeDeckTheme.accent} 14%, transparent)`,
+            }}
+          />
 
-          <p className="relative mt-3 text-[15px] font-semibold leading-none text-[#3f302c]">
-            本周你点亮了 <span className="text-[19px] font-black text-[#f2554b]">{heartedPosts.length}</span> 次心动
+          <p className="relative text-[15px] font-semibold leading-snug text-[#3f302c]">
+            本周你点亮了{" "}
+            <span
+              className="text-[19px] font-black transition-[color] duration-[250ms] ease-out"
+              style={{ color: activeDeckTheme.accent }}
+            >
+              {heartedPosts.length}
+            </span>{" "}
+            条灵感
           </p>
-          <p className="relative mt-1.5 text-[11px] text-[#6d5a52]">
-            AI 整理出 <span className="font-bold text-[#f2554b]">{directionCount}</span> 个兴趣方向
+          <p className="relative mt-2 text-[11px] leading-relaxed text-[#6d5a52]">
+            AI 整理出{" "}
+            <span
+              className="font-bold transition-[color] duration-[250ms] ease-out"
+              style={{ color: activeDeckTheme.accent }}
+            >
+              {directionCount}
+            </span>{" "}
+            个兴趣方向
           </p>
           <button
             type="button"
             onClick={handleRegenerateWithGemini}
             disabled={isRegenerating || heartedPosts.length === 0}
-            className="relative mt-3 inline-flex items-center gap-1 rounded-full border border-[#f3c8c9] bg-white/80 px-3 py-1 text-[11px] font-semibold text-[#f2554b] shadow-[0_8px_18px_rgba(242,85,75,0.10)] disabled:opacity-60"
+            className="relative mt-3.5 inline-flex items-center gap-1 rounded-full border bg-white/80 px-3 py-1 text-[11px] font-semibold shadow-md backdrop-blur-sm transition-[color,border-color,box-shadow,background-color,opacity] duration-[250ms] ease-out hover:bg-white active:opacity-90 disabled:opacity-60"
+            style={
+              {
+                color: "var(--summary-accent)",
+                borderColor: "color-mix(in srgb, var(--summary-accent) 32%, #ffffff)",
+                boxShadow: `0 8px 18px color-mix(in srgb, var(--summary-accent) 12%, transparent)`,
+              } as React.CSSProperties
+            }
           >
-            <span>↻</span>
-            {isRegenerating ? "AI 正在整理..." : "用ai生成"}
+            <span className="transition-[color] duration-[250ms] ease-out" style={{ color: "inherit" }}>
+              ↻
+            </span>
+            {isRegenerating ? "AI 正在整理..." : "用 AI 生成"}
           </button>
         </div>
       </section>
@@ -273,9 +308,9 @@ export function HeartBoardClientPage() {
       {heartedPosts.length === 0 ? (
         <section className="px-4 pt-2">
           <div className="rounded-3xl border border-[#f1dfd7] bg-white px-5 py-7 text-center">
-            <h2 className="text-lg font-semibold text-zinc-900">本周还没有心动内容</h2>
+            <h2 className="text-lg font-semibold text-zinc-900">本周还没有灵感内容</h2>
             <p className="mt-2 text-sm leading-6 text-zinc-600">
-              去发现页点亮几篇让你心动的笔记，AI 会在这里帮你整理成本周心动板。
+              去发现页点亮几篇灵感笔记，AI 会在这里帮你整理进本周灵感。
             </p>
             <Link
               href="/"
@@ -332,7 +367,7 @@ export function HeartBoardClientPage() {
 
               <div className="min-w-0 shrink text-center">
                 <p className="text-[12px] font-normal leading-relaxed tracking-[0.03em] text-[#6b5d56]">
-                  左右滑动发现更多心动
+                  左右滑动发现更多灵感
                 </p>
                 <span
                   className="mx-auto mt-2 block h-0.5 w-10 rounded-full opacity-[0.4] transition-colors duration-300 ease-out"

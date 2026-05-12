@@ -1492,7 +1492,6 @@ function buildCommentDraft(post: MockPost, index: number): Omit<MockComment, "id
 }
 
 function buildTieredComments(post: MockPost, targetCount: number): MockComment[] {
-  const fallbackTag = post.tags[0] ?? "这个主题";
   const trimmedDrafts: Omit<MockComment, "id">[] = [];
   const usedContents = new Set<string>();
 
@@ -1509,21 +1508,13 @@ function buildTieredComments(post: MockPost, targetCount: number): MockComment[]
   }
 
   let candidateIndex = 0;
-  while (trimmedDrafts.length < targetCount && candidateIndex < targetCount * 12) {
+  const maxAttempts = Math.max(targetCount * 24, 48);
+  while (trimmedDrafts.length < targetCount && candidateIndex < maxAttempts) {
     const draft = buildCommentDraft(post, candidateIndex);
     candidateIndex += 1;
     if (usedContents.has(draft.content)) continue;
     usedContents.add(draft.content);
     trimmedDrafts.push(draft);
-  }
-
-  while (trimmedDrafts.length < targetCount) {
-    const fallbackIndex = trimmedDrafts.length + 1;
-    trimmedDrafts.push({
-      userName: COMMENT_USER_NAMES[(hashString(post.id) + fallbackIndex) % COMMENT_USER_NAMES.length],
-      content: `补一个实践细节：我在「${fallbackTag}」上按你思路试了第 ${fallbackIndex} 次，体验比之前稳定。`,
-      likeCount: 3 + (fallbackIndex % 20),
-    });
   }
 
   return createComments(getPostPrefix(post.id), trimmedDrafts.slice(0, targetCount));

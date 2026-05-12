@@ -31,7 +31,7 @@ export function HeartBoardSourcesClientPage({ categoryId, itemId }: HeartBoardSo
     return (
       <main className="min-h-screen bg-[#f8f5f3] p-4">
         <div className="rounded-3xl border border-[#f1dfd7] bg-white px-5 py-7 text-center">
-          <p className="text-sm text-zinc-600">正在同步本周心动内容...</p>
+          <p className="text-sm text-zinc-600">正在同步本周灵感内容...</p>
         </div>
       </main>
     );
@@ -59,7 +59,7 @@ export function HeartBoardSourcesClientPage({ categoryId, itemId }: HeartBoardSo
             href="/heart-board"
             className="mt-5 inline-flex rounded-full bg-[var(--xhs-red)] px-4 py-2 text-sm font-medium text-white"
           >
-            返回心动板
+            返回本周灵感
           </Link>
         </div>
       </main>
@@ -84,7 +84,7 @@ export function HeartBoardSourcesClientPage({ categoryId, itemId }: HeartBoardSo
 
       <section className="px-4 pt-4">
         <div className="rounded-2xl border border-[#efddd4] bg-white p-4 shadow-sm">
-          <p className="text-sm text-zinc-700">AI 根据这些心动笔记，总结出「{item.title}」这个心动要点。</p>
+          <p className="text-sm text-zinc-700">AI 根据这些灵感笔记，总结出「{item.title}」这个灵感要点。</p>
           <p className="mt-2 text-xs text-zinc-500">关联笔记 {sourcePosts.length} 篇</p>
         </div>
       </section>
