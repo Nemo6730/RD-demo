@@ -5,20 +5,29 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { HeartBoardCard } from "@/app/components/HeartBoardCard";
 import { getHeartedPostsByWeek } from "@/data/mockPosts";
 import { getActiveHeartboardPosts } from "@/data/testDatasets";
-import type { HeartBoard } from "@/data/mockHeartBoard";
+import type { HeartBoard, HeartBoardCategory } from "@/data/mockHeartBoard";
 import type { AIHeartBoard } from "@/lib/ai/heartBoardSchema";
 import { adaptHeartBoardForUI } from "@/lib/ai/adaptHeartBoardForUI";
 import { generateMockHeartBoardFromPosts } from "@/lib/generateHeartBoard";
 import { clearGeneratedHeartBoard, loadGeneratedHeartBoard, saveGeneratedHeartBoard } from "@/lib/heartBoardCache";
 import { getCurrentWeekId, getMergedHeartedPosts } from "@/lib/heartStorage";
 
+const SWIPE_THRESHOLD = 80;
+const SWIPE_OUT_DISTANCE = 360;
+const SWIPE_ANIMATION_MS = 320;
+
 export function HeartBoardClientPage() {
   const activePosts = useMemo(() => getActiveHeartboardPosts(), []);
   const weekId = useMemo(() => getCurrentWeekId(new Date()), []);
   const [hydrated, setHydrated] = useState(false);
   const [isRegenerating, setIsRegenerating] = useState(false);
-  const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
-  const touchStartYRef = useRef<number | null>(null);
+  const [cardOrder, setCardOrder] = useState<string[]>([]);
+  const [dragX, setDragX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isSwipingOut, setIsSwipingOut] = useState(false);
+  const [expandedInsightCardId, setExpandedInsightCardId] = useState<string | null>(null);
+  const dragStartXRef = useRef<number | null>(null);
+  const swipeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     setHydrated(true);
@@ -90,25 +99,92 @@ export function HeartBoardClientPage() {
   };
 
   const directionCount = heartBoard.categories.length;
-  const safeActiveCategoryIndex = Math.min(activeCategoryIndex, Math.max(directionCount - 1, 0));
-  const activeCategory = heartBoard.categories[safeActiveCategoryIndex];
+  const categoryIds = heartBoard.categories.map((category) => category.id);
+  const categoryById = new Map(heartBoard.categories.map((category) => [category.id, category]));
+  const normalizedCardOrder = [
+    ...cardOrder.filter((id) => categoryById.has(id)),
+    ...categoryIds.filter((id) => !cardOrder.includes(id)),
+  ];
+  const orderedCategories = normalizedCardOrder
+    .map((id) => categoryById.get(id))
+    .filter((category): category is HeartBoardCategory => Boolean(category));
+  const activeCategory = orderedCategories[0];
+  const activeOriginalIndex = activeCategory
+    ? heartBoard.categories.findIndex((category) => category.id === activeCategory.id)
+    : 0;
 
-  const showPreviousCategory = () => {
-    setActiveCategoryIndex((current) => Math.max(current - 1, 0));
+  useEffect(() => {
+    return () => {
+      if (swipeTimeoutRef.current) {
+        clearTimeout(swipeTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const rotateDeck = () => {
+    setExpandedInsightCardId(null);
+    setCardOrder((currentOrder) => {
+      const normalizedOrder = [
+        ...currentOrder.filter((id) => categoryById.has(id)),
+        ...categoryIds.filter((id) => !currentOrder.includes(id)),
+      ];
+      if (normalizedOrder.length <= 1) return normalizedOrder;
+      return [...normalizedOrder.slice(1), normalizedOrder[0]];
+    });
   };
 
-  const showNextCategory = () => {
-    setActiveCategoryIndex((current) => Math.min(current + 1, directionCount - 1));
+  const rotateToCategory = (categoryId: string) => {
+    setExpandedInsightCardId(null);
+    setCardOrder((currentOrder) => {
+      const normalizedOrder = [
+        ...currentOrder.filter((id) => categoryById.has(id)),
+        ...categoryIds.filter((id) => !currentOrder.includes(id)),
+      ];
+      const targetIndex = normalizedOrder.indexOf(categoryId);
+      if (targetIndex <= 0) return normalizedOrder;
+      return [...normalizedOrder.slice(targetIndex), ...normalizedOrder.slice(0, targetIndex)];
+    });
   };
 
-  const handleTouchEnd = (endY: number) => {
-    if (touchStartYRef.current === null) return;
-    const deltaY = touchStartYRef.current - endY;
-    if (Math.abs(deltaY) > 36) {
-      if (deltaY > 0) showNextCategory();
-      if (deltaY < 0) showPreviousCategory();
+  const completeSwipe = (direction: 1 | -1) => {
+    if (isSwipingOut) return;
+    setIsDragging(false);
+    setIsSwipingOut(true);
+    setDragX(direction * SWIPE_OUT_DISTANCE);
+    if (swipeTimeoutRef.current) {
+      clearTimeout(swipeTimeoutRef.current);
     }
-    touchStartYRef.current = null;
+    swipeTimeoutRef.current = setTimeout(() => {
+      rotateDeck();
+      setDragX(0);
+      setIsSwipingOut(false);
+      dragStartXRef.current = null;
+    }, SWIPE_ANIMATION_MS);
+  };
+
+  const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if ((event.target as Element).closest("a,button") || isSwipingOut) return;
+    dragStartXRef.current = event.clientX;
+    setIsDragging(true);
+    setDragX(0);
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (dragStartXRef.current === null || isSwipingOut) return;
+    setDragX(event.clientX - dragStartXRef.current);
+  };
+
+  const handlePointerEnd = () => {
+    if (dragStartXRef.current === null || isSwipingOut) return;
+    const direction = dragX >= 0 ? 1 : -1;
+    if (Math.abs(dragX) >= SWIPE_THRESHOLD) {
+      completeSwipe(direction);
+      return;
+    }
+    dragStartXRef.current = null;
+    setIsDragging(false);
+    setDragX(0);
   };
 
   return (
@@ -165,75 +241,73 @@ export function HeartBoardClientPage() {
         </section>
       ) : activeCategory ? (
         <section className="px-4 pt-2">
-          <div
-            className="relative h-[540px] overflow-hidden px-1 pt-1"
-            onTouchStart={(event) => {
-              if ((event.target as Element).closest("a,button")) return;
-              touchStartYRef.current = event.touches[0]?.clientY ?? null;
-            }}
-            onTouchEnd={(event) => {
-              if ((event.target as Element).closest("a,button")) {
-                touchStartYRef.current = null;
-                return;
-              }
-              handleTouchEnd(event.changedTouches[0]?.clientY ?? 0);
-            }}
-          >
-            {heartBoard.categories.map((category, index) => {
-              const offset = index - safeActiveCategoryIndex;
-              const isVisible = offset >= 0 && offset <= 2;
-              const transform =
-                offset < 0
-                  ? "translateY(-40px) scale(0.96)"
-                  : `translate(${offset * 18}px, ${offset * 18}px) rotate(${offset * 3}deg) scale(${1 - offset * 0.06})`;
+          <div className="relative h-[520px] overflow-visible pl-1 pb-8 pr-4 pt-1">
+            {orderedCategories.map((category, index) => {
+              const isActive = index === 0;
+              const isVisible = index <= 3;
+              const cardWidthClass = "w-[70%]";
+              const stackedTransforms = [
+                "translateX(-28px) translateY(8px) rotate(1deg) scale(1)",
+                "translateX(calc(14% - 5px)) translateY(8px) rotate(1deg) scale(1)",
+                "translateX(calc(28% + 14px)) translateY(8px) rotate(1deg) scale(1)",
+                "translateX(calc(42% + 33px)) translateY(8px) rotate(1deg) scale(1)",
+              ];
+              const activeTransform = `translateX(${dragX - 28}px) translateY(8px) rotate(1deg) scale(1)`;
+              const transform = isActive ? activeTransform : stackedTransforms[index] ?? stackedTransforms[3];
 
               return (
                 <div
                   key={category.id}
-                  className={`absolute inset-x-1 top-1 transition-all duration-300 ease-out ${
+                  className={`absolute left-1 top-1 ${cardWidthClass} touch-pan-y select-none ${
+                    isDragging && isActive ? "" : "transition-all duration-300 ease-out"
+                  } ${
                     isVisible ? "opacity-100" : "pointer-events-none opacity-0"
-                  } ${offset === 0 ? "z-30" : offset === 1 ? "z-20" : "z-10"}`}
+                  }`}
                   style={{
                     transform,
-                    transformOrigin: "center top",
-                    pointerEvents: offset === 0 ? "auto" : "none",
+                    transformOrigin: "center center",
+                    zIndex: isActive ? 40 : index === 1 ? 30 : index === 2 ? 20 : index === 3 ? 10 : 1,
+                    opacity: isVisible ? 1 : 0,
+                    pointerEvents: isActive ? "auto" : "none",
                   }}
+                  onPointerDown={isActive ? handlePointerDown : undefined}
+                  onPointerMove={isActive ? handlePointerMove : undefined}
+                  onPointerUp={isActive ? handlePointerEnd : undefined}
+                  onPointerCancel={isActive ? handlePointerEnd : undefined}
                 >
-                  <HeartBoardCard category={category} />
+                  <HeartBoardCard
+                    category={category}
+                    isInsightExpanded={isActive && expandedInsightCardId === category.id}
+                    themeIndex={heartBoard.categories.findIndex((entry) => entry.id === category.id)}
+                    onToggleInsight={() =>
+                      setExpandedInsightCardId((current) => (current === category.id ? null : category.id))
+                    }
+                  />
                 </div>
               );
             })}
           </div>
 
-          <div className="mt-3 flex items-center justify-center gap-3">
-            <button
-              type="button"
-              onClick={showPreviousCategory}
-              disabled={safeActiveCategoryIndex === 0}
-              className="rounded-full border border-[#ead7cf] bg-white/70 px-3 py-1.5 text-xs font-medium text-zinc-600 disabled:opacity-35"
-            >
-              上一张
-            </button>
+          <div className="mt-2.5 flex flex-col items-center gap-2">
             <div className="flex items-center gap-2">
               {heartBoard.categories.map((category, index) => (
                 <button
                   key={category.id}
                   type="button"
                   aria-label={`切换到${category.title}`}
-                  onClick={() => setActiveCategoryIndex(index)}
+                  onClick={() => rotateToCategory(category.id)}
                   className={`h-2 rounded-full transition-all ${
-                    index === safeActiveCategoryIndex ? "w-5 bg-[var(--xhs-red)]" : "w-2 bg-[#e8d8d1]"
+                    index === activeOriginalIndex ? "w-5 bg-[var(--xhs-red)]" : "w-2 bg-[#e8d8d1]"
                   }`}
                 />
               ))}
             </div>
             <button
               type="button"
-              onClick={showNextCategory}
-              disabled={safeActiveCategoryIndex === directionCount - 1}
-              className="rounded-full border border-[#ead7cf] bg-white/70 px-3 py-1.5 text-xs font-medium text-zinc-600 disabled:opacity-35"
+              onClick={() => completeSwipe(-1)}
+              className="rounded-full border border-[#ead7cf] bg-white/70 px-3 py-1.5 text-xs font-medium text-zinc-600 shadow-sm"
             >
-              下一张
+              左滑翻看下一张
             </button>
           </div>
         </section>

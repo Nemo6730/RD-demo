@@ -3,67 +3,123 @@ import type { HeartBoardCategory } from "@/data/mockHeartBoard";
 
 type HeartBoardCardProps = {
   category: HeartBoardCategory;
+  isInsightExpanded: boolean;
+  onToggleInsight: () => void;
+  themeIndex: number;
 };
 
-export function HeartBoardCard({ category }: HeartBoardCardProps) {
+const cardThemes = [
+  {
+    accent: "#FF5A6B",
+    accentSoft: "#FFF1F3",
+    accentSofter: "#FFF7F8",
+    shadow: "rgba(255,90,107,0.22)",
+  },
+  {
+    accent: "#F4A261",
+    accentSoft: "#FFF5EC",
+    accentSofter: "#FFF9F2",
+    shadow: "rgba(244,162,97,0.22)",
+  },
+  {
+    accent: "#7BAE7F",
+    accentSoft: "#F2F8F2",
+    accentSofter: "#F8FBF6",
+    shadow: "rgba(123,174,127,0.22)",
+  },
+  {
+    accent: "#9C8ACD",
+    accentSoft: "#F6F2FB",
+    accentSofter: "#FAF7FD",
+    shadow: "rgba(156,138,205,0.22)",
+  },
+  {
+    accent: "#6C9BCF",
+    accentSoft: "#F0F6FC",
+    accentSofter: "#F7FBFF",
+    shadow: "rgba(108,155,207,0.2)",
+  },
+] as const;
+
+export function HeartBoardCard({ category, isInsightExpanded, onToggleInsight, themeIndex }: HeartBoardCardProps) {
   const representativeItems =
     category.representativeItems && category.representativeItems.length > 0
       ? category.representativeItems
       : category.items.slice(0, 3).map((item) => item.title);
-  const visibleKeywords = category.keywords.slice(0, 4);
-  const visibleItems = representativeItems.slice(0, 2);
+  const visibleKeywords = category.keywords.slice(0, 3);
+  const visibleItems = representativeItems.slice(0, 3);
+  const shouldShowInsightToggle = category.insight.trim().length > 52;
+  const theme = cardThemes[themeIndex % cardThemes.length];
 
   return (
-    <article className="flex h-[500px] w-full flex-col overflow-hidden rounded-[28px] border border-white/80 bg-[#fffdfb] p-3 shadow-[0_20px_42px_rgba(95,53,44,0.16)]">
+    <article className="flex h-[470px] w-full flex-col overflow-hidden rounded-[26px] border border-white/80 bg-[#fffdfb] p-2 pb-3 shadow-[0_18px_36px_rgba(95,53,44,0.16)]">
       <div
-        className="h-[168px] w-full shrink-0 rounded-[22px] bg-cover bg-center"
+        className="mx-auto h-[138px] w-[92%] shrink-0 rounded-[20px] bg-cover bg-center"
         style={{ backgroundImage: `url(${category.coverImage})` }}
       />
-      <div className="flex min-h-0 flex-1 flex-col gap-2.5 px-1 pb-1 pt-3">
-        <div className="text-left">
-          <div className="flex items-start justify-between gap-3">
-            <p className="line-clamp-2 text-[20px] font-black leading-6 text-zinc-950">{category.title}</p>
-            <span className="mt-1 shrink-0 rounded-full bg-[#fff1f2] px-2.5 py-1 text-[11px] font-medium text-[var(--xhs-red)]">
+      <div className="flex min-h-0 flex-1 flex-col px-4 pb-2 pt-1.5">
+        <div className="shrink-0 text-left">
+          <div className="space-y-1">
+            <p className="line-clamp-2 text-[16px] font-black leading-5 text-zinc-950">{category.title}</p>
+            <span
+              className="inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium"
+              style={{ backgroundColor: theme.accentSoft, color: theme.accent }}
+            >
               本周心动 {category.postCount} 篇
             </span>
           </div>
         </div>
 
-        <div className="rounded-2xl bg-[#fff6f4] p-3 text-left">
-          <p className="mb-1 text-[11px] font-semibold text-[#d15b66]">AI 洞察</p>
-          <p className="line-clamp-2 text-[13px] leading-5 text-zinc-700">{category.insight}</p>
-        </div>
+        <div className="hide-scrollbar mt-1 min-h-0 flex-1 space-y-1 overflow-y-auto pr-1">
+          <div className="rounded-2xl p-2 text-left" style={{ backgroundColor: theme.accentSofter }}>
+            <p className="mb-1 text-[10px] font-semibold" style={{ color: theme.accent }}>
+              AI 洞察
+            </p>
+            <p
+              className={`text-[10px] leading-4 text-zinc-700 ${
+                isInsightExpanded ? "max-h-[82px] overflow-y-auto pr-1" : "line-clamp-3"
+              }`}
+            >
+              {category.insight}
+            </p>
+            {shouldShowInsightToggle ? (
+              <button
+                type="button"
+                onClick={onToggleInsight}
+                className="mt-1 text-[10px] font-medium"
+                style={{ color: theme.accent }}
+              >
+                {isInsightExpanded ? "收起" : "展开"}
+              </button>
+            ) : null}
+          </div>
 
-        {visibleKeywords.length > 0 ? (
-          <div className="space-y-1.5 text-left">
-            <p className="text-[11px] font-medium text-zinc-500">心动关键词</p>
-            <div className="flex flex-wrap gap-1.5">
-              {visibleKeywords.map((keyword) => (
-                <span key={keyword} className="rounded-full bg-[#f7f0ec] px-2.5 py-1 text-[11px] text-zinc-700">
-                  #{keyword}
-                </span>
-              ))}
+          {visibleKeywords.length > 0 ? (
+            <div className="space-y-0.5 text-left">
+              <p className="text-[10px] font-medium text-zinc-500">心动关键词</p>
+              <div className="flex flex-wrap gap-1">
+                {visibleKeywords.map((keyword) => (
+                  <span key={keyword} className="rounded-full bg-[#f7f0ec] px-2 py-0.5 text-[10px] text-zinc-700">
+                    #{keyword}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
-        ) : null}
+          ) : null}
 
-        <div className="space-y-1.5 text-left">
-          <p className="text-[11px] font-medium text-zinc-500">代表内容</p>
-          <div className="grid gap-1.5">
-            {visibleItems.map((item) => (
-              <p key={item} className="rounded-2xl bg-white px-3 py-1.5 text-[12px] leading-4 text-zinc-700 shadow-sm">
-                {item}
-              </p>
-            ))}
+          <div className="space-y-0.5 text-left">
+            <p className="text-[10px] font-medium text-zinc-500">代表内容</p>
+            <p className="line-clamp-2 text-[10px] leading-[15px] text-zinc-700">{visibleItems.join(" ｜ ")}</p>
           </div>
         </div>
 
-        <div className="relative z-50 mt-auto flex justify-end">
+        <div className="relative z-50 mt-1 flex shrink-0 justify-end pb-0.5 pt-1">
           <Link
             href={`/heart-board/${category.slug}`}
-            className="relative z-50 inline-flex rounded-full bg-[var(--xhs-red)] px-4 py-2 text-xs font-semibold text-white shadow-[0_8px_18px_rgba(255,36,66,0.22)]"
+            className="relative z-50 inline-flex items-center gap-1 whitespace-nowrap rounded-full px-3 py-1.5 text-[11px] font-semibold text-white"
+            style={{ backgroundColor: theme.accent, boxShadow: `0 8px 18px ${theme.shadow}` }}
           >
-            查看详情
+            查看详情 <span aria-hidden="true">›</span>
           </Link>
         </div>
       </div>
