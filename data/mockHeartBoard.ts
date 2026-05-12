@@ -49,7 +49,7 @@ export const mockHeartBoard: HeartBoard = {
       insight: "你最近偏好清透、低饱和、通勤感的底妆。",
       keywords: ["清透", "不卡粉", "自然妆感"],
       commentSummary: ["不卡粉", "自然妆感", "干皮需要做好保湿"],
-      sourcePostIds: ["post_001", "post_004", "post_006"],
+      sourcePostIds: ["post_beauty_01", "post_beauty_04", "post_beauty_06"],
       items: [
         {
           id: "dior-forever",
@@ -61,7 +61,7 @@ export const mockHeartBoard: HeartBoard = {
           keywords: ["持妆", "细腻", "通勤"],
           summary: "妆面稳定、遮瑕适中，全天通勤不易暗沉。",
           reminder: "干皮在秋冬需加强保湿，否则鼻翼略卡纹。",
-          sourcePostIds: ["post_004", "post_001"],
+          sourcePostIds: ["post_beauty_04", "post_beauty_01"],
         },
         {
           id: "chanel-les-beiges",
@@ -73,7 +73,7 @@ export const mockHeartBoard: HeartBoard = {
           keywords: ["自然", "轻透", "光泽"],
           summary: "妆感非常自然，适合原生好皮肤路线。",
           reminder: "遮瑕偏弱，瑕疵多时建议搭配局部遮瑕。",
-          sourcePostIds: ["post_004", "post_006"],
+          sourcePostIds: ["post_beauty_04", "post_beauty_06"],
         },
         {
           id: "nars-light-reflecting",
@@ -85,7 +85,7 @@ export const mockHeartBoard: HeartBoard = {
           keywords: ["清透", "贴肤", "奶油肌"],
           summary: "上脸服帖快，镜头下肤质表现很稳。",
           reminder: "夏季出油后建议补压散粉，避免光泽过强。",
-          sourcePostIds: ["post_004", "post_001", "post_006"],
+          sourcePostIds: ["post_beauty_04", "post_beauty_01", "post_beauty_06"],
         },
       ],
     },
@@ -100,7 +100,7 @@ export const mockHeartBoard: HeartBoard = {
       insight: "你最近更偏好氛围感强、适合约会和朋友聚餐的餐厅。",
       keywords: ["约会", "意餐", "提前预约"],
       commentSummary: ["环境好", "适合聊天", "需要提前订位"],
-      sourcePostIds: ["post_003", "post_001", "post_005"],
+      sourcePostIds: ["post_restaurant_01", "post_restaurant_02", "post_restaurant_05"],
       items: [
         {
           id: "trattoria-los-angeles",
@@ -112,7 +112,7 @@ export const mockHeartBoard: HeartBoard = {
           keywords: ["约会", "氛围感", "意餐"],
           summary: "适合周末和朋友聚餐，评论多次提到环境好、出片。",
           reminder: "晚高峰排队较久，建议提前预约。",
-          sourcePostIds: ["post_003", "post_001"],
+          sourcePostIds: ["post_restaurant_01", "post_restaurant_05"],
         },
         {
           id: "brunch-garden",
@@ -124,7 +124,7 @@ export const mockHeartBoard: HeartBoard = {
           keywords: ["Brunch", "阳光", "周末"],
           summary: "整体节奏松弛，适合午后慢慢聊，拍照友好。",
           reminder: "热门时段等位时间长，建议错峰。",
-          sourcePostIds: ["post_003", "post_005"],
+          sourcePostIds: ["post_restaurant_02", "post_restaurant_01"],
         },
         {
           id: "sushi-bar-kumo",
@@ -136,7 +136,7 @@ export const mockHeartBoard: HeartBoard = {
           keywords: ["日料", "安静", "预约"],
           summary: "评论普遍认为食材稳定，适合小范围聚会。",
           reminder: "周末晚餐时段非常紧俏，至少提前两天预约。",
-          sourcePostIds: ["post_003", "post_001"],
+          sourcePostIds: ["post_restaurant_03", "post_restaurant_05"],
         },
       ],
     },
@@ -151,7 +151,7 @@ export const mockHeartBoard: HeartBoard = {
       insight: "你这周收藏的目的地更偏向短途、自然风景和拍照友好。",
       keywords: ["短途", "海边", "拍照"],
       commentSummary: ["海边光线好", "周末可达", "自驾更方便"],
-      sourcePostIds: ["post_005", "post_003", "post_001"],
+      sourcePostIds: ["post_travel_01", "post_travel_02", "post_travel_03"],
       items: [
         {
           id: "santa-barbara",
@@ -163,7 +163,7 @@ export const mockHeartBoard: HeartBoard = {
           keywords: ["短途", "海边", "拍照"],
           summary: "本周心动内容偏向短途放松和海岸线景色，出片率高。",
           reminder: "部分停车点紧张，建议提前规划。",
-          sourcePostIds: ["post_005", "post_003"],
+          sourcePostIds: ["post_travel_01", "post_travel_03"],
         },
         {
           id: "malibu",
@@ -175,7 +175,7 @@ export const mockHeartBoard: HeartBoard = {
           keywords: ["海边", "日落", "公路"],
           summary: "日落时段最受欢迎，评论多提到路线体验感强。",
           reminder: "高峰路段拥堵，建议提前出发。",
-          sourcePostIds: ["post_005", "post_001"],
+          sourcePostIds: ["post_travel_02", "post_travel_01"],
         },
         {
           id: "san-diego",
@@ -187,7 +187,7 @@ export const mockHeartBoard: HeartBoard = {
           keywords: ["自然风景", "周末", "轻旅行"],
           summary: "整体节奏轻松，适合 2-3 天恢复型周末出行。",
           reminder: "跨城移动建议提前确认交通时段。",
-          sourcePostIds: ["post_005", "post_003"],
+          sourcePostIds: ["post_travel_03", "post_travel_08"],
         },
       ],
     },
@@ -202,7 +202,7 @@ export const mockHeartBoard: HeartBoard = {
       insight: "你最近关注的是如何快速做出可展示的 AI 产品 demo。",
       keywords: ["自动化", "工作流", "提效"],
       commentSummary: ["先做 demo", "流程自动化", "重视交付速度"],
-      sourcePostIds: ["post_002", "post_001", "post_006"],
+      sourcePostIds: ["post_study_01", "post_study_02", "post_study_07"],
       items: [
         {
           id: "cursor-agent",
@@ -214,7 +214,7 @@ export const mockHeartBoard: HeartBoard = {
           keywords: ["demo", "自动化", "AI 编程"],
           summary: "更适合快速迭代页面与结构化任务拆解。",
           reminder: "先锁定最小可运行范围，再扩展能力边界。",
-          sourcePostIds: ["post_002", "post_001"],
+          sourcePostIds: ["post_study_02", "post_study_01"],
         },
         {
           id: "gemini-ai-studio",
@@ -226,7 +226,7 @@ export const mockHeartBoard: HeartBoard = {
           keywords: ["多模态", "原型", "验证"],
           summary: "被频繁用于验证 prompt 方向和交互原型。",
           reminder: "建议先跑小样本，不要直接全量接入。",
-          sourcePostIds: ["post_002", "post_006"],
+          sourcePostIds: ["post_study_07", "post_study_05"],
         },
         {
           id: "vercel-demo",
@@ -238,7 +238,7 @@ export const mockHeartBoard: HeartBoard = {
           keywords: ["部署", "展示", "MVP"],
           summary: "用于快速完成可分享的在线演示版本。",
           reminder: "优先保证核心路径可用，再做性能打磨。",
-          sourcePostIds: ["post_002", "post_001"],
+          sourcePostIds: ["post_study_02", "post_study_09"],
         },
       ],
     },
@@ -253,7 +253,7 @@ export const mockHeartBoard: HeartBoard = {
       insight: "本周生活类心动更偏向恢复状态、整理生活和建立轻量计划。",
       keywords: ["松弛感", "整理", "效率"],
       commentSummary: ["先做一点点", "不要过载", "恢复优先"],
-      sourcePostIds: ["post_006", "post_003", "post_005"],
+      sourcePostIds: ["post_lifestyle_01", "post_lifestyle_03", "post_lifestyle_05"],
       items: [
         {
           id: "weekend-room-reset",
@@ -265,7 +265,7 @@ export const mockHeartBoard: HeartBoard = {
           keywords: ["整理", "空间", "恢复"],
           summary: "通过清理桌面和衣物分区，帮助恢复日常节奏。",
           reminder: "先从一个小区域开始，不要一次铺太大。",
-          sourcePostIds: ["post_006", "post_005"],
+          sourcePostIds: ["post_lifestyle_01", "post_lifestyle_04"],
         },
         {
           id: "coffee-study",
@@ -277,7 +277,7 @@ export const mockHeartBoard: HeartBoard = {
           keywords: ["专注", "效率", "轻任务"],
           summary: "更适合处理轻任务和复盘，不适合重思考深工。",
           reminder: "提前准备任务清单，避免到店后无目标刷手机。",
-          sourcePostIds: ["post_006", "post_003"],
+          sourcePostIds: ["post_lifestyle_02", "post_lifestyle_05"],
         },
         {
           id: "low-cost-reset-plan",
@@ -289,7 +289,7 @@ export const mockHeartBoard: HeartBoard = {
           keywords: ["松弛感", "轻量计划", "恢复"],
           summary: "优先安排能快速恢复状态的小行动，降低执行门槛。",
           reminder: "先完成一个具体动作，不必一次改变太多。",
-          sourcePostIds: ["post_006", "post_005", "post_003"],
+          sourcePostIds: ["post_lifestyle_03", "post_lifestyle_05", "post_lifestyle_01"],
         },
       ],
     },

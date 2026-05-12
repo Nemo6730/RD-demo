@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getHeartBoardItem } from "@/data/mockHeartBoard";
-import { getPostsByIds } from "@/data/mockPosts";
+import { getPostExcerpt, getPostsByIds } from "@/data/mockPosts";
 
 type SourcesPageProps = {
   params: Promise<{ categoryId: string; itemId: string }>;
@@ -52,12 +52,12 @@ export default async function ItemSourcesPage({ params }: SourcesPageProps) {
               />
               <div className="min-w-0 flex-1 space-y-2 p-3">
                 <p className="line-clamp-2 text-sm font-semibold text-zinc-900">{post.title}</p>
-                <p className="line-clamp-2 text-xs text-zinc-600">{post.excerpt}</p>
-                <p className="text-xs text-zinc-500">@{post.author}</p>
+                <p className="line-clamp-2 text-xs text-zinc-600">{getPostExcerpt(post)}</p>
+                <p className="text-xs text-zinc-500">@{post.authorName}</p>
                 <div className="flex items-center gap-3 text-xs text-zinc-500">
-                  <span>♡ {post.likes}</span>
-                  <span>☆ {post.favorites}</span>
-                  <span>💬 {post.comments}</span>
+                  <span>♡ {post.likeCount}</span>
+                  <span>☆ {post.collectCount}</span>
+                  <span>💬 {post.comments.length || post.commentCount}</span>
                 </div>
               </div>
             </div>

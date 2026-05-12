@@ -5,19 +5,19 @@ import { isPostHearted, setPostHearted } from "@/lib/heartStorage";
 
 type HeartButtonProps = {
   postId: string;
-  onHearted?: () => void;
+  defaultHearted?: boolean;
+  onStateChange?: (hearted: boolean) => void;
 };
 
-export function HeartButton({ postId, onHearted }: HeartButtonProps) {
-  const initialHearted = useMemo(() => isPostHearted(postId), [postId]);
+export function HeartButton({ postId, defaultHearted = false, onStateChange }: HeartButtonProps) {
+  const initialHearted = useMemo(() => isPostHearted(postId, defaultHearted), [postId, defaultHearted]);
   const [hearted, setHearted] = useState(initialHearted);
 
   const handleClick = () => {
-    if (hearted) return;
-    const next = true;
+    const next = !hearted;
     setHearted(next);
     setPostHearted(postId, next);
-    onHearted?.();
+    onStateChange?.(next);
   };
 
   return (
@@ -29,7 +29,7 @@ export function HeartButton({ postId, onHearted }: HeartButtonProps) {
       }`}
       aria-label="心动"
     >
-      <span className="text-lg leading-none">{hearted ? "♥" : "♡"}</span>
+      <span className="text-base leading-none">✨</span>
       <span className="text-xs">{hearted ? "已心动" : "心动"}</span>
     </button>
   );
