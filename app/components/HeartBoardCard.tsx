@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useLayoutEffect, useRef, useState } from "react";
 import type { HeartBoardCategory } from "@/data/mockHeartBoard";
 
 type HeartBoardCardProps = {
@@ -8,7 +9,8 @@ type HeartBoardCardProps = {
   themeIndex: number;
 };
 
-const cardThemes = [
+/** 与 swipe 卡片主题一致；供心动板页指示器、提示条等复用 */
+export const HEART_BOARD_CARD_THEMES = [
   {
     accent: "#FF5A6B",
     accentSoft: "#FFF1F3",
@@ -42,14 +44,34 @@ const cardThemes = [
 ] as const;
 
 export function HeartBoardCard({ category, isInsightExpanded, onToggleInsight, themeIndex }: HeartBoardCardProps) {
+  const insightBodyRef = useRef<HTMLParagraphElement>(null);
+  const [insightOverflows, setInsightOverflows] = useState(false);
   const representativeItems =
     category.representativeItems && category.representativeItems.length > 0
       ? category.representativeItems
       : category.items.slice(0, 3).map((item) => item.title);
   const visibleKeywords = category.keywords.slice(0, 3);
   const visibleItems = representativeItems.slice(0, 3);
-  const shouldShowInsightToggle = category.insight.trim().length > 52;
-  const theme = cardThemes[themeIndex % cardThemes.length];
+  const theme = HEART_BOARD_CARD_THEMES[themeIndex % HEART_BOARD_CARD_THEMES.length];
+
+  useLayoutEffect(() => {
+    if (isInsightExpanded) return;
+
+    const el = insightBodyRef.current;
+    if (!el) return;
+
+    const measure = () => {
+      const node = insightBodyRef.current;
+      if (!node || isInsightExpanded) return;
+      // Collapsed uses line-clamp-3; overflow if content extends past clamped box.
+      setInsightOverflows(node.scrollHeight > node.clientHeight + 1);
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [category.insight, isInsightExpanded]);
 
   return (
     <article className="flex h-[clamp(560px,72vh,640px)] w-full flex-col overflow-hidden rounded-[26px] border border-white/80 bg-[#fffdfb] p-3 pb-4 shadow-[0_18px_36px_rgba(95,53,44,0.16)]">
@@ -78,13 +100,14 @@ export function HeartBoardCard({ category, isInsightExpanded, onToggleInsight, t
               AI 洞察
             </p>
             <p
+              ref={insightBodyRef}
               className={`text-[13px] leading-[1.65] text-zinc-700 ${
                 isInsightExpanded ? "max-h-[128px] overflow-y-auto pr-1" : "line-clamp-3"
               }`}
             >
               {category.insight}
             </p>
-            {shouldShowInsightToggle ? (
+            {insightOverflows ? (
               <button
                 type="button"
                 onClick={onToggleInsight}

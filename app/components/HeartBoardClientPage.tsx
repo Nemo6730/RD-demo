@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { ZCOOL_KuaiLe } from "next/font/google";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { HeartBoardCard } from "@/app/components/HeartBoardCard";
+import { HeartBoardCard, HEART_BOARD_CARD_THEMES } from "@/app/components/HeartBoardCard";
 import { getHeartedPostsByWeek } from "@/data/mockPosts";
 import { getActiveHeartboardPosts } from "@/data/testDatasets";
 import type { HeartBoard, HeartBoardCategory } from "@/data/mockHeartBoard";
@@ -16,11 +15,6 @@ import { getCurrentWeekId, getMergedHeartedPosts } from "@/lib/heartStorage";
 const SWIPE_THRESHOLD = 80;
 const SWIPE_OUT_DISTANCE = 360;
 const SWIPE_ANIMATION_MS = 320;
-const heroTitleFont = ZCOOL_KuaiLe({
-  weight: "400",
-  display: "swap",
-  preload: false,
-});
 
 export function HeartBoardClientPage() {
   const activePosts = useMemo(() => getActiveHeartboardPosts(), []);
@@ -193,19 +187,11 @@ export function HeartBoardClientPage() {
     setDragX(0);
   };
 
+  const activeDeckTheme = HEART_BOARD_CARD_THEMES[activeOriginalIndex % HEART_BOARD_CARD_THEMES.length];
+
   return (
     <main className="min-h-screen overflow-x-hidden bg-[linear-gradient(180deg,#fff8f4_0%,#fff5f7_48%,#fffaf6_100%)] pb-8">
-      <header className="relative overflow-hidden bg-[linear-gradient(180deg,#fff4df_0%,#fff8f4_48%,#fff5f7_100%)] px-6 pb-6 pt-4">
-        <span className="pointer-events-none absolute -left-12 top-6 h-32 w-32 rounded-full bg-[#ffd6c7]/45 blur-3xl" />
-        <span className="pointer-events-none absolute right-0 top-12 h-28 w-28 rounded-full bg-[#ffc7d0]/40 blur-3xl" />
-        <span className="pointer-events-none absolute left-[18%] top-[72px] rotate-[-18deg] text-base text-[#f47d72]/60">
-          〰
-        </span>
-        <span className="pointer-events-none absolute right-[21%] top-[62px] rotate-[12deg] text-base text-[#f47d72]/70">
-          ♡
-        </span>
-        <span className="pointer-events-none absolute right-[16%] top-[100px] text-xs text-[#f0a06d]/70">✦</span>
-
+      <header className="relative border-b border-[#f0e6e0]/90 bg-gradient-to-b from-[#fffbf9] to-[#fff8f6] px-6 pb-8 pt-4">
         <div className="relative z-10 flex items-center justify-between">
           <Link
             href="/me"
@@ -232,16 +218,13 @@ export function HeartBoardClientPage() {
           </div>
         </div>
 
-        <div className="relative z-10 mt-6 text-center">
-          <h1
-            className={`${heroTitleFont.className} -rotate-1 text-[52px] leading-none tracking-[0.06em] text-[#f2554b] drop-shadow-[0_5px_0_rgba(255,210,190,0.65)] [text-shadow:1px_1px_0_#fff2e8,-1px_1px_0_#fff2e8,0_3px_0_rgba(255,178,155,0.45)]`}
-          >
+        <div className="relative z-10 mx-auto mt-7 max-w-md text-center">
+          <h1 className="text-[1.375rem] font-semibold leading-snug tracking-tight text-[var(--xhs-red)] [text-shadow:0_1px_1px_rgba(255,255,255,0.92),0_2px_10px_rgba(255,36,66,0.32),0_5px_28px_rgba(255,36,66,0.42)] sm:text-2xl sm:leading-tight">
             本周心动
           </h1>
-          <p className="mt-3 text-[13px] font-medium tracking-[0.08em] text-[#6e554a]">
+          <p className="mx-auto mt-2.5 max-w-[18rem] text-[13px] font-normal leading-relaxed text-zinc-600">
             根据你本周点亮的内容生成
           </p>
-          <span className="mx-auto mt-2 block h-1.5 w-28 -rotate-1 rounded-full bg-[#f2554b]/45" />
         </div>
       </header>
 
@@ -309,27 +292,59 @@ export function HeartBoardClientPage() {
             />
           </div>
 
-          <div className="mt-7 flex flex-col items-center gap-2.5">
-            <div className="flex items-center gap-2">
+          <div className="mt-6 flex flex-col items-center px-2 pb-1">
+            <div className="mx-auto inline-flex max-w-full items-center justify-center gap-x-1 px-1 sm:gap-x-1.5">
+              <span
+                className="pointer-events-none shrink-0 -translate-x-1.5 -translate-y-1 transition-colors duration-300 ease-out"
+                style={{ color: activeDeckTheme.accent }}
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="opacity-[0.9]"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                    stroke="currentColor"
+                    strokeWidth="1.2"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
+
+              <div className="min-w-0 shrink text-center">
+                <p className="text-[12px] font-normal leading-relaxed tracking-[0.03em] text-[#6b5d56]">
+                  左右滑动发现更多心动
+                </p>
+                <span
+                  className="mx-auto mt-2 block h-0.5 w-10 rounded-full opacity-[0.4] transition-colors duration-300 ease-out"
+                  style={{ backgroundColor: activeDeckTheme.accent }}
+                  aria-hidden="true"
+                />
+              </div>
+            </div>
+
+            <div className="mt-3 flex items-center justify-center gap-3">
               {heartBoard.categories.map((category, index) => (
                 <button
                   key={category.id}
                   type="button"
                   aria-label={`切换到${category.title}`}
                   onClick={() => rotateToCategory(category.id)}
-                  className={`h-2 rounded-full transition-all ${
-                    index === activeOriginalIndex ? "w-5 bg-[var(--xhs-red)]" : "w-2 bg-[#e8d8d1]"
+                  className={`h-2 shrink-0 rounded-full transition-[width,background-color] duration-300 ease-out ${
+                    index === activeOriginalIndex
+                      ? "w-[20px] sm:w-[22px]"
+                      : "w-2 bg-[#D9D2CF] hover:bg-[#cec6c3]"
                   }`}
+                  style={
+                    index === activeOriginalIndex ? { backgroundColor: activeDeckTheme.accent } : undefined
+                  }
                 />
               ))}
             </div>
-            <button
-              type="button"
-              onClick={() => completeSwipe(-1)}
-              className="rounded-full border border-[#ead7cf] bg-white/70 px-3 py-1.5 text-xs font-medium text-zinc-600 shadow-sm"
-            >
-              左滑翻看下一张
-            </button>
           </div>
         </section>
       ) : null}
