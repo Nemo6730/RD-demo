@@ -11,7 +11,7 @@ export type ActiveTestDataset =
 
 // Test-only dataset switch for evaluating Heartboard behavior across different inputs.
 // Keep "original" for normal demo experience.
-export const ACTIVE_TEST_DATASET: ActiveTestDataset = "dataset_3_open_topics";
+export const ACTIVE_TEST_DATASET: ActiveTestDataset = "original";
 
 type RawDatasetPost = {
   id: string;
