@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { HeartBoardCard } from "@/app/components/HeartBoardCard";
-import { getHeartedPostsByWeek, mockPosts } from "@/data/mockPosts";
+import { getHeartedPostsByWeek } from "@/data/mockPosts";
+import { getActiveHeartboardPosts } from "@/data/testDatasets";
 import type { HeartBoard } from "@/data/mockHeartBoard";
 import type { AIHeartBoard } from "@/lib/ai/heartBoardSchema";
 import { adaptHeartBoardForUI } from "@/lib/ai/adaptHeartBoardForUI";
@@ -12,6 +13,7 @@ import { clearGeneratedHeartBoard, loadGeneratedHeartBoard, saveGeneratedHeartBo
 import { getCurrentWeekId, getMergedHeartedPosts } from "@/lib/heartStorage";
 
 export function HeartBoardClientPage() {
+  const activePosts = useMemo(() => getActiveHeartboardPosts(), []);
   const weekId = useMemo(() => getCurrentWeekId(new Date()), []);
   const [hydrated, setHydrated] = useState(false);
   const [isRegenerating, setIsRegenerating] = useState(false);
@@ -21,8 +23,8 @@ export function HeartBoardClientPage() {
   }, []);
 
   const heartedPosts = useMemo(
-    () => (hydrated ? getMergedHeartedPosts(mockPosts, weekId) : getHeartedPostsByWeek(mockPosts, weekId)),
-    [hydrated, weekId],
+    () => (hydrated ? getMergedHeartedPosts(activePosts, weekId) : getHeartedPostsByWeek(activePosts, weekId)),
+    [activePosts, hydrated, weekId],
   );
   const fallbackHeartBoard = useMemo(() => generateMockHeartBoardFromPosts(heartedPosts, weekId), [heartedPosts, weekId]);
   const [heartBoard, setHeartBoard] = useState<HeartBoard>(fallbackHeartBoard);

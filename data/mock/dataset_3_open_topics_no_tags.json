@@ -1,0 +1,652 @@
+[
+  {
+    "id": "D3_001",
+    "dataset": "dataset_3_open_topics",
+    "title": "Past Lives｜电影观后感小记录",
+    "content": "昨晚看完 Past Lives，没有哭得很夸张，但后劲有点长。它不是那种强情节电影，更像把错过和礼貌拍得很安静。适合一个人晚上看，不适合想找轻松喜剧的时候。",
+    "comments": [
+      "Past Lives 后劲真的慢慢上来",
+      "适合晚上看完发呆",
+      "我也觉得不是哭点电影，是闷闷的"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_002",
+    "dataset": "dataset_3_open_topics",
+    "title": "The Design of Everyday Things｜读书笔记小记录",
+    "content": "The Design of Everyday Things 读起来比想象中日常，很多例子都是门把手、开关这种小东西。它适合做产品 demo 前读一点，但不适合想快速找方法论的人，节奏偏慢。",
+    "comments": [
+      "这本书例子很生活化",
+      "做 demo 前读确实会有帮助",
+      "节奏慢但能改变观察方式"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_003",
+    "dataset": "dataset_3_open_topics",
+    "title": "IBKR｜转账记录小记录",
+    "content": "今天看 IBKR 的 ACH 状态有点无语，第一笔很快到账，第二笔却显示要等几天。它不是操作很难，而是规则解释得不够直观。适合慢慢研究，不适合着急用钱的时候。",
+    "comments": [
+      "IBKR 的提示真的不够友好",
+      "ACH 有时候就是忽快忽慢",
+      "着急用钱千万别卡这个时间"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_004",
+    "dataset": "dataset_3_open_topics",
+    "title": "IKEA lamp｜房间小物小记录",
+    "content": "IKEA lamp 买回来才发现亮度比店里看着暗，晚上当氛围灯可以，但学习不够用。优点是便宜、好看、占地小；缺点是实用性一般。适合床边，不适合书桌主灯。",
+    "comments": [
+      "IKEA 灯在店里看总是更亮",
+      "当床头灯可以，学习真的不行",
+      "我也踩过亮度这个坑"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_005",
+    "dataset": "dataset_3_open_topics",
+    "title": "Moon Archive 展览｜周末看展小记录",
+    "content": "Moon Archive 展览比我预期小，作品不多，但灯光和空间做得挺安静。适合周末顺路看，不适合专门跨城跑。喜欢文字和影像的人可能会更有感觉。",
+    "comments": [
+      "小型展览最怕期待太高",
+      "灯光好其实很加分",
+      "适合顺路看这个判断很实用"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_006",
+    "dataset": "dataset_3_open_topics",
+    "title": "Duolingo｜语言学习小记录",
+    "content": "Duolingo 连续打卡第 20 天，最大的作用不是让我进步很多，而是每天提醒我别完全断掉。它适合维持习惯，不适合系统提高口语。真正要开口还是得另外练。",
+    "comments": [
+      "Duolingo 更像提醒器，不是老师",
+      "口语还是得真人练",
+      "打卡能不断就已经不错了"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_007",
+    "dataset": "dataset_3_open_topics",
+    "title": "Kindle｜睡前阅读小记录",
+    "content": "Kindle 最近又开始用了，睡前看比刷手机好一点，但我发现自己很容易看着看着睡着。适合轻阅读，不适合读需要做笔记的内容。屏幕舒服，但整理摘录一般。",
+    "comments": [
+      "Kindle 睡前看真的容易睡着",
+      "做笔记还是 iPad 或纸书方便",
+      "比刷手机健康一点是真的"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_008",
+    "dataset": "dataset_3_open_topics",
+    "title": "Figma｜作品集排版小记录",
+    "content": "今天用 Figma 改作品集，发现它排版很自由，但也容易越改越乱。适合做视觉结构，不适合一开始就堆内容。最好先写好每页重点，不然会一直调整组件。",
+    "comments": [
+      "Figma 最怕边想边排，越排越乱",
+      "先定每页重点真的重要",
+      "作品集排版比想象中费时间"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_009",
+    "dataset": "dataset_3_open_topics",
+    "title": "Planet Fitness｜健身恢复小记录",
+    "content": "Planet Fitness 晚上人比我想象中多，器械要排一下，但氛围还算轻松。适合恢复运动习惯，不适合追求专业训练的人。对我来说能走进去就已经算成功。",
+    "comments": [
+      "能走进去真的就是第一步",
+      "Planet Fitness 氛围确实没那么压迫",
+      "晚上器械区经常要等"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_010",
+    "dataset": "dataset_3_open_topics",
+    "title": "Before Sunrise｜重看电影小记录",
+    "content": "重看 Before Sunrise，感觉它最打动人的不是浪漫，而是两个人认真听对方说话。适合心情安静的时候看，不适合边吃饭边放背景音。台词很多，需要一点耐心。",
+    "comments": [
+      "这部真的不能当背景音",
+      "认真听对方说话这点太珍贵",
+      "台词多但不烦"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_011",
+    "dataset": "dataset_3_open_topics",
+    "title": "Notion｜生活记录小记录",
+    "content": "Notion habit tracker 做了三天，发现模板太复杂反而不想打开。后来只保留睡眠、运动、阅读三项，才比较能坚持。适合轻量记录，不适合一上来做大系统。",
+    "comments": [
+      "Notion 模板太复杂真的会劝退",
+      "三项刚刚好，太多就不想填",
+      "先轻量再扩展比较现实"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_012",
+    "dataset": "dataset_3_open_topics",
+    "title": "Overleaf｜论文排版小记录",
+    "content": "Overleaf 写报告时很方便，但一碰到图片位置就开始折磨人。它适合需要规范格式的作业，不适合临时快速写。figure 总乱跑的时候，耐心会被消耗得很快。",
+    "comments": [
+      "figure 乱跑真的太经典了",
+      "Overleaf 适合正式报告，不适合赶时间",
+      "每次调图都想回 Word"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_013",
+    "dataset": "dataset_3_open_topics",
+    "title": "Blue Bottle｜咖啡店学习小记录",
+    "content": "Blue Bottle 环境挺干净，但我去的那家插座不多，坐久会有点焦虑。咖啡稳定，适合短时间改简历，不太适合一下午写代码。座位太抢手了。",
+    "comments": [
+      "Blue Bottle 插座少真的不适合久坐",
+      "改简历可以，写代码不行",
+      "座位抢手这点太真实"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_014",
+    "dataset": "dataset_3_open_topics",
+    "title": "Apple Reminders｜待办整理小记录",
+    "content": "Apple Reminders 用回系统自带后，反而比复杂 app 稳。它没有很强的仪式感，但提醒准、打开快。适合日常小事，不适合大型项目管理。",
+    "comments": [
+      "系统自带有时候反而最好用",
+      "大型项目还是不够清楚",
+      "打开快真的很重要"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_015",
+    "dataset": "dataset_3_open_topics",
+    "title": "Steam Deck｜游戏体验小记录",
+    "content": "Steam Deck 比我想象中重，躺着玩久了手会酸。但能在床上玩剧情游戏这点很舒服。适合慢节奏游戏，不适合需要高强度操作的竞技类。",
+    "comments": [
+      "Steam Deck 重量劝退过我",
+      "玩剧情游戏很合适",
+      "竞技类还是电脑舒服"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_016",
+    "dataset": "dataset_3_open_topics",
+    "title": "ResumeDock｜简历修改小记录",
+    "content": "ResumeDock 这个虚构工具我试着拿来改简历，它给的动词还行，但会把经历写得太满。适合找表达角度，不适合直接复制。最后还是要自己删掉夸张的部分。",
+    "comments": [
+      "AI 改简历最容易写得太满",
+      "适合找动词，不适合直接用",
+      "删夸张部分很重要"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_017",
+    "dataset": "dataset_3_open_topics",
+    "title": "Poor Things｜电影记录小记录",
+    "content": "Poor Things 视觉很强，但我不是所有段落都能进入。它适合喜欢怪诞风格的人，不适合只想看顺滑故事的人。看完会记得画面，但情绪上没有 Past Lives 那么贴近。",
+    "comments": [
+      "Poor Things 画面真的记得住",
+      "不是所有人都会喜欢这种节奏",
+      "和 Past Lives 完全不是一个情绪"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_018",
+    "dataset": "dataset_3_open_topics",
+    "title": "LinkedIn｜coffee chat小记录",
+    "content": "今天把 LinkedIn coffee chat 记录整理了一下，发现最有用的不是对方说了什么岗位技巧，而是他们怎么描述自己的选择。适合慢慢复盘，不适合只收藏不整理。",
+    "comments": [
+      "coffee chat 不整理真的很快忘",
+      "别人怎么选择比技巧更有启发",
+      "LinkedIn 约人本身也需要练"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_019",
+    "dataset": "dataset_3_open_topics",
+    "title": "Muji 收纳盒｜桌面整理小记录",
+    "content": "Muji 收纳盒买了两个放桌面，小东西终于不再散着。它不是神奇改变生活，但确实减少了找东西的烦躁。适合文具和线材，不适合塞太多杂物。",
+    "comments": [
+      "Muji 收纳就是舒服但别买太多",
+      "线材收纳真的救命",
+      "塞太多就会变成新的杂物盒"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_020",
+    "dataset": "dataset_3_open_topics",
+    "title": "ChatGPT｜面试准备小记录",
+    "content": "ChatGPT 帮我练面试时，最有用的是让它追问，而不是让它直接给标准答案。直接背答案很僵，追问能暴露逻辑漏洞。适合模拟练习，不适合完全代写。",
+    "comments": [
+      "让它追问这个方法好用",
+      "背标准答案真的会很僵",
+      "模拟面试比单看题有用"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_021",
+    "dataset": "dataset_3_open_topics",
+    "title": "Tableau｜数据展示小记录",
+    "content": "Tableau 做 dashboard 很快，但字段命名乱的时候会很崩溃。它适合展示结果，不适合前期清洗数据。最好先在 Python 或 SQL 里把数据整理干净。",
+    "comments": [
+      "Tableau 前一定要清数据",
+      "字段乱会让人想关电脑",
+      "展示效果确实快"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_022",
+    "dataset": "dataset_3_open_topics",
+    "title": "CalmNest Planner｜周计划小记录",
+    "content": "CalmNest Planner 这个虚构本子纸质挺舒服，但格子偏小，写多了会挤。适合写三件重要事，不适合详细排满一天。它让我少焦虑一点，但不是效率神器。",
+    "comments": [
+      "格子小真的会影响使用",
+      "三件重要事比排满一天现实",
+      "不是效率神器这句很真实"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_023",
+    "dataset": "dataset_3_open_topics",
+    "title": "The Bear｜剧集记录小记录",
+    "content": "The Bear 看起来很紧张，厨房里的节奏让我有点喘不过气。它不是下饭轻松剧，但人物关系很细。适合有耐心看压力感的人，不适合睡前放松。",
+    "comments": [
+      "The Bear 真的不适合睡前看",
+      "厨房节奏太窒息了",
+      "人物写得很细，但看着累"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_024",
+    "dataset": "dataset_3_open_topics",
+    "title": "LeetCode｜刷题体验小记录",
+    "content": "LeetCode 今天做 easy 题还是卡住了，发现不是题难，而是我对边界条件不敏感。它适合查漏补缺，不适合用来证明自己很笨。心态不好时越刷越焦虑。",
+    "comments": [
+      "LeetCode 最容易打击心态",
+      "边界条件真的要专门练",
+      "不要用刷题评价自己这点重要"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_025",
+    "dataset": "dataset_3_open_topics",
+    "title": "Philz Coffee｜周末学习小记录",
+    "content": "Philz Coffee 氛围比 Blue Bottle 更热闹，适合朋友一起学习，但不适合需要完全安静的时候。Mint Mojito 口味特别，不过喝到后面会有点甜。",
+    "comments": [
+      "Philz 真的比较吵但有氛围",
+      "Mint Mojito 后半杯会甜",
+      "适合聊天式学习"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_026",
+    "dataset": "dataset_3_open_topics",
+    "title": "ApplyMate｜投递记录小记录",
+    "content": "ApplyMate 这个虚构工具用来记投递还行，能看清哪些公司没回复。但它不会真的减少求职压力，只是让混乱变得可见。适合整理，不适合期待它改变结果。",
+    "comments": [
+      "求职工具只能整理，不能消除焦虑",
+      "混乱变得可见这句太对了",
+      "记录投递确实能少漏一些"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_027",
+    "dataset": "dataset_3_open_topics",
+    "title": "IKEA 小推车｜厨房整理小记录",
+    "content": "IKEA 小推车放厨房边上挺方便，零食和调料终于有地方放。缺点是轮子没有想象中顺，塞太满会显得乱。适合租房小厨房，不适合当展示架。",
+    "comments": [
+      "IKEA 小推车塞满就会乱",
+      "租房厨房真的需要这种临时收纳",
+      "轮子不顺我也遇到过"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_028",
+    "dataset": "dataset_3_open_topics",
+    "title": "Claude｜写作辅助小记录",
+    "content": "Claude 改长文逻辑比我预期稳，但有时会把语气改得太正式。适合整理结构，不适合保留很个人的表达。用之前最好告诉它哪些句子不要动。",
+    "comments": [
+      "Claude 改结构挺好，但会变官方",
+      "提前说不要动哪些句子很重要",
+      "个人语气很容易被磨掉"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_029",
+    "dataset": "dataset_3_open_topics",
+    "title": "Sunday Radio 歌单｜通勤音乐小记录",
+    "content": "Sunday Radio 歌单适合早上通勤，不会太吵，也不至于太困。缺点是几首歌风格有点像，听久了存在感变低。适合背景音乐，不适合认真听新歌。",
+    "comments": [
+      "通勤歌单不吵真的很重要",
+      "存在感低反而适合早上",
+      "认真听新歌就不太合适"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_030",
+    "dataset": "dataset_3_open_topics",
+    "title": "Perplexity｜资料搜索小记录",
+    "content": "Perplexity 查资料比普通搜索省时间，但我发现它给的答案还是要点开来源看。适合快速了解背景，不适合直接当最终引用。做报告时尤其不能偷懒。",
+    "comments": [
+      "Perplexity 省时间但不能全信",
+      "做报告一定要点来源",
+      "适合初步了解，不适合最终引用"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_031",
+    "dataset": "dataset_3_open_topics",
+    "title": "New Balance 530｜走路体验小记录",
+    "content": "New Balance 530 走路确实舒服，鞋底软，但雨天地面会有点滑。适合日常通勤和逛街，不太适合正式场合。颜色选浅色的话也要接受容易脏。",
+    "comments": [
+      "530 走路舒服但真的容易脏",
+      "雨天滑这个提醒很有用",
+      "正式场合确实不太合适"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_032",
+    "dataset": "dataset_3_open_topics",
+    "title": "InterviewNest｜模拟面试小记录",
+    "content": "InterviewNest 这个虚构工具会根据回答继续追问，这点比单纯题库好。但它的问题有时太模板，缺少行业细节。适合练表达流畅度，不适合准备深度专业面。",
+    "comments": [
+      "追问比题库有用很多",
+      "行业细节还是得自己补",
+      "练流畅度这个定位比较准"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_033",
+    "dataset": "dataset_3_open_topics",
+    "title": "Getty exhibition｜展览笔记小记录",
+    "content": "Getty exhibition 这次的说明文字写得比较清楚，不会让人看完一头雾水。展品不是每件都吸引我，但整体节奏舒服。适合慢慢看，不适合赶在闭馆前冲。",
+    "comments": [
+      "闭馆前冲展真的看不进去",
+      "说明文字清楚会提升很多体验",
+      "Getty 适合留足时间"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_034",
+    "dataset": "dataset_3_open_topics",
+    "title": "Cursor｜AI demo小记录",
+    "content": "Cursor 今天帮我改 demo，第一次让它直接改整个项目，结果结构变乱。第二次我先写清楚文件层级和组件职责，效果才好很多。适合局部推进，不适合完全放手。",
+    "comments": [
+      "Cursor 直接改整个项目真的容易乱",
+      "文件层级说清楚会好很多",
+      "适合让它做小块任务"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_035",
+    "dataset": "dataset_3_open_topics",
+    "title": "Vercel｜部署踩坑小记录",
+    "content": "Vercel 部署本身很快，但环境变量那里卡了我半天。报错信息看着简单，实际要回去查命名和路径。适合快速上线 demo，不适合完全不看配置就点部署。",
+    "comments": [
+      "Vercel 环境变量真的容易漏",
+      "路径和命名错一个就崩",
+      "部署快，但前提是配置清楚"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_036",
+    "dataset": "dataset_3_open_topics",
+    "title": "Mango blazer｜面试穿搭小记录",
+    "content": "Mango blazer 版型比 Zara 稍微稳一点，但肩线对我来说还是有点宽。适合普通 coffee chat 或 presentation，不一定适合正式金融面试。面料不厚，秋天刚好。",
+    "comments": [
+      "Mango 西装有些肩真的偏宽",
+      "正式金融面试可能还是要更稳",
+      "presentation 穿应该刚好"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_037",
+    "dataset": "dataset_3_open_topics",
+    "title": "SQL｜作业调试小记录",
+    "content": "今天 SQL join 又把行数翻倍了，问题出在 product_id 不是唯一。它提醒我不要只看代码跑没跑通，还要看结果行数。适合慢慢 debug，不适合赶 deadline 时乱试。",
+    "comments": [
+      "join 后一定要查行数",
+      "product_id 不唯一太常见了",
+      "赶 deadline 时最容易乱 join"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_038",
+    "dataset": "dataset_3_open_topics",
+    "title": "Equinox｜健身参观小记录",
+    "content": "去 Equinox 参观了一下，环境确实比普通健身房舒服，但价格也让我冷静。适合对环境要求很高的人，不适合只是想先恢复运动习惯的人。最后我决定先不办。",
+    "comments": [
+      "Equinox 环境好但价格劝退",
+      "先恢复习惯再升级比较合理",
+      "参观完冷静这点真实"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_039",
+    "dataset": "dataset_3_open_topics",
+    "title": "Python｜数据清洗小记录",
+    "content": "Python 清洗数据时最耗时间的不是写模型，而是处理日期、空值和列名。今天光统一 InventoryDate 就弄了很久。适合可重复分析，不适合想一步出图的人。",
+    "comments": [
+      "数据清洗永远比模型花时间",
+      "日期格式真的很烦",
+      "一步出图基本不存在"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_040",
+    "dataset": "dataset_3_open_topics",
+    "title": "Aritzia｜针织衫试穿小记录",
+    "content": "Aritzia 针织衫颜色很好看，上身也软，但我担心洗完会变形。适合拍照和日常约会，不太适合频繁机洗。价格不低，所以我还在犹豫。",
+    "comments": [
+      "Aritzia 针织洗后真的要小心",
+      "颜色好看但价格会让人犹豫",
+      "频繁机洗可能不太行"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_041",
+    "dataset": "dataset_3_open_topics",
+    "title": "Google AI Studio｜原型测试小记录",
+    "content": "Google AI Studio 做 prompt 测试挺方便，但一开始我写得太泛，输出就很散。后来加了字段格式和负面例子，结果稳定很多。适合快速试想法，不适合直接当完整后端。",
+    "comments": [
+      "负面例子真的能让输出稳很多",
+      "prompt 太泛就会散",
+      "适合原型，不适合最终系统"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_042",
+    "dataset": "dataset_3_open_topics",
+    "title": "Loop Bottle｜水杯使用小记录",
+    "content": "Loop Bottle 这个虚构水杯外观好看，但瓶口比我习惯的窄，洗起来有点麻烦。适合放桌上提醒自己喝水，不适合每天装咖啡或奶制品。",
+    "comments": [
+      "瓶口窄真的会降低使用频率",
+      "装咖啡之后洗起来很烦",
+      "放桌上提醒喝水还不错"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_043",
+    "dataset": "dataset_3_open_topics",
+    "title": "Before Sunset｜电影片段小记录",
+    "content": "Before Sunset 比 Before Sunrise 更现实一点，很多对话都有种没说完的遗憾。适合有点安静的晚上看，不适合想轻松转换心情的时候。看完会想走路。",
+    "comments": [
+      "Before Sunset 更现实也更痛",
+      "看完想走路这点太懂",
+      "不适合心情很满的时候看"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_044",
+    "dataset": "dataset_3_open_topics",
+    "title": "Adobe Lightroom｜照片整理小记录",
+    "content": "Lightroom 调旅行照片很方便，但我发现套预设容易让每张照片都一个味道。适合统一色调，不适合完全不看原图光线。阴天 Malibu 的照片怎么调都还是灰。",
+    "comments": [
+      "预设用多了真的会同质化",
+      "阴天海边照片太难救",
+      "还是要看原图光线"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_045",
+    "dataset": "dataset_3_open_topics",
+    "title": "Mint Mobile｜换套餐小记录",
+    "content": "Mint Mobile 价格看起来友好，但我还在观察信号稳定性。日常市区够用，去山里或者海边时偶尔会弱。适合预算优先，不适合经常跑偏远路线的人。",
+    "comments": [
+      "Mint 市区够用，偏远地方一般",
+      "预算友好但要接受信号波动",
+      "经常旅行的人要慎重"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_046",
+    "dataset": "dataset_3_open_topics",
+    "title": "Fujifilm X100V｜相机试拍小记录",
+    "content": "Fujifilm X100V 拍出来颜色很讨喜，但定焦对新手来说也会限制构图。适合慢慢走着拍，不适合旅行中什么都想拍全。价格高，所以更适合真的愿意带相机的人。",
+    "comments": [
+      "X100V 颜色确实好看",
+      "定焦会逼你多走几步",
+      "不常带相机的话不太值"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_047",
+    "dataset": "dataset_3_open_topics",
+    "title": "Headspace｜睡前放松小记录",
+    "content": "Headspace 睡前音频我试了两晚，声音挺稳，但我不确定是不是它让我睡得更好，还是我本来就累。适合睡前放下手机，不适合期待立刻改善失眠的人。",
+    "comments": [
+      "睡眠 app 真的很难判断有没有用",
+      "放下手机这点已经有帮助",
+      "期待立刻改善失眠会失望"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_048",
+    "dataset": "dataset_3_open_topics",
+    "title": "Canva｜海报修改小记录",
+    "content": "Canva 改活动海报很快，模板也多，但容易做出一种很眼熟的效果。适合时间紧的时候救急，不适合想做很独特的视觉。字体和留白还是要自己判断。",
+    "comments": [
+      "Canva 快是真的快，但模板感也明显",
+      "字体和留白还是得自己看",
+      "适合救急，不适合做品牌感"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_049",
+    "dataset": "dataset_3_open_topics",
+    "title": "Coursera｜课程学习小记录",
+    "content": "Coursera 上那门数据分析课我看了两节，内容不难，但需要自己跟着做才有用。只看视频会有一种学了的错觉。适合补基础，不适合临时抱佛脚。",
+    "comments": [
+      "只看视频真的会有学会的错觉",
+      "跟着做才记得住",
+      "临时抱佛脚不太适合网课"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  },
+  {
+    "id": "D3_050",
+    "dataset": "dataset_3_open_topics",
+    "title": "Libby｜电子书借阅小记录",
+    "content": "Libby 借电子书比我想象中方便，但热门书等待时间很长。适合不急着读的人，不适合突然想马上看某本书。能免费借到这点很好，只是需要一点耐心。",
+    "comments": [
+      "Libby 热门书真的要等很久",
+      "不急着读的话很好用",
+      "免费这点还是很香"
+    ],
+    "expected_test_focus": "Posts intentionally cover topics outside the original category frame. Test whether AI can generate new open-ended clusters rather than reusing beauty/restaurant/travel/study/fashion/lifestyle.",
+    "confidence_hint": "medium"
+  }
+]

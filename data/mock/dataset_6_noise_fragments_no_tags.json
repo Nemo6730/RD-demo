@@ -1,0 +1,652 @@
+[
+  {
+    "id": "D6_001",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "Zara 试衣间灯光｜临时吐槽小记录",
+    "content": "Zara 试衣间灯光今天又把我照得很困惑，明明外面看还行，进去之后颜色全变了。没有什么结论，就是提醒自己别在这种光线下立刻决定买不买。",
+    "comments": [
+      "Zara 试衣间灯光真的会影响判断",
+      "我每次都要出去照镜子",
+      "这种内容很真实哈哈"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_002",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "ACH 转账｜等待状态小记录",
+    "content": "ACH 第二笔还没到，页面显示要等几天。我本来只是想测试一下 IBKR，结果现在每天都想点进去看。不是大事，但这种等待状态很消耗耐心。",
+    "comments": [
+      "ACH 等待真的很烦",
+      "每天刷新状态太真实了",
+      "不是大事但会一直惦记"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_003",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "Blue Bottle 杯盖｜小观察小记录",
+    "content": "Blue Bottle 今天这个杯盖不知道为什么总漏，走回去路上手都是咖啡味。咖啡本身还行，但这种小细节会影响心情。下次可能还是坐店里喝完。",
+    "comments": [
+      "杯盖漏真的很破坏心情",
+      "手上咖啡味很难散",
+      "坐店里喝完比较安全"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_004",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "IKEA 螺丝｜家具安装小记录",
+    "content": "IKEA 小桌子装到最后少了一颗螺丝，整个人突然安静。可能不是少了，是我前面某一步用错了。今天先不拆了，明天再面对它。",
+    "comments": [
+      "IKEA 装到最后最怕剩零件或少零件",
+      "明天再面对它太真实",
+      "可能真的前面用错了"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_005",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "天气太灰｜出门失败小记录",
+    "content": "今天本来想去 Malibu，但天气灰得很彻底，最后只是在家附近走了一圈。也不是不好，只是海边计划被取消后，人会有点不知道该干嘛。",
+    "comments": [
+      "阴天 Malibu 真的没必要硬去",
+      "计划取消后会突然空掉",
+      "附近走走也算出门了"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_006",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "Notion 图标｜整理拖延小记录",
+    "content": "本来打开 Notion 是要整理 coffee chat 记录，结果花了十分钟换页面 icon。它确实变好看了，但内容还是没写。今天的效率到这里就很微妙。",
+    "comments": [
+      "Notion 最大陷阱就是装饰页面",
+      "icon 好看但内容没动哈哈",
+      "这算精神整理"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_007",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "New Balance 鞋带｜路上小事小记录",
+    "content": "New Balance 530 的鞋带今天松了三次，不知道是不是我系法问题。鞋还是舒服的，但走路总低头看鞋带会有点烦。下次试试换个系法。",
+    "comments": [
+      "530 鞋带我也觉得容易松",
+      "换双结会不会好一点",
+      "舒服是真的舒服"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_008",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "Past Lives 片尾｜情绪残留小记录",
+    "content": "Past Lives 片尾那段我今天又想起来了，不是很痛，但有点空。可能只是最近太容易被这种安静的东西影响。没有影评，就是记一下。",
+    "comments": [
+      "这部的后劲就是突然回来",
+      "不是痛，是空，这个形容好准",
+      "随手记也很适合这种电影"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_009",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "打印机｜作业前夜小记录",
+    "content": "打印机又在 deadline 前卡纸，像某种固定剧情。最后我只好去图书馆打印。以后真的不要把打印留到最后一小时，但我大概率还会忘。",
+    "comments": [
+      "打印机永远知道什么时候添乱",
+      "最后一句太真实了",
+      "deadline 前什么都会坏"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_010",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "Trader Joe's 香蕉｜购物小事小记录",
+    "content": "Trader Joe's 今天的香蕉都太生了，买回来估计要等三天。没有什么特别，只是发现我现在会因为这种小事重新安排早餐。",
+    "comments": [
+      "TJ 香蕉经常不是太生就是太熟",
+      "早餐计划被香蕉支配",
+      "这种小事真的会影响一天"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_011",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "Cursor 报错｜demo崩掉小记录",
+    "content": "Cursor 改完以后 demo 直接白屏，我盯着报错看了五分钟才发现是 import 路径错了。不是它完全不行，是我让它改太多文件了。",
+    "comments": [
+      "Cursor 一次改太多文件就危险",
+      "import 路径错真的很常见",
+      "白屏那一刻会心凉"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_012",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "雨天裤脚｜出门狼狈小记录",
+    "content": "今天穿 COS 那条宽腿裤出门，雨水直接打到裤脚。版型还是好看的，但下雨天真的不适合。以后天气预报不只是看温度，还要看地面状态。",
+    "comments": [
+      "宽腿裤雨天真的灾难",
+      "地面状态这个说法很准确",
+      "好看和实用经常冲突"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_013",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "咖啡太酸｜口味记录小记录",
+    "content": "Philz 今天这杯不知道是不是豆子问题，酸味比平时明显。我不是很懂咖啡，只是喝完觉得胃有点空。下次还是点熟悉的 Mint Mojito。",
+    "comments": [
+      "不懂咖啡但知道不好喝哈哈",
+      "Philz 有些豆子确实酸",
+      "熟悉口味最安全"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_014",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "Apple Reminders｜忘记提醒小记录",
+    "content": "Apple Reminders 明明提醒了我交电费，我看到了然后顺手划掉，结果晚上才想起来还没交。工具没问题，问题是我本人执行力短路。",
+    "comments": [
+      "工具提醒了但人没做太真实",
+      "划掉那一下很危险",
+      "执行力短路这个词好用"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_015",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "Getty 台阶｜照片失败小记录",
+    "content": "Getty Center 台阶那里人太多，我想拍一张干净的照片几乎不可能。最后拍到一半放弃，去看展反而舒服多了。有时放弃拍照是正确选择。",
+    "comments": [
+      "Getty 热门角度永远有人",
+      "放弃拍照后会轻松很多",
+      "看展比拍照更舒服"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_016",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "钥匙找不到｜出门延迟小记录",
+    "content": "出门前找钥匙找了十分钟，最后发现就在帆布包夹层。今天的计划没有被毁，但心情先被消耗了一小块。需要一个固定放钥匙的地方。",
+    "comments": [
+      "固定放钥匙真的很重要",
+      "帆布包夹层像黑洞",
+      "心情先被消耗太准确"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_017",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "Duolingo 猫头鹰｜打卡压力小记录",
+    "content": "Duolingo 猫头鹰又来提醒我了。它不是很凶，但我看到通知就有点被盯着的感觉。今天只做了一小节，算是没有断。",
+    "comments": [
+      "猫头鹰真的有压迫感",
+      "一小节也是没断",
+      "打卡 app 都有点会盯人"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_018",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "Vercel 域名｜小卡点小记录",
+    "content": "Vercel 部署成功了，但域名看起来很临时，发给别人之前还是想改一下。技术上不是问题，心理上就是觉得不够像一个完整 demo。",
+    "comments": [
+      "临时域名会显得不正式",
+      "改域名虽然小但很影响展示",
+      "demo 也需要包装一下"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_019",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "冰箱噪音｜夜里小事小记录",
+    "content": "晚上突然觉得冰箱声音很明显，白天完全没注意。可能是房间太安静了。它没有坏，但这种低频声音会让人开始怀疑所有电器。",
+    "comments": [
+      "夜里真的会听到平时听不到的声音",
+      "开始怀疑所有电器太真实",
+      "低频声很烦"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_020",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "简历文件名｜投递前小记录",
+    "content": "投递前突然发现简历文件名还是 final_final_v3.pdf，瞬间不想发了。内容可能没问题，但文件名暴露了整个修改过程。以后真的要单独导出正式版。",
+    "comments": [
+      "final_final_v3 太经典了",
+      "文件名真的会影响专业感",
+      "正式版要单独存"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_021",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "洗衣机时间｜等待中小记录",
+    "content": "洗衣机显示还剩 12 分钟，但 12 分钟已经过去很久了。它可能有自己的时间系统。今天本来想早点睡，现在只能继续等。",
+    "comments": [
+      "洗衣机的 12 分钟不是地球时间",
+      "等洗衣真的会拖晚睡觉",
+      "它有自己的时间系统哈哈"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_022",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "LinkedIn 头像｜微调小记录",
+    "content": "今天想换 LinkedIn 头像，挑了半天发现每张都不满意。不是照片问题，是一想到它和求职有关就变得很严肃。最后还是没换。",
+    "comments": [
+      "LinkedIn 头像真的会突然变严肃",
+      "最后没换也很合理",
+      "求职相关的小事都容易放大"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_023",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "Blue Bottle 座位｜学习失败小记录",
+    "content": "Blue Bottle 今天没有靠墙座位，只剩中间小圆桌。我坐了二十分钟就走了，电脑和水杯都放不开。适合喝咖啡，不适合今天这种想写东西的状态。",
+    "comments": [
+      "小圆桌真的不适合电脑",
+      "靠墙座位太重要了",
+      "咖啡店学习很看位置"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_024",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "Overleaf 编译｜小崩溃小记录",
+    "content": "Overleaf 今天突然编译不过，最后发现是我少了一个括号。错误提示看起来很可怕，实际问题很小。LaTeX 的情绪成本有时候比写作还高。",
+    "comments": [
+      "LaTeX 报错会让人以为项目没救了",
+      "少括号真的能找很久",
+      "情绪成本这个说法太准"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_025",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "Trader Joe's 花｜临时购买小记录",
+    "content": "Trader Joe's 门口的花今天很好看，本来没打算买，最后还是带了一束。它没有解决任何问题，但房间看起来稍微亮了一点。这个钱花得还算开心。",
+    "comments": [
+      "TJ 花真的很容易顺手买",
+      "房间亮一点就值了",
+      "这种小钱会改善心情"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_026",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "San Diego 明信片｜抽屉发现小记录",
+    "content": "整理抽屉发现一张 San Diego 明信片，已经不记得什么时候买的。背面还是空白。可能我买明信片只是为了保存那个旅行当下，不一定真的要寄出去。",
+    "comments": [
+      "明信片不寄也有意义",
+      "买的是当下的感觉",
+      "抽屉里总能翻出旅行碎片"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_027",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "Tableau 颜色｜图表纠结小记录",
+    "content": "Tableau 调颜色调了很久，最后发现问题不是颜色，是图本身信息太多。删掉两个指标后反而清楚了。很多时候不是美化不够，是内容太挤。",
+    "comments": [
+      "不是颜色问题是信息太多，太对了",
+      "删指标比调色有效",
+      "dashboard 最怕什么都想放"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_028",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "晚饭太咸｜餐后记录小记录",
+    "content": "今天在一家小店吃面，名字叫 Noodle Corner，汤底有点太咸。不是难吃，但喝水喝到现在。适合重口味的人，我下次可能会点干拌。",
+    "comments": [
+      "太咸真的会一直喝水",
+      "干拌可能会好一点",
+      "重口味爱好者应该喜欢"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_029",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "Figma 对齐线｜排版小事小记录",
+    "content": "Figma 对齐线今天救了我，也折磨了我。每差 1px 都很明显，但一直调 1px 也很浪费时间。demo 不是艺术品，差不多就该停。",
+    "comments": [
+      "1px 真的会让人上头",
+      "demo 不是艺术品这句要贴屏幕上",
+      "对齐线又爱又恨"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_030",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "香薰太浓｜房间气味小记录",
+    "content": "朋友送的香薰叫 Luma Cedar，刚打开还挺舒服，半小时后就有点冲。可能适合大房间，不适合我的小卧室。先放客厅试试。",
+    "comments": [
+      "小房间香薰真的不能太浓",
+      "放客厅可能刚好",
+      "半小时后冲这个很常见"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_031",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "Google Calendar｜时间看错小记录",
+    "content": "Google Calendar 上的 meeting 我看错时区，提前半小时进了 Zoom。尴尬倒是不尴尬，就是突然多出半小时不知道干嘛。以后看到时间要多看一眼。",
+    "comments": [
+      "时区真的很容易坑",
+      "提前半小时比迟到好一点",
+      "多出来的半小时会很尴尬"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_032",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "COS 衬衫｜皱巴巴小记录",
+    "content": "COS 那件白衬衫拍照挺干净，但坐一下午之后皱得很明显。适合短时间见人，不适合全天通勤。材质舒服，但我可能没有耐心每次熨。",
+    "comments": [
+      "COS 有些衬衫真的容易皱",
+      "不想熨的人慎重",
+      "短时间见人这个定位准确"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_033",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "GitHub README｜展示焦虑小记录",
+    "content": "GitHub README 写到一半卡住，不知道该写给谁看。太详细像作业，太简单又像没做完。可能先把安装步骤和 demo 截图写清楚就够了。",
+    "comments": [
+      "README 最难的是判断读者是谁",
+      "先写安装和截图很实用",
+      "太详细真的像课程作业"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_034",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "牙膏味道｜购物踩雷小记录",
+    "content": "买了一个新牙膏 MintCare，薄荷味比想象中冲，刷完像吃了很冷的糖。清洁感是有，但早上空腹用有点刺激。下次不会买大支。",
+    "comments": [
+      "牙膏买大支踩雷很痛苦",
+      "薄荷太冲真的会清醒过头",
+      "先买小支比较稳"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_035",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "Santa Barbara 风｜照片记忆小记录",
+    "content": "翻 Santa Barbara 的照片，发现那天头发全被风吹乱。现场觉得狼狈，现在看反而挺真实。不是每张旅行照都要很干净，有些乱也能留着。",
+    "comments": [
+      "风大的照片后来反而有记忆点",
+      "旅行照不用每张都完美",
+      "头发乱是海边固定剧情"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_036",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "ChatGPT 语气｜改文问题小记录",
+    "content": "让 ChatGPT 帮我改一段中文，结果变得太正式，像公告。后来我加了一句“像普通人发消息”，才正常很多。不是不能用，是要求要说清楚。",
+    "comments": [
+      "像普通人发消息这个提示好用",
+      "AI 很容易写成公告",
+      "要求越具体越正常"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_037",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "钥匙扣｜小物购买小记录",
+    "content": "买了一个小熊钥匙扣，本来觉得幼稚，挂上之后找钥匙快多了。它不是审美升级，但功能很实际。包里东西多的人可能真的需要一个显眼钥匙扣。",
+    "comments": [
+      "显眼钥匙扣真的救命",
+      "幼稚但好用就行",
+      "包里黑洞需要这种东西"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_038",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "Zoom 背景｜面试前小记录",
+    "content": "Zoom 面试前花了十分钟调背景，最后还是用了白墙。虚拟背景看起来有点假，房间又有点乱。白墙虽然无聊，但至少不会分散注意力。",
+    "comments": [
+      "白墙最安全，虽然无聊",
+      "虚拟背景有时真的很假",
+      "面试前总会纠结这种小事"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_039",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "Marugame 排队｜路过记录小记录",
+    "content": "路过 Marugame Monzo 看到又在排队，本来想吃，最后放弃。可能好吃，但我今天没有排队的心情。旅行和吃饭都一样，状态不对就会失去耐心。",
+    "comments": [
+      "没有排队心情太懂了",
+      "好吃也要看状态",
+      "Monzo 排队一直很夸张"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_040",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "手机电量｜出门焦虑小记录",
+    "content": "出门前手机只有 23%，但我又懒得等充电。一路都在省着用，连拍照都变少了。以后短途也要带充电宝，不然心里一直有个进度条。",
+    "comments": [
+      "电量低会影响整个出门体验",
+      "心里有个进度条太准确",
+      "短途也要带充电宝"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_041",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "Clio 遮瑕｜妆后观察小记录",
+    "content": "Clio 遮瑕今天在鼻翼有点卡，可能是我保湿没做好。遮痘印还可以，但干皮局部要小心。赶时间出门能用，想要很精致的话还得慢慢拍开。",
+    "comments": [
+      "Clio 鼻翼卡粉我也遇到过",
+      "保湿真的影响遮瑕表现",
+      "赶时间用可以，精致妆不够"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_042",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "日历贴纸｜桌面小物小记录",
+    "content": "买的日历贴纸尺寸比想象中大，贴在 planner 上有点挤。图案是可爱的，但实用性一般。可能更适合贴墙上，不适合小本子。",
+    "comments": [
+      "贴纸尺寸真的要看清楚",
+      "小本子很容易被贴满",
+      "贴墙上可能更合适"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_043",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "Perplexity 来源｜查资料小记录",
+    "content": "Perplexity 今天给了一个看起来很顺的答案，点开来源发现其实只支持一半。它适合帮我找入口，但不能替我判断。做作业还是得自己读。",
+    "comments": [
+      "AI 搜索一定要点来源",
+      "只支持一半这个太常见",
+      "入口可以，判断不行"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_044",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "洗碗海绵｜生活琐碎小记录",
+    "content": "Muji 洗碗海绵比超市那种硬一点，刷杯子还行，刷锅有点费力。没有什么大评价，就是用下来觉得它适合轻清洁，不适合重油污。",
+    "comments": [
+      "生活小物就是这种细节决定好不好用",
+      "刷锅费力就很烦",
+      "轻清洁可以接受"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_045",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "LinkedIn 已读｜求职小焦虑小记录",
+    "content": "LinkedIn 消息显示已读但没回，我知道很正常，但还是会忍不住想是不是自己写得不好。求职里很多焦虑不是事件本身，是等待里的脑补。",
+    "comments": [
+      "已读不回太容易脑补了",
+      "求职等待真的消耗人",
+      "其实对方可能只是忙"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_046",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "房间太暗｜台灯问题小记录",
+    "content": "晚上发现房间主灯太暗，IKEA lamp 又只能当氛围灯。人一旦开始嫌光线，就会觉得整个房间都不适合学习。可能需要认真买个书桌灯。",
+    "comments": [
+      "光线真的影响学习状态",
+      "氛围灯不能当主灯",
+      "买书桌灯是必要投资"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_047",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "酸奶过期｜冰箱清理小记录",
+    "content": "清冰箱发现一盒酸奶昨天过期，纠结了一分钟还是扔了。不是浪费不起，是不想用肚子去冒险。以后买东西还是别太乐观估计自己会吃完。",
+    "comments": [
+      "别太乐观估计自己会吃完哈哈",
+      "过期一天也会纠结",
+      "冰箱清理总有惊喜"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_048",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "Google AI Studio｜输出太散小记录",
+    "content": "Google AI Studio 今天同一个 prompt 跑了三次，结果差异有点大。可能是我约束不够清楚。做测试时才发现，稳定输出比灵感输出更重要。",
+    "comments": [
+      "稳定输出对 demo 很重要",
+      "约束不清就会飘",
+      "测试时才会发现这些问题"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_049",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "小票没拿｜退货失败小记录",
+    "content": "想退一件 Mango 上衣，才发现小票不知道放哪了。衣服本身不是不能穿，只是没有想象中合身。现在退不了，只能想办法搭一下。",
+    "comments": [
+      "小票丢了真的麻烦",
+      "不合身但不能退最难受",
+      "只能靠搭配救一下"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  },
+  {
+    "id": "D6_050",
+    "dataset": "dataset_6_noise_fragments",
+    "title": "周末太短｜状态记录小记录",
+    "content": "周日晚上突然觉得周末像没发生过。其实也做了点事，洗衣、买菜、看了一集 The Bear，但脑子还是觉得不够。可能休息也需要被认真安排。",
+    "comments": [
+      "周末像没发生过太真实",
+      "做了事但没休息到",
+      "休息也要安排这点我赞同"
+    ],
+    "expected_test_focus": "Posts are noisy, fragmentary, or low-signal. Test robustness, whether AI avoids overconfident clustering and can mark low-confidence or miscellaneous patterns.",
+    "confidence_hint": "low"
+  }
+]

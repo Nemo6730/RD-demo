@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { HeartBoard } from "@/data/mockHeartBoard";
-import { getPostExcerpt, mockPosts } from "@/data/mockPosts";
+import { getPostExcerpt } from "@/data/mockPosts";
+import { getActiveHeartboardPosts } from "@/data/testDatasets";
 import { generateMockHeartBoardFromPosts } from "@/lib/generateHeartBoard";
 import { loadGeneratedHeartBoard } from "@/lib/heartBoardCache";
 import { getCurrentWeekId, getMergedHeartedPosts } from "@/lib/heartStorage";
@@ -18,6 +19,7 @@ function normalizeItemId(id: string): string {
 }
 
 export function HeartBoardSourcesClientPage({ categoryId, itemId }: HeartBoardSourcesClientPageProps) {
+  const activePosts = getActiveHeartboardPosts();
   const weekId = getCurrentWeekId(new Date());
   const [hydrated, setHydrated] = useState(false);
 
@@ -35,7 +37,7 @@ export function HeartBoardSourcesClientPage({ categoryId, itemId }: HeartBoardSo
     );
   }
 
-  const heartedPosts = getMergedHeartedPosts(mockPosts, weekId);
+  const heartedPosts = getMergedHeartedPosts(activePosts, weekId);
   const fallbackHeartBoard = generateMockHeartBoardFromPosts(heartedPosts, weekId);
   const cachedHeartBoard =
     loadGeneratedHeartBoard(

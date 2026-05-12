@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { HeartBoardDetail } from "@/app/components/HeartBoardDetail";
 import type { HeartBoard } from "@/data/mockHeartBoard";
-import { mockPosts } from "@/data/mockPosts";
+import { getActiveHeartboardPosts } from "@/data/testDatasets";
 import { generateMockHeartBoardFromPosts } from "@/lib/generateHeartBoard";
 import { loadGeneratedHeartBoard } from "@/lib/heartBoardCache";
 import { getCurrentWeekId, getMergedHeartedPosts } from "@/lib/heartStorage";
@@ -14,6 +14,7 @@ type HeartBoardCategoryClientPageProps = {
 };
 
 export function HeartBoardCategoryClientPage({ categoryId }: HeartBoardCategoryClientPageProps) {
+  const activePosts = getActiveHeartboardPosts();
   const weekId = getCurrentWeekId(new Date());
   const [hydrated, setHydrated] = useState(false);
 
@@ -31,7 +32,7 @@ export function HeartBoardCategoryClientPage({ categoryId }: HeartBoardCategoryC
     );
   }
 
-  const heartedPosts = getMergedHeartedPosts(mockPosts, weekId);
+  const heartedPosts = getMergedHeartedPosts(activePosts, weekId);
   const fallbackHeartBoard = generateMockHeartBoardFromPosts(heartedPosts, weekId);
   const cachedHeartBoard =
     loadGeneratedHeartBoard(

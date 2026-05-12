@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { PostDetail } from "@/app/components/PostDetail";
-import { getPostById } from "@/data/mockPosts";
+import { getActivePostById } from "@/data/testDatasets";
 
 type PostPageProps = {
   params: Promise<{ postId: string }>;
@@ -17,7 +17,7 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
   const { postId } = await params;
   const { from } = await searchParams;
 
-  const post = getPostById(postId);
+  const post = getActivePostById(postId);
   if (!post) notFound();
 
   const backHref = normalizeFromPath(from) ?? "/";

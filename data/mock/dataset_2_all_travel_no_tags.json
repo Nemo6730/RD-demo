@@ -1,0 +1,652 @@
+[
+  {
+    "id": "D2_001",
+    "dataset": "dataset_2_all_travel",
+    "title": "Malibu｜海边自驾小记录",
+    "content": "周六上午从 LA 开去 Malibu，PCH 有点堵，但海边光线确实舒服。El Matador 停车位很少，晚到基本要绕。我觉得适合天气好的时候放空，不适合赶行程；阴天去可能会觉得普通。",
+    "comments": [
+      "Malibu 阴天真的差很多，照片会灰灰的",
+      "El Matador 停车我上次也绕了三圈",
+      "PCH 周末上午是不是一直都堵？"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_002",
+    "dataset": "dataset_2_all_travel",
+    "title": "Santa Barbara｜周末放空小记录",
+    "content": "Santa Barbara 这次没有安排太多景点，只去了 pier 和 downtown。它不是那种很刺激的旅行，但很适合周末放空。停车比 LA 友好一点，缺点是来回车程还是有点消耗。",
+    "comments": [
+      "Santa Barbara 适合慢慢逛，别赶景点",
+      "来回一天我觉得有点累",
+      "pier 附近风大但很舒服"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_003",
+    "dataset": "dataset_2_all_travel",
+    "title": "Solvang｜小镇一日游小记录",
+    "content": "Solvang 比我想象中小，基本半天就能走完。丹麦风建筑拍照挺可爱，但吃的没有特别惊艳。我更喜欢下午坐在街边喝咖啡的感觉，适合周末散心，不适合期待很多景点的人。",
+    "comments": [
+      "Solvang 真的半天够了，别安排太满",
+      "那边 pastries 我觉得比正餐好一点",
+      "停车方便吗？我一直没去过"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_004",
+    "dataset": "dataset_2_all_travel",
+    "title": "Joshua Tree｜两天一夜小记录",
+    "content": "Joshua Tree 适合两天一夜，不太适合当天往返。白天阳光很硬，拍照好看但容易累，晚上看星星才是重点。我觉得它不是精致型旅行，更像是换个地方安静下来。",
+    "comments": [
+      "Joshua Tree 晚上真的值，白天一般般",
+      "两天一夜刚好，当天来回太累",
+      "住宿你是住 park 附近吗？"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_005",
+    "dataset": "dataset_2_all_travel",
+    "title": "Griffith Observatory｜夜景散步小记录",
+    "content": "Griffith Observatory 我更推荐傍晚去，白天太阳有点晒。山路不难，但停车会让人烦躁，周末最好提前一点。夜景很适合带外地朋友看 LA，不过人多的时候体验会打折。",
+    "comments": [
+      "Griffith 停车真的比爬山累",
+      "带外地朋友去很稳，不会出错",
+      "傍晚风大吗？上次我被吹傻了"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_006",
+    "dataset": "dataset_2_all_travel",
+    "title": "Getty Center｜看展半日小记录",
+    "content": "Getty Center 下午去比较舒服，停车 $25 有点肉疼，但建筑和视野确实稳。展览需要慢慢看，不适合只为了拍照冲过去。傍晚光线最好，适合带朋友半日游。",
+    "comments": [
+      "Getty 傍晚真的好看，尤其是下山那段",
+      "停车费现在还是 $25 吗，好贵",
+      "我觉得展比花园更值得慢慢逛"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_007",
+    "dataset": "dataset_2_all_travel",
+    "title": "Laguna Beach｜朋友拍照小记录",
+    "content": "Laguna Beach 的海水颜色比 Santa Monica 清很多，适合拍照和慢慢走。缺点是停车真的不轻松，餐厅价格也偏高。我觉得适合朋友小聚，不适合临时说走就走。",
+    "comments": [
+      "Laguna 停车我每次都想放弃",
+      "海水颜色确实比 LA 市区这边好看",
+      "餐厅是不是都偏贵？"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_008",
+    "dataset": "dataset_2_all_travel",
+    "title": "San Diego｜一日游小记录",
+    "content": "San Diego 一日游有点赶，尤其从 LA 开过去还要考虑返程堵车。我这次去了 Seaport Village 和 Balboa Park，两个地方都舒服，但更适合住一晚慢慢玩。",
+    "comments": [
+      "San Diego 当天往返真的累",
+      "Balboa Park 我可以逛一下午",
+      "住一晚体验会好很多"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_009",
+    "dataset": "dataset_2_all_travel",
+    "title": "Palm Springs｜酒店躺平小记录",
+    "content": "Palm Springs 更像是去酒店休息，不是去密集打卡。我这次住的地方有泳池，下午基本没出门。夏天太热会影响体验，比较适合想换个环境躺两天的人。",
+    "comments": [
+      "Palm Springs 真的要选酒店，不然没啥玩",
+      "夏天去会不会热到不想出门",
+      "适合躺平，不适合特种兵"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_010",
+    "dataset": "dataset_2_all_travel",
+    "title": "Sunset Cove Trail｜海边轻徒步小记录",
+    "content": "Sunset Cove Trail 这条路线下午四点以后走比较舒服。路不长，但风会比较大，穿裙子拍照不太方便。优点是视野开阔，缺点是没有什么遮阴。",
+    "comments": [
+      "这种海边 trail 最怕没遮阴",
+      "下午四点后光线应该很好",
+      "穿裙子被风吹真的很狼狈"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_011",
+    "dataset": "dataset_2_all_travel",
+    "title": "Hollywood Bowl Overlook｜日落看景小记录",
+    "content": "Hollywood Bowl Overlook 比 Griffith 轻松很多，适合不想走太多路的时候去。位置不大，停留半小时就够。日落时能看到城市层次，但如果天气灰，照片会很普通。",
+    "comments": [
+      "这个点适合临时去，不用安排半天",
+      "天气通透真的很重要",
+      "停车会不会很难？"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_012",
+    "dataset": "dataset_2_all_travel",
+    "title": "The Broad｜雨天博物馆小记录",
+    "content": "The Broad 适合雨天或者太晒的时候去，馆不算大，但 Yayoi Kusama 的房间还是要提前预约。我觉得半日安排刚好，逛完去附近喝咖啡，比硬凑一整天舒服。",
+    "comments": [
+      "The Broad 半天刚好，逛太久会累",
+      "Kusama 那个房间现在还难约吗",
+      "附近咖啡店有推荐吗？"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_013",
+    "dataset": "dataset_2_all_travel",
+    "title": "Angeles Crest Highway｜山路兜风小记录",
+    "content": "Angeles Crest Highway 适合想看山景但不想正式徒步的时候。山路弯多，容易晕车的人要慎重。周末早上车少一点，下午回来可能会堵，我觉得更适合安静兜风。",
+    "comments": [
+      "这条路风景好，但弯真的多",
+      "晕车人看到山路就害怕",
+      "早上去是不是光线更好？"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_014",
+    "dataset": "dataset_2_all_travel",
+    "title": "Ventura Pier｜低调海边小记录",
+    "content": "Ventura Pier 比 Santa Barbara 更低调，人少一点，商业感也没那么强。海边散步很舒服，但专门开很久去可能不值。我觉得适合顺路停留，或者想避开热门海滩的人。",
+    "comments": [
+      "Ventura 确实比 Santa Barbara 安静",
+      "适合顺路，不适合专门打卡",
+      "那边停车方便吗？"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_015",
+    "dataset": "dataset_2_all_travel",
+    "title": "UCLA Sculpture Garden｜课后散步小记录",
+    "content": "UCLA Sculpture Garden 不算传统景点，但课后散步很舒服。树荫多，下午光线也柔和，适合一个人待一会儿。缺点是如果专门来旅游，可能会觉得内容太少。",
+    "comments": [
+      "这个地方适合下课后坐一会儿",
+      "专门去确实没必要，但路过很舒服",
+      "UCLA 下午光线很好看"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_016",
+    "dataset": "dataset_2_all_travel",
+    "title": "Echo Park Lake｜湖边散步小记录",
+    "content": "Echo Park Lake 适合不想开太远的时候去，绕湖走一圈很轻松。鸭子和天鹅船有点可爱，但周末人不少。它不是惊艳型景点，更适合下午没安排时散散心。",
+    "comments": [
+      "Echo Park 适合临时放空",
+      "周末人真的不少，但还算舒服",
+      "天鹅船看着可爱但我没坐过"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_017",
+    "dataset": "dataset_2_all_travel",
+    "title": "Silver Lake Reservoir｜城市散步小记录",
+    "content": "Silver Lake Reservoir 比较像本地人的散步路线，没什么游客景点感。适合下班后走一圈，附近咖啡店也多。缺点是拍照点不密集，不适合想打卡的人。",
+    "comments": [
+      "Silver Lake 很生活化，我喜欢",
+      "适合散步，不适合游客打卡",
+      "附近咖啡是不是都挺贵"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_018",
+    "dataset": "dataset_2_all_travel",
+    "title": "Manhattan Beach｜海边聊天小记录",
+    "content": "Manhattan Beach 比 Santa Monica 安静一些，pier 附近很适合傍晚聊天。停车要看运气，餐厅也不便宜。我觉得它适合约朋友散步，不适合预算很紧的周末安排。",
+    "comments": [
+      "Manhattan Beach 氛围比 Santa Monica 稳",
+      "傍晚去真的舒服",
+      "吃饭预算要提前想好"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_019",
+    "dataset": "dataset_2_all_travel",
+    "title": "Huntington Library｜花园半日小记录",
+    "content": "Huntington Library 面积比我想象中大，花园比展厅更吸引我。最好穿舒服的鞋，不然走到后面会累。适合慢慢逛半天，不适合只留一小时的人。",
+    "comments": [
+      "Huntington 真的要穿舒服鞋",
+      "花园比展厅更好逛我同意",
+      "一小时完全不够"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_020",
+    "dataset": "dataset_2_all_travel",
+    "title": "Pasadena Old Town｜周末闲逛小记录",
+    "content": "Pasadena Old Town 适合不想安排太复杂的周末，街区好走，吃饭选择也多。缺点是没有很强的目的地感，像是换个区域逛街。适合朋友见面，不适合期待景点的人。",
+    "comments": [
+      "Old Town 就是很稳但不惊艳",
+      "适合见朋友，不适合旅游打卡",
+      "停车楼还算方便"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_021",
+    "dataset": "dataset_2_all_travel",
+    "title": "Topanga Canyon｜山谷短途小记录",
+    "content": "Topanga Canyon 有种离 LA 很近但又暂时逃开的感觉。路边小店和山景都挺舒服，但手机信号有时一般。适合周末开车慢慢逛，不适合赶时间。",
+    "comments": [
+      "Topanga 很适合想逃离城市的时候",
+      "信号不好这点是真的",
+      "那边小店价格是不是偏高"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_022",
+    "dataset": "dataset_2_all_travel",
+    "title": "Descanso Gardens｜春天看花小记录",
+    "content": "Descanso Gardens 春天去比较合适，花开的时候很舒服。园区不算特别大，但走起来节奏轻松。缺点是如果不是花季，可能会觉得票价不太值。",
+    "comments": [
+      "Descanso 要看季节，花季才值",
+      "适合带家人去走走",
+      "不是花季确实会普通很多"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_023",
+    "dataset": "dataset_2_all_travel",
+    "title": "Venice Canals｜短暂停留小记录",
+    "content": "Venice Canals 很适合顺路停一下，桥和小房子拍照挺有氛围。但范围很小，不建议专门安排半天。适合和 Venice Beach 放在一起，不适合单独跑一趟。",
+    "comments": [
+      "Venice Canals 真的很小，半小时够了",
+      "和海边一起安排比较合理",
+      "拍照是好看但不用专门去"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_024",
+    "dataset": "dataset_2_all_travel",
+    "title": "Hermosa Beach｜下班看海小记录",
+    "content": "Hermosa Beach 傍晚去很舒服，pier 附近没有 Santa Monica 那么游客感。适合下班后看海散步，缺点是风大时会有点冷。带外套会比只顾拍照实用。",
+    "comments": [
+      "Hermosa 比 Santa Monica 安静多了",
+      "海边晚上真的要带外套",
+      "适合工作日傍晚去"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_025",
+    "dataset": "dataset_2_all_travel",
+    "title": "Redondo Beach｜海鲜市场小记录",
+    "content": "Redondo Beach 这次主要去了 pier 附近，海鲜市场有点热闹但也有游客感。适合朋友一起随便吃点，不适合期待精致餐厅体验。停车还算方便，但周末价格不低。",
+    "comments": [
+      "Redondo 海鲜市场就是热闹但不精致",
+      "停车周末确实不便宜",
+      "适合多人一起去比较有感觉"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_026",
+    "dataset": "dataset_2_all_travel",
+    "title": "Lake Arrowhead｜山间周末小记录",
+    "content": "Lake Arrowhead 适合想看湖和树林的人，氛围比城市安静很多。路程不短，最好住一晚。湖边商业区不大，主要是放松，不适合想密集安排活动的人。",
+    "comments": [
+      "Lake Arrowhead 很适合秋天去",
+      "住一晚会比当天往返舒服",
+      "商业区确实不大"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_027",
+    "dataset": "dataset_2_all_travel",
+    "title": "Big Bear Lake｜冬天短途小记录",
+    "content": "Big Bear Lake 冬天更有氛围，但路况要提前看。不开雪地车或者没经验的话别太随意。适合滑雪或者住小木屋，不适合说走就走的临时旅行。",
+    "comments": [
+      "Big Bear 冬天路况真的要查",
+      "小木屋氛围很好，但价格也上去",
+      "临时去容易踩坑"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_028",
+    "dataset": "dataset_2_all_travel",
+    "title": "Crystal Cove｜海边步道小记录",
+    "content": "Crystal Cove 比热门海滩安静，步道和海景都舒服。停车需要付费，走到海边也要一点时间。适合慢慢走，不适合带很多东西下去野餐。",
+    "comments": [
+      "Crystal Cove 走下去那段有点累",
+      "人少的时候真的舒服",
+      "不适合带太多东西我同意"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_029",
+    "dataset": "dataset_2_all_travel",
+    "title": "Point Dume｜看海悬崖小记录",
+    "content": "Point Dume 的视野很开阔，适合天气通透的时候去。爬上去不算难，但中午会晒。停车位有限，最好早一点。我觉得比纯海滩更有层次，但停留时间不用太久。",
+    "comments": [
+      "Point Dume 风景很值，但停车难",
+      "中午真的晒到怀疑人生",
+      "停留一小时左右刚好"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_030",
+    "dataset": "dataset_2_all_travel",
+    "title": "Leo Carrillo State Beach｜海边散步小记录",
+    "content": "Leo Carrillo State Beach 人相对少一点，适合想安静看海的人。礁石区域拍照好看，但走路要小心。缺点是设施没有那么方便，适合提前带水和零食。",
+    "comments": [
+      "Leo Carrillo 比热门海滩舒服",
+      "礁石那里走路真的要小心",
+      "设施少但人少，这点我可以接受"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_031",
+    "dataset": "dataset_2_all_travel",
+    "title": "Carpinteria｜慢节奏小城小记录",
+    "content": "Carpinteria 很适合和 Santa Barbara 顺路安排。小城很安静，海边也不拥挤。它的优点是舒服，缺点也是太平淡，适合想慢下来的人，不适合追求惊喜。",
+    "comments": [
+      "Carpinteria 很适合顺路停",
+      "平淡但舒服，这种我喜欢",
+      "适合不想被游客挤的时候去"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_032",
+    "dataset": "dataset_2_all_travel",
+    "title": "Harbor Lane｜海港散步小记录",
+    "content": "Harbor Lane 这个虚构海港点适合傍晚散步，灯亮起来之后比白天更有感觉。餐厅选择不多，最好不要饿着肚子去。适合聊天，不适合专门为了吃饭跑一趟。",
+    "comments": [
+      "海港傍晚灯光一般都很加分",
+      "餐厅少这个提醒很实用",
+      "适合散步聊天，不适合吃饭局"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_033",
+    "dataset": "dataset_2_all_travel",
+    "title": "Ojai｜小镇周末小记录",
+    "content": "Ojai 比 Solvang 更安静，有点适合发呆。书店和小店可以慢慢逛，但景点密度不高。适合住一晚，白天走走停停，不适合想拍很多照片的人。",
+    "comments": [
+      "Ojai 的节奏真的很慢",
+      "适合发呆，不适合特种兵",
+      "那边住宿会不会偏贵？"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_034",
+    "dataset": "dataset_2_all_travel",
+    "title": "Mount Wilson Observatory｜山顶看景小记录",
+    "content": "Mount Wilson Observatory 路程比想象中更绕，开车要有耐心。山顶视野不错，但不是每个人都会觉得值得。适合喜欢天文和山景的人，不适合只想轻松拍照。",
+    "comments": [
+      "Mount Wilson 路真的绕，要做好心理准备",
+      "喜欢天文的人会更有感觉",
+      "只拍照可能确实不太值"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_035",
+    "dataset": "dataset_2_all_travel",
+    "title": "Zuma Beach｜海边野餐小记录",
+    "content": "Zuma Beach 空间比很多 Malibu 海滩大，适合带毯子坐一下午。风大时沙子会有点烦，食物最好包好。它适合放空，不适合精致拍照，因为背景比较开阔但元素少。",
+    "comments": [
+      "Zuma 空间大，不会太挤",
+      "风大吃东西真的很崩溃",
+      "适合坐着发呆"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_036",
+    "dataset": "dataset_2_all_travel",
+    "title": "Dockweiler Beach｜看飞机小记录",
+    "content": "Dockweiler Beach 最大特点是能看到飞机起降，喜欢这种城市感的人会觉得有趣。海滩本身不算精致，风也大。适合临时看夕阳，不适合期待清澈海水。",
+    "comments": [
+      "Dockweiler 看飞机很特别",
+      "海水确实不是重点",
+      "适合临时去看 sunset"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_037",
+    "dataset": "dataset_2_all_travel",
+    "title": "Santa Monica Pier｜游客路线小记录",
+    "content": "Santa Monica Pier 还是很游客，但带第一次来 LA 的朋友去很方便。摩天轮拍照稳定，缺点是人多、停车贵、商业感强。适合第一次来，不适合本地人放松。",
+    "comments": [
+      "第一次来 LA 还是会想去 Santa Monica",
+      "人多到我每次都想逃",
+      "本地人放松确实不太适合"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_038",
+    "dataset": "dataset_2_all_travel",
+    "title": "Will Rogers State Beach｜轻松看海小记录",
+    "content": "Will Rogers State Beach 没有特别强的打卡感，但胜在人相对分散。适合下午带咖啡坐一会儿。缺点是周围可逛的不多，最好把它当作短暂停留。",
+    "comments": [
+      "Will Rogers 适合不想社交的时候",
+      "周围确实没啥可逛",
+      "带杯咖啡坐一会儿很舒服"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_039",
+    "dataset": "dataset_2_all_travel",
+    "title": "Eaton Canyon｜轻徒步小记录",
+    "content": "Eaton Canyon 路线不算难，但周末人很多。瀑布季节看运气，没水的时候会普通不少。适合刚开始徒步的人，不适合想找安静路线的人。",
+    "comments": [
+      "Eaton 周末真的像集体春游",
+      "瀑布没水会失望",
+      "新手徒步还算友好"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_040",
+    "dataset": "dataset_2_all_travel",
+    "title": "Runyon Canyon｜城市徒步小记录",
+    "content": "Runyon Canyon 胜在方便，离城里近，适合临时运动一下。缺点是没什么遮阴，而且人和狗都很多。想安静徒步的话不推荐，但想顺便看城市景还可以。",
+    "comments": [
+      "Runyon 人和狗都很多太真实了",
+      "方便是真的方便",
+      "夏天去会晒到不想说话"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_041",
+    "dataset": "dataset_2_all_travel",
+    "title": "Point Vicente Lighthouse｜悬崖看海小记录",
+    "content": "Point Vicente Lighthouse 很适合看海和散步，视野比普通海滩更有层次。停车相对轻松，但风会很大。适合安静看日落，不适合穿得太薄去拍照。",
+    "comments": [
+      "Point Vicente 风真的夸张",
+      "日落时很美，但要带外套",
+      "停车比 Malibu 轻松多了"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_042",
+    "dataset": "dataset_2_all_travel",
+    "title": "Terranea Trail｜海边步道小记录",
+    "content": "Terranea Trail 很适合想走路但不想爬山的人。路面比较友好，海景也稳定。缺点是度假村附近会有点精致感，周末人不少，适合轻松散步。",
+    "comments": [
+      "Terranea Trail 很好走",
+      "周末人多但风景稳",
+      "适合不想爬山的时候"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_043",
+    "dataset": "dataset_2_all_travel",
+    "title": "Abbot Kinney｜街区闲逛小记录",
+    "content": "Abbot Kinney 适合和 Venice 放在一起逛，咖啡店和小店很多。缺点是价格不太友好，也比较网红。适合朋友下午见面，不适合想省钱的一天。",
+    "comments": [
+      "Abbot Kinney 好逛但钱包会痛",
+      "适合下午见朋友",
+      "网红感确实有点重"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_044",
+    "dataset": "dataset_2_all_travel",
+    "title": "Arts District LA｜城市拍照小记录",
+    "content": "Arts District 适合喜欢咖啡店、墙绘和工业风的人。白天走走还可以，晚上有些街区会冷清。适合拍照和喝咖啡，不适合期待传统景点。",
+    "comments": [
+      "Arts District 白天比晚上舒服",
+      "适合拍照，但不是景点型",
+      "咖啡店选择很多"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_045",
+    "dataset": "dataset_2_all_travel",
+    "title": "Larchmont Village｜周末早午后小记录",
+    "content": "Larchmont Village 很适合周末上午去，街不长，但氛围轻松。买杯咖啡走走就够了。缺点是内容不多，别把它当成完整一日游，更适合附近顺路。",
+    "comments": [
+      "Larchmont 很适合周末早上",
+      "街确实不长，但舒服",
+      "顺路去比专门去合理"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_046",
+    "dataset": "dataset_2_all_travel",
+    "title": "Marina del Rey｜海港日落小记录",
+    "content": "Marina del Rey 适合想看船和日落的人，节奏比 Venice 安静。餐厅选择有，但价格偏高。我觉得适合约朋友聊天，不适合专门追求景点感。",
+    "comments": [
+      "Marina del Rey 日落很稳",
+      "适合聊天，不适合打卡景点",
+      "那边餐厅确实不便宜"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_047",
+    "dataset": "dataset_2_all_travel",
+    "title": "El Segundo Beach｜工作日看海小记录",
+    "content": "El Segundo Beach 比较低调，工作日下午去人不多。海滩本身不算最漂亮，但安静是优点。适合想短暂逃离电脑的人，不适合专门拍照打卡。",
+    "comments": [
+      "El Segundo 很适合工作日去透气",
+      "不惊艳但安静",
+      "短暂逃离电脑这个太懂了"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_048",
+    "dataset": "dataset_2_all_travel",
+    "title": "Temescal Canyon｜周末徒步小记录",
+    "content": "Temescal Canyon 有一定坡度，不算特别轻松。天气热的时候会比较累，最好早上去。优点是离西边近，缺点是停车和晒太阳都要考虑。",
+    "comments": [
+      "Temescal 比想象中累一点",
+      "早上去会舒服很多",
+      "晒的时候真的很崩溃"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_049",
+    "dataset": "dataset_2_all_travel",
+    "title": "Crystal Lake｜山里短途小记录",
+    "content": "Crystal Lake 路程不近，但山里空气很舒服。湖本身没有想象中大，适合野餐和慢慢坐，不适合期待很壮观风景的人。最好提前查开放情况。",
+    "comments": [
+      "Crystal Lake 要查开放，不然白跑",
+      "湖不大但空气很好",
+      "适合野餐，不适合打卡大片"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  },
+  {
+    "id": "D2_050",
+    "dataset": "dataset_2_all_travel",
+    "title": "Little Tokyo｜城市半日游小记录",
+    "content": "Little Tokyo 适合和朋友半日闲逛，吃饭、甜品、小店都集中。缺点是周末排队明显，停车也要看运气。我觉得适合城市短途，不适合赶时间吃完就走。",
+    "comments": [
+      "Little Tokyo 周末排队真的长",
+      "适合慢慢逛，不适合赶时间",
+      "停车每次都靠运气"
+    ],
+    "expected_test_focus": "All posts are travel-related. Test whether AI can create subclusters within travel instead of forcing unrelated high-level categories.",
+    "confidence_hint": "high"
+  }
+]
