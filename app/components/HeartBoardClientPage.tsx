@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ZCOOL_KuaiLe } from "next/font/google";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { HeartBoardCard } from "@/app/components/HeartBoardCard";
 import { getHeartedPostsByWeek } from "@/data/mockPosts";
@@ -15,6 +16,11 @@ import { getCurrentWeekId, getMergedHeartedPosts } from "@/lib/heartStorage";
 const SWIPE_THRESHOLD = 80;
 const SWIPE_OUT_DISTANCE = 360;
 const SWIPE_ANIMATION_MS = 320;
+const heroTitleFont = ZCOOL_KuaiLe({
+  weight: "400",
+  display: "swap",
+  preload: false,
+});
 
 export function HeartBoardClientPage() {
   const activePosts = useMemo(() => getActiveHeartboardPosts(), []);
@@ -189,36 +195,78 @@ export function HeartBoardClientPage() {
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[linear-gradient(180deg,#fff8f4_0%,#fff5f7_48%,#fffaf6_100%)] pb-8">
-      <header className="sticky top-0 z-20 bg-[#fff8f4]/85 px-4 py-3 backdrop-blur">
-        <div className="flex items-center justify-between">
-          <Link href="/me" className="text-2xl text-zinc-800">
+      <header className="relative overflow-hidden bg-[linear-gradient(180deg,#fff4df_0%,#fff8f4_48%,#fff5f7_100%)] px-6 pb-6 pt-4">
+        <span className="pointer-events-none absolute -left-12 top-6 h-32 w-32 rounded-full bg-[#ffd6c7]/45 blur-3xl" />
+        <span className="pointer-events-none absolute right-0 top-12 h-28 w-28 rounded-full bg-[#ffc7d0]/40 blur-3xl" />
+        <span className="pointer-events-none absolute left-[18%] top-[72px] rotate-[-18deg] text-base text-[#f47d72]/60">
+          〰
+        </span>
+        <span className="pointer-events-none absolute right-[21%] top-[62px] rotate-[12deg] text-base text-[#f47d72]/70">
+          ♡
+        </span>
+        <span className="pointer-events-none absolute right-[16%] top-[100px] text-xs text-[#f0a06d]/70">✦</span>
+
+        <div className="relative z-10 flex items-center justify-between">
+          <Link
+            href="/me"
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-white/65 text-lg text-[#6d4f45] shadow-sm backdrop-blur"
+          >
             ←
           </Link>
-          <div className="text-center">
-            <h1 className="text-[24px] font-black text-zinc-900">本周心动板</h1>
-            <p className="text-xs text-zinc-500">根据你本周点亮的内容生成</p>
-          </div>
-          <div className="flex items-center gap-3 text-lg text-zinc-700">
-            <button type="button" aria-label="更多">
+          <span className="pointer-events-none h-7 w-7" />
+          <div className="flex items-center gap-2 text-[#6d4f45]">
+            <button
+              type="button"
+              aria-label="更多"
+              className="flex h-7 w-7 items-center justify-center rounded-full bg-white/60 text-xs shadow-sm backdrop-blur"
+            >
               ...
             </button>
-            <button type="button" aria-label="分享">
+            <button
+              type="button"
+              aria-label="分享"
+              className="flex h-7 w-7 items-center justify-center rounded-full bg-white/60 text-sm shadow-sm backdrop-blur"
+            >
               ↗
             </button>
           </div>
         </div>
+
+        <div className="relative z-10 mt-6 text-center">
+          <h1
+            className={`${heroTitleFont.className} -rotate-1 text-[52px] leading-none tracking-[0.06em] text-[#f2554b] drop-shadow-[0_5px_0_rgba(255,210,190,0.65)] [text-shadow:1px_1px_0_#fff2e8,-1px_1px_0_#fff2e8,0_3px_0_rgba(255,178,155,0.45)]`}
+          >
+            本周心动
+          </h1>
+          <p className="mt-3 text-[13px] font-medium tracking-[0.08em] text-[#6e554a]">
+            根据你本周点亮的内容生成
+          </p>
+          <span className="mx-auto mt-2 block h-1.5 w-28 -rotate-1 rounded-full bg-[#f2554b]/45" />
+        </div>
       </header>
 
-      <section className="px-5 pb-3 pt-4">
-        <div className="rounded-3xl border border-white/70 bg-white/60 px-4 py-3 shadow-sm backdrop-blur">
-          <p className="text-[13px] font-medium text-zinc-700">本周你点亮了 {heartedPosts.length} 次心动</p>
-          <p className="mt-1 text-[13px] text-zinc-500">AI 整理出 {directionCount} 个兴趣方向</p>
+      <section className="px-5 pb-3 pt-2">
+        <div className="relative overflow-hidden rounded-[28px] border border-white/75 bg-[linear-gradient(135deg,#fff7f8_0%,#fff_52%,#fff1f3_100%)] px-5 py-3 shadow-[0_14px_32px_rgba(242,85,75,0.10)]">
+          <span className="pointer-events-none absolute -right-8 top-2 h-28 w-28 rounded-full bg-[#ffd6dc]/55 blur-3xl" />
+          <span className="pointer-events-none absolute right-8 top-8 text-4xl text-[#f2554b]/16">♡</span>
+          <span className="pointer-events-none absolute right-20 bottom-5 h-1.5 w-20 -rotate-6 rounded-full bg-[#f2554b]/20" />
+          <span className="relative inline-flex items-center gap-1 rounded-full bg-[#f2554b] px-2 py-0.5 text-[9px] font-semibold text-white shadow-[0_6px_14px_rgba(242,85,75,0.18)]">
+            ❤ AI 回顾
+          </span>
+
+          <p className="relative mt-3 text-[15px] font-semibold leading-none text-[#3f302c]">
+            本周你点亮了 <span className="text-[19px] font-black text-[#f2554b]">{heartedPosts.length}</span> 次心动
+          </p>
+          <p className="relative mt-1.5 text-[11px] text-[#6d5a52]">
+            AI 整理出 <span className="font-bold text-[#f2554b]">{directionCount}</span> 个兴趣方向
+          </p>
           <button
             type="button"
             onClick={handleRegenerateWithGemini}
             disabled={isRegenerating || heartedPosts.length === 0}
-            className="mt-3 inline-flex rounded-full border border-[#f0cdc3]/80 bg-white/70 px-3 py-1 text-[11px] font-medium text-zinc-600 shadow-sm disabled:opacity-60"
+            className="relative mt-3 inline-flex items-center gap-1 rounded-full border border-[#f3c8c9] bg-white/80 px-3 py-1 text-[11px] font-semibold text-[#f2554b] shadow-[0_8px_18px_rgba(242,85,75,0.10)] disabled:opacity-60"
           >
+            <span>↻</span>
             {isRegenerating ? "AI 正在整理..." : "用ai生成"}
           </button>
         </div>
@@ -240,55 +288,28 @@ export function HeartBoardClientPage() {
           </div>
         </section>
       ) : activeCategory ? (
-        <section className="px-4 pt-2">
-          <div className="relative h-[520px] overflow-visible pl-1 pb-8 pr-4 pt-1">
-            {orderedCategories.map((category, index) => {
-              const isActive = index === 0;
-              const isVisible = index <= 3;
-              const cardWidthClass = "w-[70%]";
-              const stackedTransforms = [
-                "translateX(-28px) translateY(8px) rotate(1deg) scale(1)",
-                "translateX(calc(14% - 5px)) translateY(8px) rotate(1deg) scale(1)",
-                "translateX(calc(28% + 14px)) translateY(8px) rotate(1deg) scale(1)",
-                "translateX(calc(42% + 33px)) translateY(8px) rotate(1deg) scale(1)",
-              ];
-              const activeTransform = `translateX(${dragX - 28}px) translateY(8px) rotate(1deg) scale(1)`;
-              const transform = isActive ? activeTransform : stackedTransforms[index] ?? stackedTransforms[3];
-
-              return (
-                <div
-                  key={category.id}
-                  className={`absolute left-1 top-1 ${cardWidthClass} touch-pan-y select-none ${
-                    isDragging && isActive ? "" : "transition-all duration-300 ease-out"
-                  } ${
-                    isVisible ? "opacity-100" : "pointer-events-none opacity-0"
-                  }`}
-                  style={{
-                    transform,
-                    transformOrigin: "center center",
-                    zIndex: isActive ? 40 : index === 1 ? 30 : index === 2 ? 20 : index === 3 ? 10 : 1,
-                    opacity: isVisible ? 1 : 0,
-                    pointerEvents: isActive ? "auto" : "none",
-                  }}
-                  onPointerDown={isActive ? handlePointerDown : undefined}
-                  onPointerMove={isActive ? handlePointerMove : undefined}
-                  onPointerUp={isActive ? handlePointerEnd : undefined}
-                  onPointerCancel={isActive ? handlePointerEnd : undefined}
-                >
-                  <HeartBoardCard
-                    category={category}
-                    isInsightExpanded={isActive && expandedInsightCardId === category.id}
-                    themeIndex={heartBoard.categories.findIndex((entry) => entry.id === category.id)}
-                    onToggleInsight={() =>
-                      setExpandedInsightCardId((current) => (current === category.id ? null : category.id))
-                    }
-                  />
-                </div>
-              );
-            })}
+        <section className="px-5 pt-3">
+          <div
+            className={`mx-auto w-full touch-pan-y select-none ${
+              isDragging ? "" : "transition-transform duration-300 ease-out"
+            }`}
+            style={{ transform: `translateX(${dragX}px)` }}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerEnd}
+            onPointerCancel={handlePointerEnd}
+          >
+            <HeartBoardCard
+              category={activeCategory}
+              isInsightExpanded={expandedInsightCardId === activeCategory.id}
+              themeIndex={heartBoard.categories.findIndex((entry) => entry.id === activeCategory.id)}
+              onToggleInsight={() =>
+                setExpandedInsightCardId((current) => (current === activeCategory.id ? null : activeCategory.id))
+              }
+            />
           </div>
 
-          <div className="mt-2.5 flex flex-col items-center gap-2">
+          <div className="mt-7 flex flex-col items-center gap-2.5">
             <div className="flex items-center gap-2">
               {heartBoard.categories.map((category, index) => (
                 <button

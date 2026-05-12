@@ -52,17 +52,19 @@ export function HeartBoardCard({ category, isInsightExpanded, onToggleInsight, t
   const theme = cardThemes[themeIndex % cardThemes.length];
 
   return (
-    <article className="flex h-[470px] w-full flex-col overflow-hidden rounded-[26px] border border-white/80 bg-[#fffdfb] p-2 pb-3 shadow-[0_18px_36px_rgba(95,53,44,0.16)]">
+    <article className="flex h-[clamp(560px,72vh,640px)] w-full flex-col overflow-hidden rounded-[26px] border border-white/80 bg-[#fffdfb] p-3 pb-4 shadow-[0_18px_36px_rgba(95,53,44,0.16)]">
       <div
-        className="mx-auto h-[138px] w-[92%] shrink-0 rounded-[20px] bg-cover bg-center"
+        className="mx-auto h-[142px] w-[92%] shrink-0 rounded-[20px] bg-cover bg-center"
         style={{ backgroundImage: `url(${category.coverImage})` }}
       />
-      <div className="flex min-h-0 flex-1 flex-col px-4 pb-2 pt-1.5">
+      <div className="flex min-h-0 flex-1 flex-col px-3.5 pb-3 pt-2.5 sm:px-4">
         <div className="shrink-0 text-left">
-          <div className="space-y-1">
-            <p className="line-clamp-2 text-[16px] font-black leading-5 text-zinc-950">{category.title}</p>
+          <div className="space-y-1.5">
+            <p className="line-clamp-2 text-[20px] font-black leading-[1.3] tracking-tight text-zinc-950">
+              {category.title}
+            </p>
             <span
-              className="inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium"
+              className="inline-flex rounded-full px-3 py-1 text-[12px] font-medium leading-snug"
               style={{ backgroundColor: theme.accentSoft, color: theme.accent }}
             >
               本周心动 {category.postCount} 篇
@@ -70,14 +72,14 @@ export function HeartBoardCard({ category, isInsightExpanded, onToggleInsight, t
           </div>
         </div>
 
-        <div className="hide-scrollbar mt-1 min-h-0 flex-1 space-y-1 overflow-y-auto pr-1">
-          <div className="rounded-2xl p-2 text-left" style={{ backgroundColor: theme.accentSofter }}>
-            <p className="mb-1 text-[10px] font-semibold" style={{ color: theme.accent }}>
+        <div className="hide-scrollbar mt-2 min-h-0 flex-1 space-y-2.5 overflow-y-auto pr-0.5">
+          <div className="rounded-2xl p-3 text-left" style={{ backgroundColor: theme.accentSofter }}>
+            <p className="mb-1.5 text-[12px] font-semibold leading-snug" style={{ color: theme.accent }}>
               AI 洞察
             </p>
             <p
-              className={`text-[10px] leading-4 text-zinc-700 ${
-                isInsightExpanded ? "max-h-[82px] overflow-y-auto pr-1" : "line-clamp-3"
+              className={`text-[13px] leading-[1.65] text-zinc-700 ${
+                isInsightExpanded ? "max-h-[128px] overflow-y-auto pr-1" : "line-clamp-3"
               }`}
             >
               {category.insight}
@@ -86,7 +88,7 @@ export function HeartBoardCard({ category, isInsightExpanded, onToggleInsight, t
               <button
                 type="button"
                 onClick={onToggleInsight}
-                className="mt-1 text-[10px] font-medium"
+                className="mt-1.5 text-[12px] font-medium leading-snug"
                 style={{ color: theme.accent }}
               >
                 {isInsightExpanded ? "收起" : "展开"}
@@ -95,11 +97,11 @@ export function HeartBoardCard({ category, isInsightExpanded, onToggleInsight, t
           </div>
 
           {visibleKeywords.length > 0 ? (
-            <div className="space-y-0.5 text-left">
-              <p className="text-[10px] font-medium text-zinc-500">心动关键词</p>
-              <div className="flex flex-wrap gap-1">
+            <div className="space-y-1 text-left">
+              <p className="text-[12px] font-medium leading-snug text-zinc-500">心动关键词</p>
+              <div className="flex flex-wrap gap-1.5">
                 {visibleKeywords.map((keyword) => (
-                  <span key={keyword} className="rounded-full bg-[#f7f0ec] px-2 py-0.5 text-[10px] text-zinc-700">
+                  <span key={keyword} className="rounded-full bg-[#f7f0ec] px-3 py-1 text-[12px] leading-snug text-zinc-700">
                     #{keyword}
                   </span>
                 ))}
@@ -107,16 +109,16 @@ export function HeartBoardCard({ category, isInsightExpanded, onToggleInsight, t
             </div>
           ) : null}
 
-          <div className="space-y-0.5 text-left">
-            <p className="text-[10px] font-medium text-zinc-500">代表内容</p>
-            <p className="line-clamp-2 text-[10px] leading-[15px] text-zinc-700">{visibleItems.join(" ｜ ")}</p>
+          <div className="space-y-1 text-left">
+            <p className="text-[12px] font-medium leading-snug text-zinc-500">代表内容</p>
+            <p className="line-clamp-2 text-[13px] leading-[1.55] text-zinc-700">{visibleItems.join(" ｜ ")}</p>
           </div>
         </div>
 
-        <div className="relative z-50 mt-1 flex shrink-0 justify-end pb-0.5 pt-1">
+        <div className="relative z-50 mt-1.5 flex shrink-0 justify-end pb-0.5 pt-1.5">
           <Link
             href={`/heart-board/${category.slug}`}
-            className="relative z-50 inline-flex items-center gap-1 whitespace-nowrap rounded-full px-3 py-1.5 text-[11px] font-semibold text-white"
+            className="relative z-50 inline-flex items-center gap-1 whitespace-nowrap rounded-full px-4 py-2 text-[13px] font-semibold leading-snug text-white"
             style={{ backgroundColor: theme.accent, boxShadow: `0 8px 18px ${theme.shadow}` }}
           >
             查看详情 <span aria-hidden="true">›</span>
