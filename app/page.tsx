@@ -11,8 +11,8 @@ export default function Home() {
       <FeedHeader />
 
       <section className="columns-2 gap-3 px-3 pt-3">
-        {posts.map((post) => (
-          <PostCard key={post.id} post={post} />
+        {posts.map((post, index) => (
+          <PostCard key={post.id} post={post} guideStepAnchor={index === 0 ? 1 : undefined} />
         ))}
       </section>
 

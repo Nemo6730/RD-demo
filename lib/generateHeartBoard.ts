@@ -405,6 +405,41 @@ function buildItemTitle(category: BaseCategory, keyword: string): string {
   return keyword;
 }
 
+/** 本地 fallback：比单句「主要集中在…」信息更完整的要点总结 */
+function buildMockItemSummary(
+  postCount: number,
+  focusLabel: string,
+  keywords: string[],
+  meta: { positiveSignals: Set<string>; riskSignals: Set<string>; scenes: Set<string> } | undefined,
+): string {
+  const kw = keywords.map((k) => k.trim()).filter(Boolean);
+  const pos = meta ? [...meta.positiveSignals].filter((s) => !kw.includes(s)).slice(0, 4) : [];
+  const kwShow = kw.slice(0, 3);
+  const posShow = pos.slice(0, 3);
+  const scn = meta ? [...meta.scenes].slice(0, 2) : [];
+  const risks = meta ? [...meta.riskSignals].slice(0, 2) : [];
+
+  const breadth = postCount > 1 ? "几条点亮内容从不同侧面给了可对照的评价" : "点亮内容里对这一点有直接可读的描述";
+  let text = `围绕「${focusLabel}」，${breadth}，能拼出更完整的印象。`;
+  const detailBits: string[] = [];
+  if (kwShow.length > 0) {
+    detailBits.push(`讨论里最常串起来的角度是「${kwShow.join("」「")}」`);
+  }
+  if (posShow.length > 0) {
+    detailBits.push(`大家更常强调的感受是「${posShow.join("」「")}」`);
+  }
+  if (detailBits.length > 0) {
+    text += ` ${detailBits.join("；")}。`;
+  }
+  if (scn.length > 0) {
+    text += ` 这些内容多出现在「${scn.join("、")}」一类场景里，方便你对照自己的需求。`;
+  }
+  if (risks.length > 0) {
+    text += ` 也有人提醒要留意：${risks.join("、")}。`;
+  }
+  return text;
+}
+
 function generateItemsFromCategoryPosts(
   categoryPosts: MockPost[],
   category: HeartBoardCategory,
@@ -454,7 +489,7 @@ function generateItemsFromCategoryPosts(
         image,
         mentionCount: sourcePostIds.length,
         keywords: mergedKeywords.length > 0 ? mergedKeywords : [entityName],
-        summary: `有 ${sourcePostIds.length} 篇本周点亮笔记对「${itemTitle || entityName}」给出实质评价，主要集中在${(mergedKeywords[0] ?? "使用体验")}。`,
+        summary: "",
         reminder: riskSignals.length > 0 ? `注意：${riskSignals.join("、")}` : undefined,
         sourcePostIds,
       };
@@ -505,7 +540,13 @@ function generateItemsFromCategoryPosts(
     });
   });
 
-  const dedupedItemCandidates = [...dedupedById.values()];
+  const dedupedItemCandidates = [...dedupedById.values()].map((item) => {
+    const meta = supportMetaById.get(item.id);
+    return {
+      ...item,
+      summary: buildMockItemSummary(item.sourcePostIds.length, item.title, item.keywords, meta),
+    };
+  });
 
   if (dedupedItemCandidates.length > 0) {
     const postIndex = new Map(categoryPosts.map((post) => [post.id, post]));

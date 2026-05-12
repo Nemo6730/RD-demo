@@ -1,16 +1,31 @@
 import Link from "next/link";
 import type { HeartBoardCategory } from "@/data/mockHeartBoard";
 import { getHeartBoardCardTheme } from "@/lib/heartBoardCardThemes";
+import {
+  getCategoryLiveAccumulationCount,
+  getLiveItemMentionCount,
+  getLiveItemSourcePostCount,
+} from "@/lib/heartBoardLiveMetrics";
 
 type HeartBoardDetailProps = {
   category: HeartBoardCategory;
   /** heartBoard.categories 中的稳定下标，与滑动排序无关 */
   themeIndex: number;
+  /** 顶栏副标题，如 `2026/05/04-2026/05/10 灵感积累` */
+  weekNavLabel: string;
+  /** 与分类 `sourcePostIds` 求交，「本周积累」随点亮实时变化 */
+  liveHeartedPostIds?: ReadonlySet<string>;
 };
 
-export function HeartBoardDetail({ category, themeIndex }: HeartBoardDetailProps) {
+export function HeartBoardDetail({
+  category,
+  themeIndex,
+  weekNavLabel,
+  liveHeartedPostIds,
+}: HeartBoardDetailProps) {
   const visibleItems = category.items.filter((item) => item.sourcePostIds.length > 0);
   const theme = getHeartBoardCardTheme(themeIndex);
+  const accumulationCount = getCategoryLiveAccumulationCount(category, liveHeartedPostIds);
 
   const pageStyle = {
     "--theme-accent": theme.accent,
@@ -33,7 +48,7 @@ export function HeartBoardDetail({ category, themeIndex }: HeartBoardDetailProps
       }}
     >
       <header
-        className="sticky top-0 z-20 flex h-12 items-center justify-between border-b px-4 backdrop-blur-md"
+        className="sticky top-0 z-20 flex h-12 items-center gap-1 border-b px-2 backdrop-blur-md sm:px-3"
         style={{
           borderColor: `color-mix(in srgb, ${theme.accent} 18%, #e7e5e4)`,
           background: `linear-gradient(180deg, color-mix(in srgb, ${theme.accentSoft} 92%, #fff) 0%, color-mix(in srgb, ${theme.accentSoft} 55%, #f8f5f3) 100%)`,
@@ -46,6 +61,9 @@ export function HeartBoardDetail({ category, themeIndex }: HeartBoardDetailProps
         >
           ←
         </Link>
+        <p className="min-w-0 flex-1 truncate text-center text-sm font-medium leading-snug text-zinc-600 sm:text-[15px]">
+          {weekNavLabel}
+        </p>
         <button
           type="button"
           className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border bg-white/90 text-lg leading-none"
@@ -88,7 +106,7 @@ export function HeartBoardDetail({ category, themeIndex }: HeartBoardDetailProps
               {category.title}
             </h1>
             <p className="text-sm font-semibold" style={{ color: theme.accent }}>
-              本周积累 {category.postCount} 篇
+              本周积累 {accumulationCount} 篇
             </p>
             <div
               className="rounded-2xl p-3"
@@ -108,7 +126,10 @@ export function HeartBoardDetail({ category, themeIndex }: HeartBoardDetailProps
 
       <section className="space-y-3 px-4 pt-5">
         <h2 className="text-lg font-semibold text-zinc-900">灵感要点</h2>
-        {visibleItems.map((item) => (
+        {visibleItems.map((item) => {
+          const liveSourceCount = getLiveItemSourcePostCount(item, liveHeartedPostIds);
+          const liveMentionCount = getLiveItemMentionCount(item, liveHeartedPostIds);
+          return (
           <article
             key={item.id}
             className="overflow-hidden rounded-2xl bg-white shadow-sm"
@@ -127,7 +148,7 @@ export function HeartBoardDetail({ category, themeIndex }: HeartBoardDetailProps
                 <p className="text-xs text-zinc-500">
                   被提到{" "}
                   <span className="font-semibold tabular-nums" style={{ color: theme.accent }}>
-                    {item.mentionCount}
+                    {liveMentionCount}
                   </span>{" "}
                   次
                 </p>
@@ -157,11 +178,12 @@ export function HeartBoardDetail({ category, themeIndex }: HeartBoardDetailProps
                 className="inline-flex text-sm font-medium transition hover:opacity-85"
                 style={{ color: theme.accent }}
               >
-                相关原帖 {item.sourcePostIds.length} 篇
+                相关原帖 {liveSourceCount} 篇
               </Link>
             </div>
           </article>
-        ))}
+        );
+        })}
         {visibleItems.length === 0 ? (
           <div
             className="rounded-2xl bg-white p-4 text-sm text-zinc-600"

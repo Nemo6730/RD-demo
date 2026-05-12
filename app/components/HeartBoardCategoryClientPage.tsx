@@ -7,7 +7,7 @@ import type { HeartBoard } from "@/data/mockHeartBoard";
 import { getActiveHeartboardPosts } from "@/data/testDatasets";
 import { generateMockHeartBoardFromPosts } from "@/lib/generateHeartBoard";
 import { loadGeneratedHeartBoard } from "@/lib/heartBoardCache";
-import { getCurrentWeekId, getMergedHeartedPosts } from "@/lib/heartStorage";
+import { formatWeekRangeNavLabel, getCurrentWeekId, getMergedHeartedPosts } from "@/lib/heartStorage";
 
 type HeartBoardCategoryClientPageProps = {
   categoryId: string;
@@ -33,12 +33,9 @@ export function HeartBoardCategoryClientPage({ categoryId }: HeartBoardCategoryC
   }
 
   const heartedPosts = getMergedHeartedPosts(activePosts, weekId);
+  const liveHeartedPostIds = new Set(heartedPosts.map((p) => p.id));
   const fallbackHeartBoard = generateMockHeartBoardFromPosts(heartedPosts, weekId);
-  const cachedHeartBoard =
-    loadGeneratedHeartBoard(
-      weekId,
-      heartedPosts.map((post) => post.id),
-    ) ?? null;
+  const cachedHeartBoard = loadGeneratedHeartBoard(weekId) ?? null;
   const heartBoard: HeartBoard = cachedHeartBoard ?? fallbackHeartBoard;
   const category = heartBoard.categories.find((entry) => entry.slug === categoryId || entry.id === categoryId);
 
@@ -64,5 +61,12 @@ export function HeartBoardCategoryClientPage({ categoryId }: HeartBoardCategoryC
     heartBoard.categories.findIndex((entry) => entry.id === category.id),
   );
 
-  return <HeartBoardDetail category={category} themeIndex={categoryThemeIndex} />;
+  return (
+    <HeartBoardDetail
+      category={category}
+      themeIndex={categoryThemeIndex}
+      weekNavLabel={formatWeekRangeNavLabel(weekId)}
+      liveHeartedPostIds={liveHeartedPostIds}
+    />
+  );
 }

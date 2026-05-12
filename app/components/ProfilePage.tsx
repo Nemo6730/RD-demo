@@ -103,7 +103,7 @@ export function ProfilePage() {
       <section className="columns-2 gap-3 px-3 pt-3">
         {visibleProfileNotes.map((note) => (
           <Link
-            href={`/post/post_00${note.id - 10}?from=${encodeURIComponent("/me")}`}
+            href={`/post/${note.postId}?from=${encodeURIComponent("/me")}`}
             key={note.id}
             className="mb-3 block break-inside-avoid overflow-hidden rounded-2xl bg-white shadow-sm"
           >

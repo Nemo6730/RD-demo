@@ -39,11 +39,7 @@ export function HeartBoardSourcesClientPage({ categoryId, itemId }: HeartBoardSo
 
   const heartedPosts = getMergedHeartedPosts(activePosts, weekId);
   const fallbackHeartBoard = generateMockHeartBoardFromPosts(heartedPosts, weekId);
-  const cachedHeartBoard =
-    loadGeneratedHeartBoard(
-      weekId,
-      heartedPosts.map((post) => post.id),
-    ) ?? null;
+  const cachedHeartBoard = loadGeneratedHeartBoard(weekId) ?? null;
   const heartBoard: HeartBoard = cachedHeartBoard ?? fallbackHeartBoard;
   const category = heartBoard.categories.find((entry) => entry.slug === categoryId || entry.id === categoryId);
   const normalizedItemId = normalizeItemId(itemId);

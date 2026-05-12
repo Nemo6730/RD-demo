@@ -21,6 +21,7 @@ export function BottomNav({ active }: BottomNavProps) {
           <Link
             key={item.key}
             href={item.href}
+            data-step-guide={item.key === "me" ? "3" : undefined}
             className={`${itemColumnClass[index]} flex h-12 items-center justify-center leading-none ${
               active === item.key ? "font-semibold text-zinc-900" : ""
             }`}

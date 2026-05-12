@@ -27,6 +27,7 @@ export function HeartBoardEntry() {
           <Link
             href="/heart-board"
             className="shrink-0 rounded-full bg-[var(--xhs-red)] px-4 py-2 text-xs font-semibold text-white shadow-[0_6px_14px_rgba(255,36,66,0.24)] transition active:scale-95"
+            data-step-guide="4"
           >
             查看本周灵感
           </Link>

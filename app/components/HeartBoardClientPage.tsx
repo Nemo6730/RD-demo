@@ -7,33 +7,28 @@ import { HEART_BOARD_CARD_THEMES } from "@/lib/heartBoardCardThemes";
 import { getHeartedPostsByWeek } from "@/data/mockPosts";
 import { getActiveHeartboardPosts } from "@/data/testDatasets";
 import type { HeartBoard, HeartBoardCategory } from "@/data/mockHeartBoard";
-import type { AIHeartBoard } from "@/lib/ai/heartBoardSchema";
-import { adaptHeartBoardForUI } from "@/lib/ai/adaptHeartBoardForUI";
 import { generateMockHeartBoardFromPosts } from "@/lib/generateHeartBoard";
 import { clearGeneratedHeartBoard, loadGeneratedHeartBoard, saveGeneratedHeartBoard } from "@/lib/heartBoardCache";
 import { getCurrentWeekId, getMergedHeartedPosts } from "@/lib/heartStorage";
+import { useStepGuide } from "@/components/StepGuide";
 
-const SWIPE_THRESHOLD = 80;
-const SWIPE_OUT_DISTANCE = 360;
-const SWIPE_ANIMATION_MS = 320;
-/** 超过此位移才判定水平/垂直意图，避免误挡卡片内纵向滚动 */
-const GESTURE_COMMIT_PX = 10;
+const CARD_SWITCH_OUT_DISTANCE = 360;
+const CARD_SWITCH_ANIMATION_MS = 320;
 
 export function HeartBoardClientPage() {
   const activePosts = useMemo(() => getActiveHeartboardPosts(), []);
   const weekId = useMemo(() => getCurrentWeekId(new Date()), []);
+  const { notifyAiGenerateStartedForGuide, notifyAiGenerateFinishedForGuide } = useStepGuide();
   const [hydrated, setHydrated] = useState(false);
+  const [aiDeckVisible, setAiDeckVisible] = useState(false);
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [cardOrder, setCardOrder] = useState<string[]>([]);
   const [dragX, setDragX] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const isSwipingOutRef = useRef(false);
+  const isSwitchingCardRef = useRef(false);
   const [expandedInsightCardId, setExpandedInsightCardId] = useState<string | null>(null);
-  const dragStartXRef = useRef<number | null>(null);
-  const dragStartYRef = useRef<number | null>(null);
   const dragXRef = useRef(0);
-  const swipeCommittedRef = useRef(false);
-  const swipeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const switchCardTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const streamGuideAdvancedRef = useRef(false);
 
   useEffect(() => {
     setHydrated(true);
@@ -43,6 +38,7 @@ export function HeartBoardClientPage() {
     () => (hydrated ? getMergedHeartedPosts(activePosts, weekId) : getHeartedPostsByWeek(activePosts, weekId)),
     [activePosts, hydrated, weekId],
   );
+  const liveHeartedPostIds = useMemo(() => new Set(heartedPosts.map((p) => p.id)), [heartedPosts]);
   const fallbackHeartBoard = useMemo(() => generateMockHeartBoardFromPosts(heartedPosts, weekId), [heartedPosts, weekId]);
   const [heartBoard, setHeartBoard] = useState<HeartBoard>(fallbackHeartBoard);
 
@@ -51,18 +47,21 @@ export function HeartBoardClientPage() {
     if (heartedPosts.length === 0) {
       clearGeneratedHeartBoard(weekId);
       setHeartBoard(fallbackHeartBoard);
+      setAiDeckVisible(false);
       return;
     }
 
-    const cached = loadGeneratedHeartBoard(
-      weekId,
-      heartedPosts.map((post) => post.id),
-    );
+    const cached = loadGeneratedHeartBoard(weekId);
     setHeartBoard(cached ?? fallbackHeartBoard);
+    setAiDeckVisible(cached != null);
   }, [hydrated, weekId, heartedPosts, fallbackHeartBoard]);
 
   const handleRegenerateWithGemini = async () => {
     if (heartedPosts.length === 0 || isRegenerating) return;
+    notifyAiGenerateStartedForGuide();
+    setExpandedInsightCardId(null);
+    setCardOrder([]);
+    streamGuideAdvancedRef.current = false;
     setIsRegenerating(true);
     try {
       const response = await fetch("/api/heart-board/generate", {
@@ -73,34 +72,74 @@ export function HeartBoardClientPage() {
         body: JSON.stringify({
           weekId,
           posts: heartedPosts,
+          stream: true,
         }),
       });
-      const data = (await response.json()) as {
-        heartBoard?: HeartBoard | AIHeartBoard;
-        usedFallback?: boolean;
-        error?: string;
-      };
 
-      if (!response.ok || !data.heartBoard) {
-        throw new Error(data.error || "Failed to regenerate with Gemini");
+      if (!response.ok) {
+        throw new Error(`Failed to regenerate with Gemini (${response.status})`);
       }
 
-      const nextBoard = adaptHeartBoardForUI(data.heartBoard, heartedPosts, weekId);
-      setHeartBoard(nextBoard);
-      saveGeneratedHeartBoard(
-        weekId,
-        heartedPosts.map((post) => post.id),
-        nextBoard,
-      );
+      const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error("No response body");
+      }
 
-      if (data.usedFallback) {
-        console.warn("Gemini regeneration used fallback heart board.");
+      const decoder = new TextDecoder();
+      let lineBuffer = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        lineBuffer += decoder.decode(value, { stream: true });
+        const lines = lineBuffer.split("\n");
+        lineBuffer = lines.pop() ?? "";
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed) continue;
+          const msg = JSON.parse(trimmed) as
+            | { type: "partial"; heartBoard: HeartBoard }
+            | { type: "done"; heartBoard: HeartBoard; usedFallback?: boolean; error?: string };
+
+          if (msg.type === "partial" && msg.heartBoard.categories.length > 0) {
+            setAiDeckVisible(true);
+            setHeartBoard(msg.heartBoard);
+            if (!streamGuideAdvancedRef.current) {
+              streamGuideAdvancedRef.current = true;
+              notifyAiGenerateFinishedForGuide();
+            }
+          }
+
+          if (msg.type === "done") {
+            setAiDeckVisible(true);
+            setHeartBoard(msg.heartBoard);
+            saveGeneratedHeartBoard(
+              weekId,
+              heartedPosts.map((post) => post.id),
+              msg.heartBoard,
+            );
+            if (msg.usedFallback) {
+              console.warn("Gemini regeneration used fallback heart board.");
+            }
+            if (msg.error) {
+              console.warn("Gemini stream:", msg.error);
+            }
+            if (!streamGuideAdvancedRef.current) {
+              streamGuideAdvancedRef.current = true;
+              notifyAiGenerateFinishedForGuide();
+            }
+          }
+        }
       }
     } catch (error) {
       console.error("Failed to regenerate heart board:", error);
       setHeartBoard(fallbackHeartBoard);
     } finally {
       setIsRegenerating(false);
+      setAiDeckVisible(true);
+      if (!streamGuideAdvancedRef.current) {
+        notifyAiGenerateFinishedForGuide();
+      }
     }
   };
 
@@ -121,8 +160,8 @@ export function HeartBoardClientPage() {
 
   useEffect(() => {
     return () => {
-      if (swipeTimeoutRef.current) {
-        clearTimeout(swipeTimeoutRef.current);
+      if (switchCardTimeoutRef.current) {
+        clearTimeout(switchCardTimeoutRef.current);
       }
     };
   }, []);
@@ -157,108 +196,29 @@ export function HeartBoardClientPage() {
     });
   };
 
-  /** 视觉飞出方向；deckStep 与轮播顺序对应（左滑下一张 / 右滑上一张） */
-  const completeSwipe = (visualDirection: 1 | -1, deckStep: 1 | -1) => {
-    if (isSwipingOutRef.current) return;
-    isSwipingOutRef.current = true;
-    setIsDragging(false);
-    swipeCommittedRef.current = false;
-    const endX = visualDirection * SWIPE_OUT_DISTANCE;
+  /** 视觉飞出方向；deckStep 与轮播顺序对应（与原先左滑下一张 / 右滑上一张一致） */
+  const playCardSwitchAnimation = (visualDirection: 1 | -1, deckStep: 1 | -1) => {
+    if (isSwitchingCardRef.current) return;
+    isSwitchingCardRef.current = true;
+    const endX = visualDirection * CARD_SWITCH_OUT_DISTANCE;
     dragXRef.current = endX;
     setDragX(endX);
-    if (swipeTimeoutRef.current) {
-      clearTimeout(swipeTimeoutRef.current);
+    if (switchCardTimeoutRef.current) {
+      clearTimeout(switchCardTimeoutRef.current);
     }
-    swipeTimeoutRef.current = setTimeout(() => {
+    switchCardTimeoutRef.current = setTimeout(() => {
       rotateDeck(deckStep);
       dragXRef.current = 0;
       setDragX(0);
-      isSwipingOutRef.current = false;
-      dragStartXRef.current = null;
-      dragStartYRef.current = null;
-    }, SWIPE_ANIMATION_MS);
+      isSwitchingCardRef.current = false;
+    }, CARD_SWITCH_ANIMATION_MS);
   };
 
-  const releaseSwipeCapture = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (!swipeCommittedRef.current) return;
-    try {
-      event.currentTarget.releasePointerCapture(event.pointerId);
-    } catch {
-      /* already released */
-    }
-  };
-
-  const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-    if ((event.target as Element).closest("a, button") || isSwipingOutRef.current) return;
-    dragStartXRef.current = event.clientX;
-    dragStartYRef.current = event.clientY;
-    dragXRef.current = 0;
-    swipeCommittedRef.current = false;
-    setDragX(0);
-    setIsDragging(false);
-  };
-
-  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (dragStartXRef.current === null || dragStartYRef.current === null || isSwipingOutRef.current) return;
-
-    const dx = event.clientX - dragStartXRef.current;
-    const dy = event.clientY - dragStartYRef.current;
-
-    if (!swipeCommittedRef.current) {
-      if (Math.max(Math.abs(dx), Math.abs(dy)) < GESTURE_COMMIT_PX) return;
-      if (Math.abs(dy) >= Math.abs(dx)) {
-        dragStartXRef.current = null;
-        dragStartYRef.current = null;
-        return;
-      }
-      swipeCommittedRef.current = true;
-      setIsDragging(true);
-      event.currentTarget.setPointerCapture(event.pointerId);
-    }
-
-    dragXRef.current = dx;
-    setDragX(dx);
-  };
-
-  const handlePointerEnd = (event: React.PointerEvent<HTMLDivElement>) => {
-    const x = dragXRef.current;
-    const hadCommitted = swipeCommittedRef.current;
-
-    releaseSwipeCapture(event);
-    swipeCommittedRef.current = false;
-
-    if (!hadCommitted) {
-      dragStartXRef.current = null;
-      dragStartYRef.current = null;
-      return;
-    }
-
-    if (isSwipingOutRef.current) return;
-
-    if (Math.abs(x) >= SWIPE_THRESHOLD) {
-      if (x < 0) {
-        completeSwipe(-1, 1);
-      } else {
-        completeSwipe(1, -1);
-      }
-      return;
-    }
-
-    dragStartXRef.current = null;
-    dragStartYRef.current = null;
-    dragXRef.current = 0;
-    setIsDragging(false);
-    setDragX(0);
-  };
-
-  const handleLostPointerCapture = () => {
-    if (isSwipingOutRef.current) return;
-    swipeCommittedRef.current = false;
-    dragStartXRef.current = null;
-    dragStartYRef.current = null;
-    dragXRef.current = 0;
-    setIsDragging(false);
-    setDragX(0);
+  const handleDeckClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (isSwitchingCardRef.current || directionCount <= 1) return;
+    const target = event.target as HTMLElement | null;
+    if (target?.closest("a, button")) return;
+    playCardSwitchAnimation(-1, 1);
   };
 
   const activeDeckTheme = HEART_BOARD_CARD_THEMES[activeOriginalIndex % HEART_BOARD_CARD_THEMES.length];
@@ -348,17 +308,24 @@ export function HeartBoardClientPage() {
             条灵感
           </p>
           <p className="relative mt-2 text-[11px] leading-relaxed text-[#6d5a52]">
-            AI 整理出{" "}
-            <span
-              className="font-bold transition-[color] duration-[250ms] ease-out"
-              style={{ color: activeDeckTheme.accent }}
-            >
-              {directionCount}
-            </span>{" "}
-            个兴趣方向
+            {aiDeckVisible ? (
+              <>
+                AI 整理出{" "}
+                <span
+                  className="font-bold transition-[color] duration-[250ms] ease-out"
+                  style={{ color: activeDeckTheme.accent }}
+                >
+                  {directionCount}
+                </span>{" "}
+                个兴趣方向
+              </>
+            ) : (
+              <>点击「用 AI 生成」后将展示兴趣方向</>
+            )}
           </p>
           <button
             type="button"
+            data-step-guide="5"
             onClick={handleRegenerateWithGemini}
             disabled={isRegenerating || heartedPosts.length === 0}
             className="relative mt-3.5 inline-flex items-center gap-1 rounded-full border bg-white/80 px-3 py-1 text-[11px] font-semibold shadow-md backdrop-blur-sm transition-[color,border-color,box-shadow,background-color,opacity] duration-[250ms] ease-out hover:bg-white active:opacity-90 disabled:opacity-60"
@@ -393,23 +360,18 @@ export function HeartBoardClientPage() {
             </Link>
           </div>
         </section>
-      ) : activeCategory ? (
+      ) : aiDeckVisible && activeCategory ? (
         <section className="px-5 pt-3">
           <div
-            className={`mx-auto w-full touch-pan-y select-none ${
-              isDragging ? "" : "transition-transform duration-300 ease-out"
-            }`}
+            className="mx-auto w-full cursor-pointer select-none transition-transform duration-[320ms] ease-out"
             style={{ transform: `translateX(${dragX}px)` }}
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerEnd}
-            onPointerCancel={handlePointerEnd}
-            onLostPointerCapture={handleLostPointerCapture}
+            onClick={handleDeckClick}
           >
             <HeartBoardCard
               category={activeCategory}
               isInsightExpanded={expandedInsightCardId === activeCategory.id}
               themeIndex={heartBoard.categories.findIndex((entry) => entry.id === activeCategory.id)}
+              liveHeartedPostIds={liveHeartedPostIds}
               onToggleInsight={() =>
                 setExpandedInsightCardId((current) => (current === activeCategory.id ? null : activeCategory.id))
               }
@@ -441,7 +403,7 @@ export function HeartBoardClientPage() {
 
               <div className="min-w-0 shrink text-center">
                 <p className="text-[12px] font-normal leading-relaxed tracking-[0.03em] text-[#6b5d56]">
-                  左右滑动发现更多灵感
+                  左右拉动寻找更多灵感
                 </p>
                 <span
                   className="mx-auto mt-2 block h-0.5 w-10 rounded-full opacity-[0.4] transition-colors duration-300 ease-out"

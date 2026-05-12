@@ -1,7 +1,13 @@
 import dataset2Raw from "@/data/mock/dataset_2_all_travel_no_tags.json";
 import dataset3Raw from "@/data/mock/dataset_3_open_topics_no_tags.json";
 import dataset6Raw from "@/data/mock/dataset_6_noise_fragments_no_tags.json";
-import { getCurrentWeekId as getWeekIdFromDate, mockPosts, type MockComment, type MockPost } from "@/data/mockPosts";
+import {
+  getCurrentWeekId as getWeekIdFromDate,
+  getPostById,
+  mockPosts,
+  type MockComment,
+  type MockPost,
+} from "@/data/mockPosts";
 
 export type ActiveTestDataset =
   | "original"
@@ -209,8 +215,14 @@ export function getActiveHeartboardPosts(): MockPost[] {
 
 export function getActivePostById(postId: string): MockPost | undefined {
   const activePosts = getActivePostsInternal();
-  const normalized = postId === "1" ? activePosts[0]?.id : postId;
-  return activePosts.find((post) => post.id === normalized);
+  if (postId === "1") return activePosts[0];
+  const direct = activePosts.find((post) => post.id === postId);
+  if (direct) return direct;
+  const resolved = getPostById(postId);
+  if (resolved && activePosts.some((post) => post.id === resolved.id)) {
+    return resolved;
+  }
+  return undefined;
 }
 
 export function getActivePostsByIds(postIds: string[]): MockPost[] {

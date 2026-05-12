@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { isPostHearted, removeHeartAction, saveHeartAction } from "@/lib/heartStorage";
+import {
+  isPostEligibleForWeeklyInspiration,
+  isPostHearted,
+  removeHeartAction,
+  saveHeartAction,
+} from "@/lib/heartStorage";
 
 type HeartButtonProps = {
   postId: string;
@@ -10,6 +15,7 @@ type HeartButtonProps = {
 };
 
 export function HeartButton({ postId, defaultHearted = false, onStateChange }: HeartButtonProps) {
+  const eligible = useMemo(() => isPostEligibleForWeeklyInspiration(postId), [postId]);
   const initialHearted = useMemo(() => isPostHearted(postId, defaultHearted), [postId, defaultHearted]);
   const [hearted, setHearted] = useState(initialHearted);
 
@@ -18,15 +24,31 @@ export function HeartButton({ postId, defaultHearted = false, onStateChange }: H
   }, [postId, defaultHearted]);
 
   const handleClick = () => {
+    if (!eligible) return;
     const next = !hearted;
     if (next) {
-      saveHeartAction(postId);
+      const saved = saveHeartAction(postId);
+      if (!saved) return;
     } else {
       removeHeartAction(postId);
     }
     setHearted(next);
     onStateChange?.(next);
   };
+
+  if (!eligible) {
+    return (
+      <button
+        type="button"
+        disabled
+        className="inline-flex cursor-not-allowed items-center gap-1 text-sm text-zinc-300"
+        aria-label="该笔记不参与本周灵感"
+      >
+        <span className="text-base leading-none">✨</span>
+        <span className="text-xs">灵感</span>
+      </button>
+    );
+  }
 
   return (
     <button

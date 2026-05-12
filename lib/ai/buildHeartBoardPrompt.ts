@@ -1,18 +1,36 @@
 import type { MockPost } from "@/data/mockPosts";
 
-export function buildHeartBoardPrompt(posts: MockPost[], weekId: string): string {
-  const compactPosts = posts.map((post) => ({
+/** 控制单次请求的输入体量（字越多，tokenizer + 推理越慢） */
+const MAX_POST_BODY_CHARS = 1800;
+const MAX_COMMENT_TEXT_CHARS = 120;
+const MAX_COMMENTS_PER_POST = 8;
+
+function truncateByChars(text: string, maxChars: number): string {
+  const chars = [...text];
+  if (chars.length <= maxChars) return text;
+  return `${chars.slice(0, maxChars).join("")}…`;
+}
+
+function compactPostForPrompt(post: MockPost) {
+  return {
     id: post.id,
-    title: post.title,
-    content: post.content,
-    comments: post.comments?.map((comment) => comment.content).slice(0, 20) ?? [],
+    title: truncateByChars(post.title, 200),
+    content: truncateByChars(post.content, MAX_POST_BODY_CHARS),
+    comments:
+      post.comments
+        ?.map((comment) => truncateByChars(comment.content, MAX_COMMENT_TEXT_CHARS))
+        .slice(0, MAX_COMMENTS_PER_POST) ?? [],
     likeCount: post.likeCount,
     collectCount: post.collectCount,
     commentCount: post.commentCount,
     createdAt: post.createdAt,
     heartedAt: post.heartedAt,
     weekId: post.weekId,
-  }));
+  };
+}
+
+export function buildHeartBoardPrompt(posts: MockPost[], weekId: string): string {
+  const compactPosts = posts.map(compactPostForPrompt);
 
   return `
 你是小红书「灵感板」AI 整理助手。
@@ -117,6 +135,14 @@ categoryType 是你自己总结的内部类型，可以是任意中文短语。
    例如：粉底液、餐厅、AI 工具、旅行目的地、穿搭单品、生活计划。
 9. itemType 不要使用固定枚举。
 
+item.summary（要点总结）规则：
+1. 用 2～4 句中文，把原帖里对同一对象的讨论串联成一段可读总结，信息要比单句模板更丰富。
+2. 必须交代大家主要在评哪些维度（如妆效、持妆、性价比、环境、路线、上手成本等）；若写「依据多少条内容」，须自然融入句中，写得像复盘而不是计数。
+3. 至少写出 2～3 个能从原帖支撑的具体感受、场景或对比角度（可融合 keywords / positiveSignals；有 riskSignals 时用一两句自然带过提醒）。
+4. 禁止只写「主要集中在××」或类似一句带过；禁止空泛口号。
+5. **禁止**「多篇笔记提到」「多篇帖子提到」「不少笔记提到」「有笔记提到……」等套话句式（避免像在凑篇数）。
+6. 建议长度约 80～180 字。
+
 关键词和代表内容的区别：
 1. keywords 表示用户被内容吸引的原因。
    它们是原因、评价、场景、偏好，例如：
@@ -172,17 +198,18 @@ AI 洞察（category.insight）规则：
 1. 必须输出 JSON。
 2. 必须符合 response schema。
 3. 不要输出解释性文字。
-4. categories 最多 4 个。
-4.1 categories 不要求固定为 4 个，1-3 个是可接受且推荐的（当信号分散时）。
-5. 每个 category 的 items 最多 3 个。
-6. 每个 category.sourcePostIds 不能为空。
-7. 每个 item.sourcePostIds 不能为空。
-8. 所有 sourcePostIds 必须来自输入 posts。
-9. 如果无法判断，就少生成一些分类或 item，不要硬编。
+4. 根对象字段输出顺序：先输出完整的 categories 数组，再输出 id、weekId、weekRange、totalHeartCount、summary（便于流式展示）。
+5. categories 最多 4 个。
+6. categories 不要求固定为 4 个，1-3 个是可接受且推荐的（当信号分散时）。
+7. 每个 category 的 items 最多 3 个。
+8. 每个 category.sourcePostIds 不能为空。
+9. 每个 item.sourcePostIds 不能为空。
+10. 所有 sourcePostIds 必须来自输入 posts。
+11. 如果无法判断，就少生成一些分类或 item，不要硬编。
 
 当前 weekId: ${weekId}
 
 请分析以下本周灵感帖子：
-${JSON.stringify(compactPosts, null, 2)}
+${JSON.stringify(compactPosts)}
 `;
 }

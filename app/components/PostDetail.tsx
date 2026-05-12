@@ -2,9 +2,12 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { getPostParagraphs, type MockPost } from "@/data/mockPosts";
+import { BottomNav } from "@/app/components/BottomNav";
 import { HeartButton } from "@/app/components/HeartButton";
 import { Toast } from "@/app/components/Toast";
+import { getPostParagraphs, type MockPost } from "@/data/mockPosts";
+import { isPostEligibleForWeeklyInspiration } from "@/lib/heartStorage";
+import { useStepGuide } from "@/components/StepGuide";
 
 type PostDetailProps = {
   post: MockPost;
@@ -14,6 +17,8 @@ type PostDetailProps = {
 export function PostDetail({ post, backHref }: PostDetailProps) {
   const [toastMessage, setToastMessage] = useState("");
   const [showAllComments, setShowAllComments] = useState(false);
+  const { reserveBottomNavOnPost, notifyHeartLitForGuide } = useStepGuide();
+  const inspirationEligible = isPostEligibleForWeeklyInspiration(post.id);
   const imageList = post.images && post.images.length > 0 ? post.images : [post.coverImage];
   const totalCommentCount = post.comments.length > 0 ? post.comments.length : post.commentCount;
   const visibleComments = showAllComments ? post.comments : post.comments.slice(0, 5);
@@ -25,7 +30,7 @@ export function PostDetail({ post, backHref }: PostDetailProps) {
   });
 
   return (
-    <main className="min-h-screen bg-white pb-24">
+    <main className={`min-h-screen bg-white ${reserveBottomNavOnPost ? "pb-36" : "pb-24"}`}>
       <Toast message={toastMessage} onClose={() => setToastMessage("")} />
 
       <header className="fixed inset-x-0 top-0 z-30 mx-auto w-full max-w-[430px] border-b border-zinc-100 bg-white/95 px-4 py-3 backdrop-blur">
@@ -129,7 +134,13 @@ export function PostDetail({ post, backHref }: PostDetailProps) {
         </article>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-40 mx-auto w-full max-w-[430px] border-t border-zinc-200 bg-white px-4 pb-[calc(env(safe-area-inset-bottom)+8px)] pt-2">
+      <div
+        className={`fixed inset-x-0 z-40 mx-auto w-full max-w-[430px] border-t border-zinc-200 bg-white px-4 pt-2 ${
+          reserveBottomNavOnPost
+            ? "bottom-[calc(3.25rem+env(safe-area-inset-bottom,0px))] pb-2"
+            : "bottom-0 pb-[calc(env(safe-area-inset-bottom)+8px)]"
+        }`}
+      >
         <div className="flex items-center gap-2">
           <button
             type="button"
@@ -142,17 +153,26 @@ export function PostDetail({ post, backHref }: PostDetailProps) {
               <span className="text-lg">♡</span>
               <span className="text-xs">{post.likeCount}</span>
             </button>
-            <HeartButton
-              postId={post.id}
-              defaultHearted={post.isHearted}
-              onStateChange={(next) => {
-                if (next) {
-                  setToastMessage("已加入本周灵感，AI 将自动帮你整理");
-                } else {
-                  setToastMessage("已从本周灵感移除");
-                }
-              }}
-            />
+            {inspirationEligible ? (
+              <div data-step-guide="2" className="inline-flex">
+                <HeartButton
+                  postId={post.id}
+                  defaultHearted={post.isHearted}
+                  onStateChange={(next) => {
+                    if (next) {
+                      setToastMessage("已加入本周灵感，AI 将自动帮你整理");
+                      notifyHeartLitForGuide();
+                    } else {
+                      setToastMessage("已从本周灵感移除");
+                    }
+                  }}
+                />
+              </div>
+            ) : (
+              <div className="inline-flex">
+                <HeartButton postId={post.id} defaultHearted={post.isHearted} />
+              </div>
+            )}
             <button type="button" className="inline-flex items-center gap-1 text-sm">
               <span className="text-lg">☆</span>
               <span className="text-xs">{post.collectCount}</span>
@@ -164,6 +184,8 @@ export function PostDetail({ post, backHref }: PostDetailProps) {
           </div>
         </div>
       </div>
+
+      {reserveBottomNavOnPost ? <BottomNav active={backHref === "/me" ? "me" : "home"} /> : null}
     </main>
   );
 }

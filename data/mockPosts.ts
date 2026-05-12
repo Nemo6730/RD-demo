@@ -1088,6 +1088,67 @@ const baseMockPosts: MockPost[] = [
     createdAt: "2026-05-09T22:05:00.000Z",
     hiddenCategory: "misc",
   },
+  /** 「我」页笔记《这个点我猜过》专用：互动猜题长帖 */
+  {
+    id: "post_profile_guess_01",
+    title: "这个点我猜过",
+    content:
+      "上周六傍晚在静安寺附近逛街随手拍的，原图没调色。线索我一条一条放，不贪快——猜对的朋友评论区报数，我晚点把这一条置顶对比图。\n\n" +
+      "【图 1】整块门头是霓虹 + 亚克力叠的，主色偏玫红，旁边还有一行很小的粤语谐音梗（看得清才作数）。\n\n" +
+      "【图 2】人行道地砖是灰色小方砖，左前方有个地铁出入口的黄色导向牌角标——说明离某条线步行不到 3 分钟。\n\n" +
+      "「这个点」其实不是我说的品牌名啦，是我那天走到路口突然冒出来的想法：如果把招牌里某个偏旁挡掉，读起来就像另一家老网红店——所以才会玩「我猜过」这个梗。\n\n" +
+      "【提问】你第一眼觉得是：A）连锁奶茶改版门头 B）独立咖啡 C）柠檬茶专门店？说理由，别只丢字母。\n\n" +
+      "小惩罚：猜错的人去主页翻我前一条「排雷合集」点赞再走（开玩笑的，别真走）。\n\n" +
+      "明天同一时间我补「店员制服袖标」特写，那个才是送分题。",
+    authorName: "momo",
+    authorAvatar:
+      "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?auto=format&fit=crop&w=200&q=80",
+    coverImage:
+      "https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&fit=crop&w=1000&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&fit=crop&w=1000&q=80",
+      "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=1000&q=80",
+    ],
+    tags: ["路人猜题", "门头线索", "周末逛街", "无奖竞猜"],
+    likeCount: 2406,
+    collectCount: 502,
+    commentCount: 6,
+    comments: makeComments("post_profile_guess_01", [
+      [
+        "柯基腿短短",
+        "先压 B……霓虹字笔画断开的位置太像手写咖啡字号了，柠檬茶店一般直接用大字报。",
+        156,
+      ],
+      [
+        "黄油贝果",
+        "地铁黄牌子角标我也认出来了，是不是 2 号线那个口？要是的话我站你 A，那家奶茶最近换季老爱换玫红底。",
+        132,
+      ],
+      [
+        "午睡梦到大促",
+        "别吵了，粤语谐音那条才是关键吧，我读成「柠走甜」但又不太像饮料店常用句式，作者快交卷！",
+        98,
+      ],
+      [
+        "小鱼干",
+        "我从地砖纹理反推的……这片区翻新批次对得上，应该是常熟路往南那截。猜错就当我练眼力。",
+        76,
+      ],
+      [
+        "阿冷",
+        "作者说把偏旁挡掉像老网红店——我脑子里已经冒出三个名字了，能不能给条「音节数」范围救命。",
+        61,
+      ],
+      [
+        "momo",
+        "回复 黄油贝果：方向近了，但别抠地铁编号啦，猜错我可要罚抄你评论（并没有）。今晚我先点赞一波靠谱的推理。",
+        44,
+      ],
+    ]),
+    isHearted: false,
+    createdAt: "2026-05-10T16:40:00.000Z",
+    hiddenCategory: "misc",
+  },
 ];
 
 export const CURRENT_WEEK_ID = "2026-W20";
@@ -1521,6 +1582,21 @@ function buildTieredComments(post: MockPost, targetCount: number): MockComment[]
 }
 
 export const mockPosts: MockPost[] = baseMockPosts.map((post, index) => {
+  /** 个人主页展示用长帖：保持手写正文与评论，不参与自动生成扩写 */
+  if (post.id === "post_profile_guess_01") {
+    const likeCount = HOT_LIKE_OVERRIDES[post.id] ?? post.likeCount;
+    const createdAt = LEGACY_CREATED_AT_OVERRIDES[post.id] ?? post.createdAt;
+    return {
+      ...post,
+      likeCount,
+      createdAt,
+      isHearted: false,
+      heartedAt: undefined,
+      weekId: undefined,
+      commentCount: post.comments.length,
+    };
+  }
+
   const likeCount = HOT_LIKE_OVERRIDES[post.id] ?? post.likeCount;
   const createdAt = LEGACY_CREATED_AT_OVERRIDES[post.id] ?? post.createdAt;
   const isPreviousWeek = index >= baseMockPosts.length - 5;
@@ -1563,7 +1639,7 @@ export function getPostParagraphs(post: MockPost): string[] {
 
 const legacyIdAlias: Record<string, string> = {
   "1": "post_beauty_01",
-  post_001: "post_study_01",
+  post_001: "post_profile_guess_01",
   post_002: "post_study_02",
   post_003: "post_restaurant_01",
   post_004: "post_beauty_04",
@@ -1598,17 +1674,29 @@ export function getHeartedPostsByWeek(posts: MockPost[], weekId: string): MockPo
   });
 }
 
-export const profileNotes = [
+export type ProfileNote = {
+  id: number;
+  /** 与 `mockPosts` 中帖子 id 对应，用于详情页 */
+  postId: string;
+  title: string;
+  subtitle: string;
+  views: number;
+  cover: string;
+};
+
+export const profileNotes: ProfileNote[] = [
   {
     id: 11,
+    postId: "post_profile_guess_01",
     title: "这个点我猜过",
-    subtitle: "快来参与猜题吧",
-    views: 916,
+    subtitle: "门头线索 + 粤语梗，来试试能不能一次猜中",
+    views: 2406,
     cover:
       "https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&fit=crop&w=800&q=80",
   },
   {
     id: 12,
+    postId: "post_study_02",
     title: "燕云男女主之争",
     subtitle: "今天你站哪一边",
     views: 1265,

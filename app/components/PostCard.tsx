@@ -4,13 +4,16 @@ import { getPostExcerpt, type FeedPost } from "@/data/mockPosts";
 type PostCardProps = {
   post: FeedPost;
   href?: string;
+  /** 新手引导：在本卡片上挂载 data-step-guide */
+  guideStepAnchor?: number;
 };
 
-export function PostCard({ post, href }: PostCardProps) {
+export function PostCard({ post, href, guideStepAnchor }: PostCardProps) {
   return (
     <Link
       href={href ?? `/post/${post.id}`}
       className="mb-3 block break-inside-avoid overflow-hidden rounded-2xl border border-zinc-100 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)]"
+      {...(guideStepAnchor != null ? { "data-step-guide": String(guideStepAnchor) } : {})}
     >
       <div
         className="h-48 w-full bg-cover bg-center"

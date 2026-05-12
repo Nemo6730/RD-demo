@@ -34,12 +34,8 @@ export type AIHeartBoardItem = {
 
 export const heartBoardResponseSchema = {
   type: "object",
+  /** categories 在前，便于流式输出尽早出现第一张卡片 */
   properties: {
-    id: { type: "string" },
-    weekId: { type: "string" },
-    weekRange: { type: "string" },
-    totalHeartCount: { type: "integer" },
-    summary: { type: "string" },
     categories: {
       type: "array",
       items: {
@@ -117,6 +113,11 @@ export const heartBoardResponseSchema = {
         ],
       },
     },
+    id: { type: "string" },
+    weekId: { type: "string" },
+    weekRange: { type: "string" },
+    totalHeartCount: { type: "integer" },
+    summary: { type: "string" },
   },
-  required: ["id", "weekId", "weekRange", "totalHeartCount", "summary", "categories"],
+  required: ["categories", "id", "weekId", "weekRange", "totalHeartCount", "summary"],
 } as const;

@@ -2,18 +2,27 @@ import Link from "next/link";
 import { useLayoutEffect, useRef, useState } from "react";
 import type { HeartBoardCategory } from "@/data/mockHeartBoard";
 import { getHeartBoardCardTheme } from "@/lib/heartBoardCardThemes";
+import { getCategoryLiveAccumulationCount } from "@/lib/heartBoardLiveMetrics";
 
 type HeartBoardCardProps = {
   category: HeartBoardCategory;
   isInsightExpanded: boolean;
   onToggleInsight: () => void;
   themeIndex: number;
+  /** 与 `category.sourcePostIds` 求交，用于「本周积累」随点亮/取消即时更新（卡片其余内容仍可来自缓存） */
+  liveHeartedPostIds?: ReadonlySet<string>;
 };
 
 /** Re-export：与 `HeartBoardCard` 同路径引用时仍可使用 */
 export { HEART_BOARD_CARD_THEMES } from "@/lib/heartBoardCardThemes";
 
-export function HeartBoardCard({ category, isInsightExpanded, onToggleInsight, themeIndex }: HeartBoardCardProps) {
+export function HeartBoardCard({
+  category,
+  isInsightExpanded,
+  onToggleInsight,
+  themeIndex,
+  liveHeartedPostIds,
+}: HeartBoardCardProps) {
   const insightBodyRef = useRef<HTMLParagraphElement>(null);
   const [insightOverflows, setInsightOverflows] = useState(false);
   const representativeItems =
@@ -23,6 +32,7 @@ export function HeartBoardCard({ category, isInsightExpanded, onToggleInsight, t
   const visibleKeywords = category.keywords.slice(0, 3);
   const visibleItems = representativeItems.slice(0, 3);
   const theme = getHeartBoardCardTheme(themeIndex);
+  const accumulationCount = getCategoryLiveAccumulationCount(category, liveHeartedPostIds);
 
   useLayoutEffect(() => {
     if (isInsightExpanded) return;
@@ -59,7 +69,7 @@ export function HeartBoardCard({ category, isInsightExpanded, onToggleInsight, t
               className="inline-flex rounded-full px-3 py-1 text-[12px] font-medium leading-snug"
               style={{ backgroundColor: theme.accentSoft, color: theme.accent }}
             >
-              本周积累 {category.postCount} 篇
+              本周积累 {accumulationCount} 篇
             </span>
           </div>
         </div>
@@ -111,6 +121,7 @@ export function HeartBoardCard({ category, isInsightExpanded, onToggleInsight, t
         <div className="relative z-50 mt-1.5 flex shrink-0 justify-end pb-0.5 pt-1.5">
           <Link
             href={`/heart-board/${category.slug}`}
+            data-step-guide="6"
             className="relative z-50 inline-flex items-center gap-1 whitespace-nowrap rounded-full px-4 py-2 text-[13px] font-semibold leading-snug text-white"
             style={{ backgroundColor: theme.accent, boxShadow: `0 8px 18px ${theme.shadow}` }}
           >
