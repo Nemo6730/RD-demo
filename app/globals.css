@@ -43,3 +43,32 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+@keyframes heartboard-subtitle-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heartboard-soft-glow {
+  0%,
+  100% {
+    text-shadow: 0 0 0 rgba(255, 36, 66, 0);
+  }
+  45% {
+    text-shadow: 0 0 10px rgba(255, 36, 66, 0.28);
+  }
+}
+
+.heartboard-subtitle {
+  animation: heartboard-subtitle-in 0.72s ease-out both;
+}
+
+.heartboard-highlight {
+  animation: heartboard-soft-glow 0.9s ease-out 0.12s both;
+}

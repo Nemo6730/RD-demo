@@ -4,10 +4,12 @@ import { BottomNav } from "@/app/components/BottomNav";
 import { HeartBoardEntry } from "@/app/components/HeartBoardEntry";
 
 export function ProfilePage() {
+  const visibleProfileNotes = profileNotes.filter((note) => note.title !== "燕云男女主之争");
+
   return (
-    <main className="min-h-screen bg-[#f7f7f7] pb-24">
-      <section className="rounded-b-3xl bg-[linear-gradient(180deg,#4d5b7f_0%,#6c5e69_55%,#7d6f79_100%)] px-4 pb-4 pt-3 text-white">
-        <div className="mb-4 flex items-center justify-between text-xl">
+    <main className="min-h-screen bg-[#f7f7f7] pb-24 font-sans">
+      <section className="mx-4 mt-3 rounded-3xl bg-[linear-gradient(180deg,#4d5b7f_0%,#6c5e69_55%,#7d6f79_100%)] px-4 pb-4 pt-3 text-white">
+        <div className="mb-4 flex items-center justify-between text-lg">
           <button type="button" aria-label="菜单">
             ☰
           </button>
@@ -21,43 +23,46 @@ export function ProfilePage() {
           </div>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex items-center gap-3">
           <div
             className="h-20 w-20 shrink-0 rounded-full border-2 border-white/80 bg-cover bg-center"
             style={{
               backgroundImage:
-                "url(https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80)",
+                "url(https://images.unsplash.com/photo-1519052537078-e6302a4968d4?auto=format&fit=crop&w=300&q=80)",
             }}
           />
           <div className="flex-1">
-            <p className="text-[34px] font-bold leading-none">何意味</p>
-            <p className="mt-2 text-sm text-white/80">小红书号: 339472261</p>
-            <p className="text-sm text-white/80">IP 属地: 美国</p>
+            <p className="text-[28px] font-semibold leading-tight">momo</p>
+            <p className="mt-2 text-xs leading-5 text-white/80">小红书号: 2333333</p>
+            <p className="text-xs leading-5 text-white/80">IP 属地: 美国</p>
           </div>
         </div>
 
-        <p className="mt-4 text-[15px] text-white/85">点击这里，填写简介</p>
+        <p className="mt-4 text-xs leading-5 text-white/85">点击这里，填写简介</p>
 
-        <div className="mt-3 flex items-center justify-between">
-          <div className="flex gap-6 text-sm">
-            <p>
-              <span className="mr-1 text-2xl font-semibold">0</span>关注
+        <div className="mt-4 flex items-center justify-between gap-3">
+          <div className="flex min-w-0 items-baseline gap-4 text-[13px] leading-none text-white/90">
+            <p className="flex items-baseline gap-1 whitespace-nowrap">
+              <span className="text-base font-semibold">0</span>关注
             </p>
-            <p>
-              <span className="mr-1 text-2xl font-semibold">1</span>粉丝
+            <p className="flex items-baseline gap-1 whitespace-nowrap">
+              <span className="text-base font-semibold">1</span>粉丝
             </p>
-            <p>
-              <span className="mr-1 text-2xl font-semibold">76</span>获赞与收藏
+            <p className="flex items-baseline gap-1 whitespace-nowrap">
+              <span className="text-base font-semibold">76</span>获赞与收藏
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <button
               type="button"
-              className="rounded-full border border-white/50 px-4 py-1 text-sm font-medium"
+              className="h-8 whitespace-nowrap rounded-full border border-white/50 px-4 text-xs font-medium"
             >
               编辑资料
             </button>
-            <button type="button" className="rounded-full border border-white/50 px-3 py-1 text-sm">
+            <button
+              type="button"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/50 text-base"
+            >
               ⚙
             </button>
           </div>
@@ -79,8 +84,8 @@ export function ProfilePage() {
         <HeartBoardEntry />
       </section>
 
-      <section className="mt-4 border-y border-zinc-200 bg-white px-4">
-        <div className="flex items-center justify-between py-3 text-[15px]">
+      <section className="mx-4 mt-4 overflow-hidden rounded-3xl bg-white px-4 shadow-sm">
+        <div className="flex items-center justify-between py-3 text-[13px]">
           {["笔记", "收藏", "赞过"].map((tab, idx) => (
             <button key={tab} type="button" className={`relative ${idx === 0 ? "font-semibold" : ""}`}>
               {tab}
@@ -89,14 +94,14 @@ export function ProfilePage() {
               ) : null}
             </button>
           ))}
-          <button type="button" aria-label="搜索">
+          <button type="button" aria-label="搜索" className="text-xl leading-none">
             ⌕
           </button>
         </div>
       </section>
 
       <section className="columns-2 gap-3 px-3 pt-3">
-        {profileNotes.map((note) => (
+        {visibleProfileNotes.map((note) => (
           <Link
             href={`/post/post_00${note.id - 10}?from=${encodeURIComponent("/me")}`}
             key={note.id}

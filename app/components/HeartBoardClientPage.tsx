@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { HeartBoardCard } from "@/app/components/HeartBoardCard";
 import { getHeartedPostsByWeek } from "@/data/mockPosts";
 import { getActiveHeartboardPosts } from "@/data/testDatasets";
@@ -17,6 +17,8 @@ export function HeartBoardClientPage() {
   const weekId = useMemo(() => getCurrentWeekId(new Date()), []);
   const [hydrated, setHydrated] = useState(false);
   const [isRegenerating, setIsRegenerating] = useState(false);
+  const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
+  const touchStartYRef = useRef<number | null>(null);
 
   useEffect(() => {
     setHydrated(true);
@@ -88,10 +90,30 @@ export function HeartBoardClientPage() {
   };
 
   const directionCount = heartBoard.categories.length;
+  const safeActiveCategoryIndex = Math.min(activeCategoryIndex, Math.max(directionCount - 1, 0));
+  const activeCategory = heartBoard.categories[safeActiveCategoryIndex];
+
+  const showPreviousCategory = () => {
+    setActiveCategoryIndex((current) => Math.max(current - 1, 0));
+  };
+
+  const showNextCategory = () => {
+    setActiveCategoryIndex((current) => Math.min(current + 1, directionCount - 1));
+  };
+
+  const handleTouchEnd = (endY: number) => {
+    if (touchStartYRef.current === null) return;
+    const deltaY = touchStartYRef.current - endY;
+    if (Math.abs(deltaY) > 36) {
+      if (deltaY > 0) showNextCategory();
+      if (deltaY < 0) showPreviousCategory();
+    }
+    touchStartYRef.current = null;
+  };
 
   return (
-    <main className="min-h-screen bg-[#f9f5f1] pb-8">
-      <header className="sticky top-0 z-20 border-b border-[#f1dfd7] bg-[#f9f5f1]/95 px-4 py-3 backdrop-blur">
+    <main className="min-h-screen overflow-x-hidden bg-[linear-gradient(180deg,#fff8f4_0%,#fff5f7_48%,#fffaf6_100%)] pb-8">
+      <header className="sticky top-0 z-20 bg-[#fff8f4]/85 px-4 py-3 backdrop-blur">
         <div className="flex items-center justify-between">
           <Link href="/me" className="text-2xl text-zinc-800">
             ←
@@ -111,17 +133,19 @@ export function HeartBoardClientPage() {
         </div>
       </header>
 
-      <section className="px-5 pb-3 pt-5">
-        <p className="text-[15px] text-zinc-700">本周你点亮了 {heartedPosts.length} 次心动</p>
-        <p className="mt-1 text-[15px] text-zinc-700">AI 为你整理出 {directionCount} 个兴趣方向</p>
-        <button
-          type="button"
-          onClick={handleRegenerateWithGemini}
-          disabled={isRegenerating || heartedPosts.length === 0}
-          className="mt-3 inline-flex rounded-full border border-[#f0cdc3] bg-white px-3 py-1 text-xs text-zinc-700 disabled:opacity-60"
-        >
-          {isRegenerating ? "AI 正在整理本周心动..." : "用 Gemini 重新生成"}
-        </button>
+      <section className="px-5 pb-3 pt-4">
+        <div className="rounded-3xl border border-white/70 bg-white/60 px-4 py-3 shadow-sm backdrop-blur">
+          <p className="text-[13px] font-medium text-zinc-700">本周你点亮了 {heartedPosts.length} 次心动</p>
+          <p className="mt-1 text-[13px] text-zinc-500">AI 整理出 {directionCount} 个兴趣方向</p>
+          <button
+            type="button"
+            onClick={handleRegenerateWithGemini}
+            disabled={isRegenerating || heartedPosts.length === 0}
+            className="mt-3 inline-flex rounded-full border border-[#f0cdc3]/80 bg-white/70 px-3 py-1 text-[11px] font-medium text-zinc-600 shadow-sm disabled:opacity-60"
+          >
+            {isRegenerating ? "AI 正在整理..." : "用ai生成"}
+          </button>
+        </div>
       </section>
 
       {heartedPosts.length === 0 ? (
@@ -139,13 +163,81 @@ export function HeartBoardClientPage() {
             </Link>
           </div>
         </section>
-      ) : (
-        <section className="hide-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto px-4">
-          {heartBoard.categories.map((category) => (
-            <HeartBoardCard key={category.id} category={category} />
-          ))}
+      ) : activeCategory ? (
+        <section className="px-4 pt-2">
+          <div
+            className="relative h-[540px] overflow-hidden px-1 pt-1"
+            onTouchStart={(event) => {
+              if ((event.target as Element).closest("a,button")) return;
+              touchStartYRef.current = event.touches[0]?.clientY ?? null;
+            }}
+            onTouchEnd={(event) => {
+              if ((event.target as Element).closest("a,button")) {
+                touchStartYRef.current = null;
+                return;
+              }
+              handleTouchEnd(event.changedTouches[0]?.clientY ?? 0);
+            }}
+          >
+            {heartBoard.categories.map((category, index) => {
+              const offset = index - safeActiveCategoryIndex;
+              const isVisible = offset >= 0 && offset <= 2;
+              const transform =
+                offset < 0
+                  ? "translateY(-40px) scale(0.96)"
+                  : `translate(${offset * 18}px, ${offset * 18}px) rotate(${offset * 3}deg) scale(${1 - offset * 0.06})`;
+
+              return (
+                <div
+                  key={category.id}
+                  className={`absolute inset-x-1 top-1 transition-all duration-300 ease-out ${
+                    isVisible ? "opacity-100" : "pointer-events-none opacity-0"
+                  } ${offset === 0 ? "z-30" : offset === 1 ? "z-20" : "z-10"}`}
+                  style={{
+                    transform,
+                    transformOrigin: "center top",
+                    pointerEvents: offset === 0 ? "auto" : "none",
+                  }}
+                >
+                  <HeartBoardCard category={category} />
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="mt-3 flex items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={showPreviousCategory}
+              disabled={safeActiveCategoryIndex === 0}
+              className="rounded-full border border-[#ead7cf] bg-white/70 px-3 py-1.5 text-xs font-medium text-zinc-600 disabled:opacity-35"
+            >
+              上一张
+            </button>
+            <div className="flex items-center gap-2">
+              {heartBoard.categories.map((category, index) => (
+                <button
+                  key={category.id}
+                  type="button"
+                  aria-label={`切换到${category.title}`}
+                  onClick={() => setActiveCategoryIndex(index)}
+                  className={`h-2 rounded-full transition-all ${
+                    index === safeActiveCategoryIndex ? "w-5 bg-[var(--xhs-red)]" : "w-2 bg-[#e8d8d1]"
+                  }`}
+                />
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={showNextCategory}
+              disabled={safeActiveCategoryIndex === directionCount - 1}
+              className="rounded-full border border-[#ead7cf] bg-white/70 px-3 py-1.5 text-xs font-medium text-zinc-600 disabled:opacity-35"
+            >
+              下一张
+            </button>
+          </div>
         </section>
-      )}
+      ) : null}
     </main>
   );
 }
