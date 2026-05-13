@@ -55,7 +55,7 @@ export function HeartBoardDetail({
         }}
       >
         <Link
-          href="/heart-board"
+          href={`/heart-board?focus=${encodeURIComponent(category.slug)}`}
           className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-2xl leading-none text-zinc-800 transition hover:bg-white/80"
           style={{ color: theme.accent }}
         >

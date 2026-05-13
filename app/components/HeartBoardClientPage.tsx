@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { HeartBoardCard } from "@/app/components/HeartBoardCard";
 import { HEART_BOARD_CARD_THEMES } from "@/lib/heartBoardCardThemes";
@@ -16,6 +17,10 @@ const CARD_SWITCH_OUT_DISTANCE = 360;
 const CARD_SWITCH_ANIMATION_MS = 320;
 
 export function HeartBoardClientPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const focusParam = searchParams.get("focus")?.trim() ?? "";
+
   const activePosts = useMemo(() => getActiveHeartboardPosts(), []);
   const weekId = useMemo(() => getCurrentWeekId(new Date()), []);
   const { notifyAiGenerateStartedForGuide, notifyAiGenerateFinishedForGuide } = useStepGuide();
@@ -142,6 +147,37 @@ export function HeartBoardClientPage() {
       }
     }
   };
+
+  const categoryIdsKey = useMemo(
+    () => heartBoard.categories.map((c) => c.id).join("|"),
+    [heartBoard.categories],
+  );
+  const heartBoardCategoriesRef = useRef(heartBoard.categories);
+  heartBoardCategoriesRef.current = heartBoard.categories;
+
+  useEffect(() => {
+    if (!hydrated || !aiDeckVisible || !focusParam) return;
+    const categories = heartBoardCategoriesRef.current;
+    if (categories.length === 0) return;
+    const match = categories.find((c) => c.slug === focusParam || c.id === focusParam);
+    if (!match) return;
+
+    const ids = categories.map((c) => c.id);
+    /* Restore top swipe card when returning from category detail (?focus=slug). */
+    /* eslint-disable react-hooks/set-state-in-effect */
+    setExpandedInsightCardId(null);
+    setCardOrder((prev) => {
+      const normalizedOrder = [
+        ...prev.filter((id) => ids.includes(id)),
+        ...ids.filter((id) => !prev.includes(id)),
+      ];
+      const targetIndex = normalizedOrder.indexOf(match.id);
+      if (targetIndex <= 0) return normalizedOrder;
+      return [...normalizedOrder.slice(targetIndex), ...normalizedOrder.slice(0, targetIndex)];
+    });
+    /* eslint-enable react-hooks/set-state-in-effect */
+    router.replace("/heart-board", { scroll: false });
+  }, [hydrated, aiDeckVisible, focusParam, categoryIdsKey, router]);
 
   const directionCount = heartBoard.categories.length;
   const categoryIds = heartBoard.categories.map((category) => category.id);
