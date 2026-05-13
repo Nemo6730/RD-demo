@@ -296,7 +296,7 @@ function StepGuideBubble({
 
     setRect(null);
 
-    let retryTimer: ReturnType<typeof setInterval> | undefined;
+    let retryTimer: number | undefined;
     const mo = new MutationObserver(() => {
       if (cancelled) return;
       if (tryAttach()) {
