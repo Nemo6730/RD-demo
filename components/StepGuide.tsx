@@ -15,16 +15,23 @@ import { usePathname } from "next/navigation";
 const STORAGE_FINISHED = "guide_finished";
 const STORAGE_STEP = "guide_step";
 
-export const GUIDE_STEP_COUNT = 6;
+export const GUIDE_STEP_COUNT = 7;
 
 const STEP_LABELS: Record<number, string> = {
-  1: "点开第一篇，去发现灵感 ✨",
-  2: "点亮灵感 ✨",
-  3: "去查看结果",
-  4: "开启 AI 整理",
-  5: "点击生成",
+  1: "点开第一篇，去留个爪 ✨",
+  2: "留个爪 ✨",
+  3: "查看爪印记录",
+  4: "开启爪印整理",
+  5: "整理本周爪印",
   6: "查看详情",
+  7: "查看要点总结、回顾原帖",
 };
+
+/** `/heart-board/[categoryId]`，不含列表页与 sources 子页 */
+function isHeartBoardCategoryDetailPath(path: string): boolean {
+  const parts = path.split("/").filter(Boolean);
+  return parts.length === 2 && parts[0] === "heart-board";
+}
 
 function isStepAllowedOnPath(step: number, path: string): boolean {
   if (step === 1) return path === "/" || path === "";
@@ -33,11 +40,12 @@ function isStepAllowedOnPath(step: number, path: string): boolean {
   if (step === 4) return path === "/me";
   if (step === 5) return path === "/heart-board";
   if (step === 6) return path === "/heart-board";
+  if (step === 7) return isHeartBoardCategoryDetailPath(path);
   return false;
 }
 
 type StepGuideContextValue = {
-  /** 当前要完成的步骤 1–6；0 表示未开始或未 hydrate */
+  /** 当前要完成的步骤 1–7；0 表示未开始或未 hydrate */
   step: number;
   hydrated: boolean;
   finished: boolean;
@@ -45,7 +53,7 @@ type StepGuideContextValue = {
   reserveBottomNavOnPost: boolean;
   /** Step 2：仅在用户成功点亮时调用（避免点按取消也推进） */
   notifyHeartLitForGuide: () => void;
-  /** Step 5：「用 AI 生成」请求开始时显示等待气泡 */
+  /** Step 5：「整理本周爪印」请求开始时显示等待气泡 */
   notifyAiGenerateStartedForGuide: () => void;
   /** Step 5：请求结束后清除等待并进入 Step 6 */
   notifyAiGenerateFinishedForGuide: () => void;
@@ -142,6 +150,13 @@ export function StepGuideProvider({ children }: { children: React.ReactNode }) {
   }, [hydrated, finished, step, persistStep]);
 
   useEffect(() => {
+    if (!hydrated || finished || step !== 6) return;
+    if (isHeartBoardCategoryDetailPath(pathname)) {
+      persistStep(7);
+    }
+  }, [hydrated, finished, step, pathname, persistStep]);
+
+  useEffect(() => {
     if (!hydrated || finished) return;
 
     const onPointerDown = (event: Event) => {
@@ -227,58 +242,133 @@ function StepGuideBubble({
       return;
     }
 
-    const el = document.querySelector(`[data-step-guide="${step}"]`);
-    if (!el || !(el instanceof HTMLElement)) {
-      setRect(null);
-      return;
-    }
+    let cancelled = false;
+    let ro: ResizeObserver | null = null;
+    const cleanups: Array<() => void> = [];
 
-    const update = () => {
-      const r = el.getBoundingClientRect();
-      setRect(r);
+    const cleanupMeasurement = () => {
+      ro?.disconnect();
+      ro = null;
+      while (cleanups.length) {
+        cleanups.pop()?.();
+      }
     };
 
-    update();
-    const ro = new ResizeObserver(() => update());
-    ro.observe(el);
-    window.addEventListener("scroll", update, true);
-    window.addEventListener("resize", update);
+    const attach = (target: HTMLElement) => {
+      cleanupMeasurement();
+      const update = () => {
+        if (cancelled) return;
+        const r = target.getBoundingClientRect();
+        setRect(r.width > 0 || r.height > 0 ? r : null);
+      };
+      update();
+      ro = new ResizeObserver(update);
+      ro.observe(target);
+      const onWin = () => update();
+      window.addEventListener("scroll", onWin, true);
+      window.addEventListener("resize", onWin);
+      cleanups.push(() => {
+        window.removeEventListener("scroll", onWin, true);
+        window.removeEventListener("resize", onWin);
+      });
+    };
+
+    const findAnchor = (): HTMLElement | null => {
+      const el = document.querySelector(`[data-step-guide="${step}"]`);
+      return el instanceof HTMLElement ? el : null;
+    };
+
+    const tryAttach = (): boolean => {
+      const target = findAnchor();
+      if (!target) return false;
+      const r = target.getBoundingClientRect();
+      if (r.width === 0 && r.height === 0) return false;
+      attach(target);
+      return true;
+    };
+
+    if (tryAttach()) {
+      return () => {
+        cancelled = true;
+        cleanupMeasurement();
+      };
+    }
+
+    setRect(null);
+
+    let retryTimer: ReturnType<typeof setInterval> | undefined;
+    const mo = new MutationObserver(() => {
+      if (cancelled) return;
+      if (tryAttach()) {
+        mo.disconnect();
+        if (retryTimer != null) window.clearInterval(retryTimer);
+      }
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
+
+    retryTimer = window.setInterval(() => {
+      if (cancelled) return;
+      if (tryAttach()) {
+        mo.disconnect();
+        if (retryTimer != null) window.clearInterval(retryTimer);
+      }
+    }, 100);
+    const stopTimer = window.setTimeout(() => {
+      if (retryTimer != null) window.clearInterval(retryTimer);
+    }, 4000);
+
     return () => {
-      ro.disconnect();
-      window.removeEventListener("scroll", update, true);
-      window.removeEventListener("resize", update);
+      cancelled = true;
+      mo.disconnect();
+      if (retryTimer != null) window.clearInterval(retryTimer);
+      window.clearTimeout(stopTimer);
+      cleanupMeasurement();
     };
   }, [mounted, finished, step, pathname, aiGuideGenerating]);
 
-  if (!mounted || finished || step < 1 || !rect || rect.width === 0) return null;
+  if (!mounted || finished || step < 1 || !rect || (rect.width === 0 && rect.height === 0)) return null;
   if (!isStepAllowedOnPath(step, pathname)) return null;
 
   const label =
     step === 5 && aiGuideGenerating
-      ? "AI 正在整理，请稍候…"
+      ? "整理中，请稍等"
       : STEP_LABELS[step];
   if (!label) return null;
 
-  const bubbleWidth = 168;
+  const bubbleWidth = step === 7 ? 192 : 168;
   const bubbleApproxHeight = 52;
   const gap = 10;
-  /** Step 5（含生成中）：气泡在按钮下方；Step 1：气泡下移到卡片内（封面偏下） */
+  /** Step 5（含生成中）：气泡在锚点下方 */
   const belowAnchor = step === 5;
+  /** Step 7：气泡在「相关原帖」链接右侧 */
+  const rightOfAnchor = step === 7;
   const step1InCard = step === 1;
 
-  const left = rect.left + rect.width / 2 - bubbleWidth / 2;
+  let left: number;
   let top: number;
-  if (belowAnchor) {
+  if (rightOfAnchor) {
+    left = rect.right + gap;
+    top = rect.top + rect.height / 2 - bubbleApproxHeight / 2;
+  } else if (belowAnchor) {
+    left = rect.left + rect.width / 2 - bubbleWidth / 2;
     top = rect.bottom + gap;
   } else if (step1InCard) {
+    left = rect.left + rect.width / 2 - bubbleWidth / 2;
     top = rect.top + 52;
   } else {
+    left = rect.left + rect.width / 2 - bubbleWidth / 2;
     top = rect.top - 44;
   }
-  const clampedLeft = Math.max(12, Math.min(left, window.innerWidth - bubbleWidth - 12));
+
+  let clampedLeft = Math.max(12, Math.min(left, window.innerWidth - bubbleWidth - 12));
   let clampedTop = Math.max(12, top);
   if (belowAnchor) {
     clampedTop = Math.min(clampedTop, window.innerHeight - bubbleApproxHeight - 12);
+  } else if (rightOfAnchor) {
+    clampedTop = Math.min(
+      Math.max(12, clampedTop),
+      window.innerHeight - bubbleApproxHeight - 12,
+    );
   }
 
   const arrowLeft = rect.left + rect.width / 2 - clampedLeft;
@@ -293,7 +383,7 @@ function StepGuideBubble({
       aria-label="新手引导"
     >
       <div
-        className={`${motionClass} pointer-events-none absolute max-w-[168px] rounded-2xl border border-white/90 bg-white/80 px-3 py-2 text-center text-xs font-medium leading-snug text-zinc-900 shadow-[0_8px_24px_rgba(0,0,0,0.12)] backdrop-blur-sm`}
+        className={`${motionClass} pointer-events-none absolute rounded-2xl border border-white/90 bg-white/80 px-3 py-2 text-center text-xs font-medium leading-snug text-zinc-900 shadow-[0_8px_24px_rgba(0,0,0,0.12)] backdrop-blur-sm`}
         style={{
           left: clampedLeft,
           top: clampedTop,
@@ -308,6 +398,11 @@ function StepGuideBubble({
               left: Math.min(Math.max(arrowLeft, 20), bubbleWidth - 20),
               transform: "translateX(-50%)",
             }}
+          />
+        ) : rightOfAnchor ? (
+          <span
+            className="absolute top-1/2 h-0 w-0 -translate-y-1/2 border-y-[7px] border-r-[8px] border-y-transparent border-r-white/80"
+            style={{ left: -7 }}
           />
         ) : (
           <span

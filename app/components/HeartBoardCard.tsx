@@ -69,7 +69,7 @@ export function HeartBoardCard({
               className="inline-flex rounded-full px-3 py-1 text-[12px] font-medium leading-snug"
               style={{ backgroundColor: theme.accentSoft, color: theme.accent }}
             >
-              本周积累 {accumulationCount} 篇
+              本周留下 {accumulationCount} 个爪印
             </span>
           </div>
         </div>
@@ -101,7 +101,7 @@ export function HeartBoardCard({
 
           {visibleKeywords.length > 0 ? (
             <div className="space-y-1 text-left">
-              <p className="text-[12px] font-medium leading-snug text-zinc-500">灵感关键词</p>
+              <p className="text-[12px] font-medium leading-snug text-zinc-500">关键词</p>
               <div className="flex flex-wrap gap-1.5">
                 {visibleKeywords.map((keyword) => (
                   <span key={keyword} className="rounded-full bg-[#f7f0ec] px-3 py-1 text-[12px] leading-snug text-zinc-700">
@@ -113,7 +113,7 @@ export function HeartBoardCard({
           ) : null}
 
           <div className="space-y-1 text-left">
-            <p className="text-[12px] font-medium leading-snug text-zinc-500">代表内容</p>
+            <p className="text-[12px] font-medium leading-snug text-zinc-500">具体内容</p>
             <p className="line-clamp-2 text-[13px] leading-[1.55] text-zinc-700">{visibleItems.join(" ｜ ")}</p>
           </div>
         </div>
@@ -125,7 +125,7 @@ export function HeartBoardCard({
             className="relative z-50 inline-flex items-center gap-1 whitespace-nowrap rounded-full px-4 py-2 text-[13px] font-semibold leading-snug text-white"
             style={{ backgroundColor: theme.accent, boxShadow: `0 8px 18px ${theme.shadow}` }}
           >
-            查看灵感详情 <span aria-hidden="true">›</span>
+            查看详情 <span aria-hidden="true">›</span>
           </Link>
         </div>
       </div>

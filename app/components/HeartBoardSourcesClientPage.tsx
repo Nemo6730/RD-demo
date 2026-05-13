@@ -31,7 +31,7 @@ export function HeartBoardSourcesClientPage({ categoryId, itemId }: HeartBoardSo
     return (
       <main className="min-h-screen bg-[#f8f5f3] p-4">
         <div className="rounded-3xl border border-[#f1dfd7] bg-white px-5 py-7 text-center">
-          <p className="text-sm text-zinc-600">正在同步本周灵感内容...</p>
+          <p className="text-sm text-zinc-600">正在同步本周爪印内容...</p>
         </div>
       </main>
     );
@@ -50,12 +50,12 @@ export function HeartBoardSourcesClientPage({ categoryId, itemId }: HeartBoardSo
       <main className="min-h-screen bg-[#f8f5f3] p-4">
         <div className="rounded-3xl border border-[#f1dfd7] bg-white px-5 py-7 text-center">
           <h1 className="text-lg font-semibold text-zinc-900">当前要点暂无相关帖子</h1>
-          <p className="mt-2 text-sm leading-6 text-zinc-600">点亮更多内容后，这里会自动补充本周相关原帖。</p>
+          <p className="mt-2 text-sm leading-6 text-zinc-600">多留几个爪后，这里会自动补充本周相关原帖。</p>
           <Link
             href="/heart-board"
             className="mt-5 inline-flex rounded-full bg-[var(--xhs-red)] px-4 py-2 text-sm font-medium text-white"
           >
-            返回本周灵感
+            返回本周爪印
           </Link>
         </div>
       </main>
@@ -69,18 +69,25 @@ export function HeartBoardSourcesClientPage({ categoryId, itemId }: HeartBoardSo
   return (
     <main className="min-h-screen bg-[#f8f5f3] pb-8">
       <header className="sticky top-0 z-20 flex items-center justify-between border-b border-[#f0dfd6] bg-[#f8f5f3]/95 px-4 py-3 backdrop-blur">
-        <Link href={`/heart-board/${category.slug}`} className="text-2xl text-zinc-800">
+        <Link
+          href={`/heart-board/${category.slug}`}
+          className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center text-2xl text-zinc-800"
+        >
           ←
         </Link>
-        <h1 className="text-lg font-semibold text-zinc-900">相关帖子</h1>
-        <button type="button" className="text-lg text-zinc-600">
+        <h1 className="pointer-events-none absolute inset-x-0 text-center text-lg font-semibold text-zinc-900">
+          相关原帖
+        </h1>
+        <button type="button" className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center text-lg text-zinc-600">
           ...
         </button>
       </header>
 
       <section className="px-4 pt-4">
         <div className="rounded-2xl border border-[#efddd4] bg-white p-4 shadow-sm">
-          <p className="text-sm text-zinc-700">AI 根据这些灵感笔记，总结出「{item.title}」这个灵感要点。</p>
+          <p className="text-sm text-zinc-700">
+            AI 根据以下 {sourcePosts.length} 篇笔记，在兴趣方向「{category.title}」下整理出「{item.title}」。
+          </p>
           <p className="mt-2 text-xs text-zinc-500">关联笔记 {sourcePosts.length} 篇</p>
         </div>
       </section>

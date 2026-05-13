@@ -21,8 +21,8 @@ export function saveGeneratedHeartBoard(weekId: string, postIds: string[], heart
 }
 
 /**
- * 读取本周已生成的灵感板缓存。
- * - 不传 `postIds`：不校验帖子列表，点亮/取消后仍沿用上次生成结果，直至再次「用 AI 生成」。
+ * 读取本周已生成的爪印整理缓存。
+ * - 不传 `postIds`：不校验帖子列表，留爪/取消后仍沿用上次生成结果，直至再次「整理本周爪印」。
  * - 传入 `postIds`：仅在列表与缓存写入时一致时返回（旧行为，供需要严格对齐的场景）。
  */
 export function loadGeneratedHeartBoard(weekId: string, postIds?: string[]): HeartBoard | null {

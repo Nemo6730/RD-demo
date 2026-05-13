@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { PawPrint } from "lucide-react";
 import {
   isPostEligibleForWeeklyInspiration,
   isPostHearted,
@@ -42,10 +43,10 @@ export function HeartButton({ postId, defaultHearted = false, onStateChange }: H
         type="button"
         disabled
         className="inline-flex cursor-not-allowed items-center gap-1 text-sm text-zinc-300"
-        aria-label="该笔记不参与本周灵感"
+        aria-label="该笔记不参与本周爪印"
       >
-        <span className="text-base leading-none">✨</span>
-        <span className="text-xs">灵感</span>
+        <PawPrint className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden />
+        <span className="text-xs">留个爪</span>
       </button>
     );
   }
@@ -57,10 +58,15 @@ export function HeartButton({ postId, defaultHearted = false, onStateChange }: H
       className={`inline-flex items-center gap-1 text-sm transition-transform active:scale-95 ${
         hearted ? "text-[var(--xhs-red)]" : "text-zinc-400"
       }`}
-      aria-label={hearted ? "已加灵感" : "加灵感"}
+      aria-label={hearted ? "已留爪" : "留个爪"}
     >
-      <span className="text-base leading-none">✨</span>
-      <span className="text-xs">{hearted ? "已加灵感" : "加灵感"}</span>
+      <PawPrint
+        className={`h-4 w-4 shrink-0 transition-transform duration-150 ease-out ${hearted ? "scale-[1.05]" : ""}`}
+        strokeWidth={2}
+        fill={hearted ? "currentColor" : "none"}
+        aria-hidden
+      />
+      <span className="text-xs">{hearted ? "已留爪" : "留个爪"}</span>
     </button>
   );
 }

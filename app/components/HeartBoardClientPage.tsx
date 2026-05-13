@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { PawPrint } from "lucide-react";
 import { HeartBoardCard } from "@/app/components/HeartBoardCard";
 import { HEART_BOARD_CARD_THEMES } from "@/lib/heartBoardCardThemes";
 import { getHeartedPostsByWeek } from "@/data/mockPosts";
@@ -10,7 +11,7 @@ import { getActiveHeartboardPosts } from "@/data/testDatasets";
 import type { HeartBoard, HeartBoardCategory } from "@/data/mockHeartBoard";
 import { generateMockHeartBoardFromPosts } from "@/lib/generateHeartBoard";
 import { clearGeneratedHeartBoard, loadGeneratedHeartBoard, saveGeneratedHeartBoard } from "@/lib/heartBoardCache";
-import { getCurrentWeekId, getMergedHeartedPosts } from "@/lib/heartStorage";
+import { formatWeekRangeCompact, getCurrentWeekId, getMergedHeartedPosts } from "@/lib/heartStorage";
 import { useStepGuide } from "@/components/StepGuide";
 
 const CARD_SWITCH_OUT_DISTANCE = 360;
@@ -45,6 +46,10 @@ export function HeartBoardClientPage() {
   const liveHeartedPostIds = useMemo(() => new Set(heartedPosts.map((p) => p.id)), [heartedPosts]);
   const fallbackHeartBoard = useMemo(() => generateMockHeartBoardFromPosts(heartedPosts, weekId), [heartedPosts, weekId]);
   const [heartBoard, setHeartBoard] = useState<HeartBoard>(fallbackHeartBoard);
+  const hasCachedDeckForButton = useMemo(() => {
+    if (!hydrated || typeof window === "undefined") return false;
+    return loadGeneratedHeartBoard(weekId) != null;
+  }, [hydrated, weekId, heartedPosts.length, aiDeckVisible]);
 
   useEffect(() => {
     if (!hydrated) return;
@@ -222,6 +227,7 @@ export function HeartBoardClientPage() {
   };
 
   const activeDeckTheme = HEART_BOARD_CARD_THEMES[activeOriginalIndex % HEART_BOARD_CARD_THEMES.length];
+  const weekRangeCompact = useMemo(() => formatWeekRangeCompact(weekId), [weekId]);
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[linear-gradient(180deg,#fff8f4_0%,#fff5f7_48%,#fffaf6_100%)] pb-8">
@@ -266,12 +272,12 @@ export function HeartBoardClientPage() {
           </div>
         </div>
 
-        <div className="relative z-10 mx-auto mt-7 max-w-md text-center">
-          <h1 className="text-[1.375rem] font-semibold leading-snug tracking-tight text-zinc-900 sm:text-2xl sm:leading-tight">
-            本周灵感
+        <div className="relative z-10 mx-auto mt-7 w-full max-w-md text-center">
+          <h1 className="text-center text-[1.375rem] font-semibold leading-snug tracking-tight text-zinc-900 sm:text-2xl sm:leading-tight">
+            {weekRangeCompact ? `${weekRangeCompact} 本周爪印` : "本周爪印"}
           </h1>
-          <p className="mx-auto mt-2.5 max-w-[18rem] text-[13px] font-normal leading-relaxed text-zinc-600">
-            根据你本周点亮的内容生成
+          <p className="mx-auto mt-2.5 max-w-[18rem] text-center text-[13px] font-normal leading-relaxed text-zinc-600">
+            别让这些想法溜走......
           </p>
         </div>
       </header>
@@ -298,19 +304,19 @@ export function HeartBoardClientPage() {
           />
 
           <p className="relative text-[15px] font-semibold leading-snug text-[#3f302c]">
-            本周你点亮了{" "}
+            本周你总共留下了{" "}
             <span
               className="text-[19px] font-black transition-[color] duration-[250ms] ease-out"
               style={{ color: activeDeckTheme.accent }}
             >
               {heartedPosts.length}
             </span>{" "}
-            条灵感
+            个爪印
           </p>
           <p className="relative mt-2 text-[11px] leading-relaxed text-[#6d5a52]">
             {aiDeckVisible ? (
               <>
-                AI 整理出{" "}
+                AI 为你整理出{" "}
                 <span
                   className="font-bold transition-[color] duration-[250ms] ease-out"
                   style={{ color: activeDeckTheme.accent }}
@@ -320,7 +326,7 @@ export function HeartBoardClientPage() {
                 个兴趣方向
               </>
             ) : (
-              <>点击「用 AI 生成」后将展示兴趣方向</>
+              <>点击「整理本周爪印」后将展示兴趣方向</>
             )}
           </p>
           <button
@@ -340,7 +346,11 @@ export function HeartBoardClientPage() {
             <span className="transition-[color] duration-[250ms] ease-out" style={{ color: "inherit" }}>
               ↻
             </span>
-            {isRegenerating ? "AI 正在整理..." : "用 AI 生成"}
+            {isRegenerating
+              ? "AI 正在整理本周爪印..."
+              : hasCachedDeckForButton
+                ? "重新整理爪印"
+                : "整理本周爪印"}
           </button>
         </div>
       </section>
@@ -348,9 +358,9 @@ export function HeartBoardClientPage() {
       {heartedPosts.length === 0 ? (
         <section className="px-4 pt-2">
           <div className="rounded-3xl border border-[#f1dfd7] bg-white px-5 py-7 text-center">
-            <h2 className="text-lg font-semibold text-zinc-900">本周还没有灵感内容</h2>
+            <h2 className="text-lg font-semibold text-zinc-900">本周还没有爪印</h2>
             <p className="mt-2 text-sm leading-6 text-zinc-600">
-              去发现页点亮几篇灵感笔记，AI 会在这里帮你整理进本周灵感。
+              看到想试、想去、想学、想改变的瞬间，就留个爪。AI 会在这里帮你整理成本周爪印。
             </p>
             <Link
               href="/"
@@ -384,26 +394,12 @@ export function HeartBoardClientPage() {
                 className="pointer-events-none shrink-0 -translate-x-1.5 -translate-y-1 transition-colors duration-300 ease-out"
                 style={{ color: activeDeckTheme.accent }}
               >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  className="opacity-[0.9]"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                <PawPrint className="h-5 w-5 opacity-90" strokeWidth={1.75} aria-hidden />
               </span>
 
               <div className="min-w-0 shrink text-center">
                 <p className="text-[12px] font-normal leading-relaxed tracking-[0.03em] text-[#6b5d56]">
-                  左右拉动寻找更多灵感
+                  点击卡片扒拉更多爪印
                 </p>
                 <span
                   className="mx-auto mt-2 block h-0.5 w-10 rounded-full opacity-[0.4] transition-colors duration-300 ease-out"

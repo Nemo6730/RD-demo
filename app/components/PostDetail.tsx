@@ -160,10 +160,10 @@ export function PostDetail({ post, backHref }: PostDetailProps) {
                   defaultHearted={post.isHearted}
                   onStateChange={(next) => {
                     if (next) {
-                      setToastMessage("已加入本周灵感，AI 将自动帮你整理");
+                      setToastMessage("已加入本周爪印，AI 会帮你整理");
                       notifyHeartLitForGuide();
                     } else {
-                      setToastMessage("已从本周灵感移除");
+                      setToastMessage("已从本周爪印移除");
                     }
                   }}
                 />

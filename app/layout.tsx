@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "本周灵感 Demo",
-  description: "小红书风格移动端本周灵感演示",
+  title: "本周爪印 Demo",
+  description: "小红书风格移动端本周爪印演示",
 };
 
 export default function RootLayout({

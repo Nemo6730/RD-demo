@@ -26,7 +26,7 @@ export function HeartBoardCategoryClientPage({ categoryId }: HeartBoardCategoryC
     return (
       <main className="min-h-screen bg-[#f8f5f3] p-4">
         <div className="rounded-3xl border border-[#f1dfd7] bg-white px-5 py-7 text-center">
-          <p className="text-sm text-zinc-600">正在同步本周灵感内容...</p>
+          <p className="text-sm text-zinc-600">正在同步本周爪印内容...</p>
         </div>
       </main>
     );
@@ -43,13 +43,13 @@ export function HeartBoardCategoryClientPage({ categoryId }: HeartBoardCategoryC
     return (
       <main className="min-h-screen bg-[#f8f5f3] p-4">
         <div className="rounded-3xl border border-[#f1dfd7] bg-white px-5 py-7 text-center">
-          <h1 className="text-lg font-semibold text-zinc-900">本周暂无该分类灵感内容</h1>
-          <p className="mt-2 text-sm leading-6 text-zinc-600">去点亮更多内容后，这里会自动更新分类详情。</p>
+          <h1 className="text-lg font-semibold text-zinc-900">本周暂无该分类爪印内容</h1>
+          <p className="mt-2 text-sm leading-6 text-zinc-600">多留几个爪后，这里会自动更新分类详情。</p>
           <Link
             href="/heart-board"
             className="mt-5 inline-flex rounded-full bg-[var(--xhs-red)] px-4 py-2 text-sm font-medium text-white"
           >
-            返回本周灵感
+            返回本周爪印
           </Link>
         </div>
       </main>

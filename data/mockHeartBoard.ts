@@ -165,7 +165,7 @@ export const mockHeartBoard: HeartBoard = {
             "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
           mentionCount: 10,
           keywords: ["短途", "海边", "拍照"],
-          summary: "本周灵感内容偏向短途放松和海岸线景色，出片率高。",
+          summary: "本周爪印内容偏向短途放松和海岸线景色，出片率高。",
           reminder: "部分停车点紧张，建议提前规划。",
           sourcePostIds: ["post_travel_01", "post_travel_03"],
         },
@@ -198,7 +198,7 @@ export const mockHeartBoard: HeartBoard = {
     {
       id: "cat_ai_tools",
       slug: "ai-tools",
-      title: "AI 工具灵感",
+      title: "AI 工具爪印",
       type: "tool",
       coverImage:
         "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1000&q=80",
@@ -249,12 +249,12 @@ export const mockHeartBoard: HeartBoard = {
     {
       id: "cat_lifestyle",
       slug: "lifestyle",
-      title: "生活方式灵感",
+      title: "生活方式爪印",
       type: "lifestyle",
       coverImage:
         "https://images.unsplash.com/photo-1493666438817-866a91353ca9?auto=format&fit=crop&w=1000&q=80",
       postCount: 16,
-      insight: "本周生活类灵感更偏向恢复状态、整理生活和建立轻量计划。",
+      insight: "本周生活类爪印更偏向恢复状态、整理生活和建立轻量计划。",
       keywords: ["松弛感", "整理", "效率"],
       commentSummary: ["先做一点点", "不要过载", "恢复优先"],
       sourcePostIds: ["post_lifestyle_01", "post_lifestyle_03", "post_lifestyle_05"],

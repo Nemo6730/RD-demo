@@ -13,15 +13,7 @@ export function HeartBoardEntry() {
         </div>
         <div className="mt-2.5 flex items-center justify-between gap-3">
           <p className="heartboard-subtitle min-w-0 text-[13px] font-medium leading-5 text-zinc-700">
-            把本周
-            <span className="mx-0.5 bg-gradient-to-r from-[#ff2442] to-[#f59ab0] bg-clip-text font-semibold text-transparent">
-              点亮
-            </span>
-            过的
-            <span className="mx-0.5 bg-gradient-to-r from-[#ff2442] to-[#f59ab0] bg-clip-text font-semibold text-transparent">
-              灵感
-            </span>
-            整理好了
+            本周留下的爪印已帮你整理好
             <span className="ml-1 align-[1px] text-[10px] text-[var(--xhs-red)]">✦</span>
           </p>
           <Link
@@ -29,7 +21,7 @@ export function HeartBoardEntry() {
             className="shrink-0 rounded-full bg-[var(--xhs-red)] px-4 py-2 text-xs font-semibold text-white shadow-[0_6px_14px_rgba(255,36,66,0.24)] transition active:scale-95"
             data-step-guide="4"
           >
-            查看本周灵感
+            查看本周爪印
           </Link>
         </div>
       </div>

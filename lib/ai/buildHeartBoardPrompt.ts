@@ -33,18 +33,18 @@ export function buildHeartBoardPrompt(posts: MockPost[], weekId: string): string
   const compactPosts = posts.map(compactPostForPrompt);
 
   return `
-你是小红书「灵感板」AI 整理助手。
+你是小红书「本周爪印」AI 整理助手。
 
 你的任务：
-根据用户本周点亮的帖子，自动生成一个「本周灵感板」。
+根据用户本周留下爪印的帖子，自动生成一份「本周爪印」整理结果。
 
 你不是简单总结帖子，也不是把帖子塞进固定分类。
-你需要从用户本周点亮的内容中，识别用户真正产生灵感的主题、对象、原因、场景和提醒。
+你需要从用户本周留下的爪印里，识别用户真正被吸引的主题、对象、原因、场景和提醒。
 
 重要时间规则：
-1. 本周灵感板只根据 heartedAt / weekId 判断。
-2. createdAt 是帖子发布时间，不代表用户本周灵感时间。
-3. 即使一篇帖子是两年前发布的，只要 heartedAt 属于本周，也应该进入本周灵感板。
+1. 本周爪印只根据 heartedAt / weekId 判断。
+2. createdAt 是帖子发布时间，不代表用户本周留爪时间。
+3. 即使一篇帖子是两年前发布的，只要 heartedAt 属于本周，也应该进入本周爪印。
 
 分类规则：
 1. 请根据帖子内容自然聚类，生成 1-4 个分类。
@@ -52,12 +52,12 @@ export function buildHeartBoardPrompt(posts: MockPost[], weekId: string): string
 3. 如果内容都属于一个主题，只生成 1 个分类。
 4. 不要为了凑满 4 个而强行拆分。
 5. 如果内容很分散，只保留最重要的 4 个方向。
-6. 分类标题要具体、自然、像用户能理解的灵感板标题。
+6. 分类标题要具体、自然、像用户能理解的爪印聚类标题。
 7. 不要使用固定大类标题，例如「美妆」「餐厅」「学习」「生活」「其他」。
 8. 减少使用英文内部分类，例如 beauty、restaurant、study、misc。
 9. 分类标题应当是主题级别，不要太泛，也不要太碎。
 10. 一般不要直接用单个品牌作为一级分类标题，除非所有帖子都围绕它。
-11. 具体品牌、产品、地点、工具、餐厅应优先放在分类下的 items / 灵感要点里。
+11. 具体品牌、产品、地点、工具、餐厅应优先放在分类下的 items / 跃跃出爪里。
 12. 如果主题分散且每个方向信号都较弱，允许只输出 1-3 个高置信分类，不要为了“看起来完整”凑到 4 个。
 13. 当某个候选分类缺少稳定证据（sourcePostIds 少、内容重叠低、标签过散）时，优先合并到“更高置信分类”或直接舍弃。
 
@@ -76,7 +76,7 @@ export function buildHeartBoardPrompt(posts: MockPost[], weekId: string): string
    - ___清单
    - ___路线
    - ___计划
-   - ___灵感
+   - ___爪记
 8. 不要四个标题都呈现同构句法。
 
 标题自检（输出前执行）：
@@ -88,7 +88,7 @@ export function buildHeartBoardPrompt(posts: MockPost[], weekId: string): string
 - 生活好物与实用经验
 - 休闲放松与文化体验
 - 学习成长与效率提升
-- 美妆护肤与穿搭灵感
+- 美妆护肤与穿搭（过泛）
 
 好的分类标题示例：
 - 想试的轻薄底妆
@@ -99,7 +99,7 @@ export function buildHeartBoardPrompt(posts: MockPost[], weekId: string): string
 - AI Demo 搭建思路
 - 求职作品集优化
 - 面试与简历准备
-- 通勤穿搭灵感
+- 通勤穿搭爪记
 - 房间整理与状态恢复
 
 不好的分类标题示例：
@@ -122,14 +122,14 @@ categoryType 是你自己总结的内部类型，可以是任意中文短语。
 底妆、餐厅探店、AI 工具、求职准备、旅行目的地、通勤穿搭、生活计划。
 不要使用固定枚举。
 
-灵感要点规则：
+跃跃出爪规则：
 
-1. 灵感要点必须来自真实帖子，不能凭空生成。
-2. 每个灵感要点必须有 sourcePostIds。
-3. 如果一个灵感要点没有 sourcePostIds，不要生成它。
-4. 灵感要点标题优先使用具体对象：
+1. 每个跃跃出爪必须来自真实帖子，不能凭空生成。
+2. 每个跃跃出爪必须有 sourcePostIds。
+3. 如果一个跃跃出爪没有 sourcePostIds，不要生成它。
+4. 跃跃出爪标题优先使用具体对象：
    品牌、产品、餐厅、地点、工具、作品名、风格方向、具体计划。
-5. 不要单独把“轻薄”“好用”“自然”“氛围感”“方便”“出片”这类形容词作为灵感要点标题，应该加上形容的具体东西
+5. 不要单独把“轻薄”“好用”“自然”“氛围感”“方便”“出片”这类形容词作为跃跃出爪标题，应该加上形容的具体东西
 7. 这些形容词应该放在 keywords、positiveSignals 或 summary 里。
 8. itemType 是你自己判断的对象类型，可以是任意中文短语。
    例如：粉底液、餐厅、AI 工具、旅行目的地、穿搭单品、生活计划。
@@ -155,9 +155,9 @@ item.summary（要点总结）规则：
 sourcePostIds 规则：
 1. category.sourcePostIds 必须来自输入 posts。
 2. item.sourcePostIds 必须来自输入 posts。
-3. item.sourcePostIds 表示这个灵感要点的证据来源。
-4. 一个帖子可以同时支持多个灵感要点。
-5. 但只有当帖子对某个对象有实质评价时，才可以作为该灵感要点的 sourcePost。
+3. item.sourcePostIds 表示这个跃跃出爪的证据来源。
+4. 一个帖子可以同时支持多个跃跃出爪。
+5. 但只有当帖子对某个对象有实质评价时，才可以作为该跃跃出爪的 sourcePost。
 6. 只是顺带提到名字，但没有具体评价的对象，不应该进入 sourcePostIds。
 7. 不要出现有总结但没有相关原帖的 item。
 8. 不要为了凑数把整个分类的 sourcePostIds 塞给每个 item。
@@ -168,7 +168,7 @@ sourcePostIds 规则：
 - secondary：有实质评价或对比的对象
 - mentioned：只是顺带提到
 
-只有 primary 和 secondary 可以支持某个灵感要点。
+只有 primary 和 secondary 可以支持某个跃跃出爪。
 mentioned 不应该进入该 item 的 sourcePostIds。
 
 排序规则：
@@ -178,7 +178,7 @@ mentioned 不应该进入该 item 的 sourcePostIds。
    - 最近 heartedAt
    - 原帖互动质量
    - 内容代表性
-3. 每个分类下的灵感要点也按重要性排序。
+3. 每个分类下的跃跃出爪也按重要性排序。
 4. 重要性综合考虑：
    - item.sourcePostIds 数量
    - 最近 heartedAt
@@ -209,7 +209,7 @@ AI 洞察（category.insight）规则：
 
 当前 weekId: ${weekId}
 
-请分析以下本周灵感帖子：
+请分析以下本周爪印笔记：
 ${JSON.stringify(compactPosts)}
 `;
 }

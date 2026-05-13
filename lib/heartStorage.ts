@@ -9,7 +9,7 @@ export type HeartAction = {
   weekId: string;
 };
 
-/** 不参与「本周灵感」的帖子（不可点亮、不计入统计与 AI 素材）。 */
+/** 不参与「本周爪印」的帖子（不可留爪、不计入统计与 AI 素材）。 */
 const INSPIRATION_EXCLUDED_POST_IDS = new Set<string>(["post_profile_guess_01"]);
 
 export function isPostEligibleForWeeklyInspiration(postId: string): boolean {
@@ -70,24 +70,19 @@ export function getCurrentWeekId(date = new Date()): string {
   return `${utcDate.getUTCFullYear()}-W${String(weekNo).padStart(2, "0")}`;
 }
 
-function pad2(n: number): string {
-  return String(n).padStart(2, "0");
-}
-
-function formatLocalYmd(d: Date): string {
-  return `${d.getFullYear()}/${pad2(d.getMonth() + 1)}/${pad2(d.getDate())}`;
+function formatCompactLocalMd(d: Date): string {
+  return `${d.getMonth() + 1}.${d.getDate()}`;
 }
 
 /**
- * 导航等展示：`2026/05/04-2026/05/10 灵感积累`。
- * 按 `getCurrentWeekId` 遍历本地日历日，取同属该 weekId 的最小、最大日期。
+ * 周起止短格式，如 `5.11 - 5.17`；无法从 weekId 推算时返回 null。
  */
-export function formatWeekRangeNavLabel(weekId: string): string {
+export function formatWeekRangeCompact(weekId: string): string | null {
   const m = /^(\d{4})-W(\d{1,2})$/.exec(weekId.trim());
-  if (!m) return "本周 灵感积累";
+  if (!m) return null;
 
   const y = parseInt(m[1], 10);
-  if (!Number.isFinite(y)) return "本周 灵感积累";
+  if (!Number.isFinite(y)) return null;
 
   let minD: Date | null = null;
   let maxD: Date | null = null;
@@ -106,8 +101,17 @@ export function formatWeekRangeNavLabel(weekId: string): string {
   considerYear(y);
   considerYear(y + 1);
 
-  if (!minD || !maxD) return "本周 灵感积累";
-  return `${formatLocalYmd(minD)}-${formatLocalYmd(maxD)} 灵感积累`;
+  if (!minD || !maxD) return null;
+  return `${formatCompactLocalMd(minD)} - ${formatCompactLocalMd(maxD)}`;
+}
+
+/**
+ * 分类详情顶栏（示例）：`5.11 - 5.17 留痕瞬间`（与 `formatWeekRangeCompact` 同一套日期）。
+ */
+export function formatWeekRangeNavLabel(weekId: string): string {
+  const compact = formatWeekRangeCompact(weekId);
+  if (!compact) return "本周 留痕瞬间";
+  return `${compact} 留痕瞬间`;
 }
 
 export function getHeartActions(): HeartAction[] {

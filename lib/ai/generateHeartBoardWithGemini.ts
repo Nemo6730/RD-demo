@@ -37,7 +37,7 @@ function sanitizeAIHeartBoard(board: AIHeartBoard, inputPosts: MockPost[], weekI
           return {
             ...item,
             id: item.id || `${slugify(item.title || "item")}-${itemIndex}`,
-            itemType: item.itemType || "灵感要点",
+            itemType: item.itemType || "跃跃出爪",
             sourcePostIds: itemSourcePostIds,
             keywords: (item.keywords ?? []).slice(0, 4),
             positiveSignals: item.positiveSignals ?? [],
@@ -56,7 +56,7 @@ function sanitizeAIHeartBoard(board: AIHeartBoard, inputPosts: MockPost[], weekI
         ...category,
         id: category.id || `category-${categoryIndex}`,
         slug: category.slug || slugify(category.title || `category-${categoryIndex}`),
-        categoryType: category.categoryType || "灵感主题",
+        categoryType: category.categoryType || "回溯主题",
         coverPostId: fallbackCoverPostId,
         sourcePostIds: categorySourcePostIds,
         keywords: (category.keywords ?? []).slice(0, 3),

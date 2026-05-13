@@ -61,7 +61,7 @@ const CATEGORY_META: Record<
     slug: "travel",
     title: "海边和短途旅行",
     type: "destination",
-    insight: "这周你的灵感路线以周末短途和风景点位为主。",
+    insight: "这周你的留爪路线以周末短途和风景点位为主。",
     fallbackKeyword: "周末短途",
   },
   study: {
@@ -77,16 +77,16 @@ const CATEGORY_META: Record<
     slug: "lifestyle",
     title: "通勤穿搭与生活状态",
     type: "style",
-    insight: "你本周的灵感内容聚焦在穿搭舒适度、恢复状态和轻量生活调整。",
+    insight: "你本周的爪印内容更聚焦在穿搭舒适度、恢复状态和轻量生活调整。",
     fallbackKeyword: "状态恢复",
   },
   misc: {
     id: "cat_misc",
     slug: "misc",
-    title: "零碎灵感收藏",
+    title: "零碎爪印收藏",
     type: "other",
-    insight: "这些零碎收藏记录了你当周的即时兴趣和灵感。",
-    fallbackKeyword: "灵感碎片",
+    insight: "这些零碎收藏记录了你当周的即时兴趣与被戳中的瞬间。",
+    fallbackKeyword: "爪印碎片",
   },
 };
 
@@ -419,7 +419,7 @@ function buildMockItemSummary(
   const scn = meta ? [...meta.scenes].slice(0, 2) : [];
   const risks = meta ? [...meta.riskSignals].slice(0, 2) : [];
 
-  const breadth = postCount > 1 ? "几条点亮内容从不同侧面给了可对照的评价" : "点亮内容里对这一点有直接可读的描述";
+  const breadth = postCount > 1 ? "几条留爪笔记从不同侧面给了可对照的评价" : "留爪笔记里对这一点有直接可读的描述";
   let text = `围绕「${focusLabel}」，${breadth}，能拼出更完整的印象。`;
   const detailBits: string[] = [];
   if (kwShow.length > 0) {
@@ -615,7 +615,7 @@ function generateItemsFromCategoryPosts(
       latestHeartedAt: categoryPosts[0]?.heartedAt,
       priorityScore: 60,
       keywords: category.keywords,
-      summary: "AI 根据这些笔记整理出本类灵感内容。",
+      summary: "AI 根据这些笔记整理出本类爪印内容。",
       reminder: "建议先从最容易落地的一篇开始。",
       sourcePostIds: categoryPosts.map((post) => post.id),
     },
@@ -672,12 +672,12 @@ export function generateMockHeartBoardFromPosts(posts: MockPost[], weekId: strin
         category.items = [
           {
             id: `${category.slug}-collection`,
-            title: "本类灵感合集",
+            title: "本类爪印合集",
             type: category.type,
             image: category.coverImage,
             mentionCount: category.sourcePostIds.length,
             keywords: category.keywords,
-            summary: "AI 根据这些笔记整理出本类灵感内容。",
+            summary: "AI 根据这些笔记整理出本类爪印内容。",
             sourcePostIds: category.sourcePostIds,
           },
         ];
@@ -701,24 +701,24 @@ export function generateMockHeartBoardFromPosts(posts: MockPost[], weekId: strin
     totalHeartCount: heartedPostsThisWeek.length,
     summary:
       heartedPostsThisWeek.length > 0
-        ? "这里汇总了你本周点亮的内容，后续会升级为 AI 自动聚类与总结。"
-        : "本周还没有灵感内容，去发现页点亮几篇后再回来看看。",
+        ? "这里汇总了你本周留下的爪印，后续会升级为 AI 自动聚类与总结。"
+        : "本周还没有爪印，去发现页多留几个爪后再回来看看。",
     categories,
   };
 }
 
 export function buildEntityExtractionPrompt(posts: MockPost[]): string {
   return `
-你需要逐篇分析用户本周点亮的帖子。
+你需要逐篇分析用户本周留下爪印的帖子。
 同一篇帖子可以提到多个对象。
 请为每个对象判断 role：
 - primary：主要讨论对象
 - secondary：有实质评价的对比对象
 - mentioned：只是顺带提到
 
-只有 primary 和 secondary 能支持灵感要点。
+只有 primary 和 secondary 能支持跃跃出爪。
 每个对象需要返回 positiveSignals、riskSignals、scenes、evidence、sourcePostIds。
-不要把只是出现名字但没有评价的对象当作灵感要点。
+不要把只是出现名字但没有评价的对象当作跃跃出爪。
 
 当前分析帖子数：${posts.length}
 `;

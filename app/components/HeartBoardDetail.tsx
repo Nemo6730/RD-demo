@@ -11,7 +11,7 @@ type HeartBoardDetailProps = {
   category: HeartBoardCategory;
   /** heartBoard.categories 中的稳定下标，与滑动排序无关 */
   themeIndex: number;
-  /** 顶栏副标题，如 `2026/05/04-2026/05/10 灵感积累` */
+  /** 顶栏副标题，如 `5.11 - 5.17 留痕瞬间` */
   weekNavLabel: string;
   /** 与分类 `sourcePostIds` 求交，「本周积累」随点亮实时变化 */
   liveHeartedPostIds?: ReadonlySet<string>;
@@ -106,7 +106,7 @@ export function HeartBoardDetail({
               {category.title}
             </h1>
             <p className="text-sm font-semibold" style={{ color: theme.accent }}>
-              本周积累 {accumulationCount} 篇
+              本周标记 {accumulationCount} 个爪印
             </p>
             <div
               className="rounded-2xl p-3"
@@ -125,8 +125,8 @@ export function HeartBoardDetail({
       </section>
 
       <section className="space-y-3 px-4 pt-5">
-        <h2 className="text-lg font-semibold text-zinc-900">灵感要点</h2>
-        {visibleItems.map((item) => {
+        <h2 className="text-lg font-semibold text-zinc-900">出爪要点</h2>
+        {visibleItems.map((item, itemIndex) => {
           const liveSourceCount = getLiveItemSourcePostCount(item, liveHeartedPostIds);
           const liveMentionCount = getLiveItemMentionCount(item, liveHeartedPostIds);
           return (
@@ -177,6 +177,7 @@ export function HeartBoardDetail({
                 href={`/heart-board/${category.slug}/sources/${item.id}`}
                 className="inline-flex text-sm font-medium transition hover:opacity-85"
                 style={{ color: theme.accent }}
+                {...(itemIndex === 0 ? { "data-step-guide": "7" as const } : {})}
               >
                 相关原帖 {liveSourceCount} 篇
               </Link>
