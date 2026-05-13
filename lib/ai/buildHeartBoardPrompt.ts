@@ -198,7 +198,7 @@ AI 洞察（category.insight）规则：
 1. 必须输出 JSON。
 2. 必须符合 response schema。
 3. 不要输出解释性文字。
-4. 根对象字段输出顺序：先输出完整的 categories 数组，再输出 id、weekId、weekRange、totalHeartCount、summary（便于流式展示）。
+4. 根对象字段输出顺序：先输出完整的 categories 数组，再输出 id、weekId、weekRange、totalHeartCount、summary。
 5. categories 最多 4 个。
 6. categories 不要求固定为 4 个，1-3 个是可接受且推荐的（当信号分散时）。
 7. 每个 category 的 items 最多 3 个。

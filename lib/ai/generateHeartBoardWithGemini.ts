@@ -1,10 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import type { MockPost } from "@/data/mockPosts";
 import { buildHeartBoardPrompt } from "@/lib/ai/buildHeartBoardPrompt";
-import {
-  appendStreamText,
-  extractCompleteCategoryObjects,
-} from "@/lib/ai/extractPartialCategoriesFromJsonBuffer";
 import { heartBoardResponseSchema, type AIHeartBoard } from "@/lib/ai/heartBoardSchema";
 
 function slugify(text: string): string {
@@ -114,61 +110,4 @@ export async function generateHeartBoardWithGemini(posts: MockPost[], weekId: st
 
   const parsed = JSON.parse(text) as AIHeartBoard;
   return sanitizeAIHeartBoard(parsed, posts, weekId);
-}
-
-export type HeartBoardGeminiStreamEvent =
-  | { kind: "partial"; board: AIHeartBoard }
-  | { kind: "final"; board: AIHeartBoard };
-
-export async function* generateHeartBoardWithGeminiStream(
-  posts: MockPost[],
-  weekId: string,
-): AsyncGenerator<HeartBoardGeminiStreamEvent> {
-  const { ai, model } = getGeminiClientAndModel();
-  const prompt = buildHeartBoardPrompt(posts, weekId);
-
-  const stream = await ai.models.generateContentStream({
-    model,
-    contents: prompt,
-    config: heartBoardGeminiConfig,
-  });
-
-  let accumulated = "";
-  let lastEmittedCategoryCount = 0;
-
-  for await (const chunk of stream) {
-    const piece = chunk.text ?? "";
-    accumulated = appendStreamText(accumulated, piece);
-
-    const cats = extractCompleteCategoryObjects(accumulated);
-    if (cats.length > lastEmittedCategoryCount) {
-      lastEmittedCategoryCount = cats.length;
-      const provisional: AIHeartBoard = {
-        id: `heart-board-${weekId}`,
-        weekId,
-        weekRange: weekId,
-        totalHeartCount: posts.length,
-        summary: "正在整理…",
-        categories: cats,
-      };
-      yield { kind: "partial", board: sanitizeAIHeartBoard(provisional, posts, weekId) };
-    }
-  }
-
-  let finalParsed: AIHeartBoard;
-  try {
-    finalParsed = JSON.parse(accumulated.trim()) as AIHeartBoard;
-  } catch {
-    const cats = extractCompleteCategoryObjects(accumulated);
-    finalParsed = {
-      id: `heart-board-${weekId}`,
-      weekId,
-      weekRange: weekId,
-      totalHeartCount: posts.length,
-      summary: "",
-      categories: cats,
-    };
-  }
-
-  yield { kind: "final", board: sanitizeAIHeartBoard(finalParsed, posts, weekId) };
 }

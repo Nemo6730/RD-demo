@@ -33,7 +33,6 @@ export function HeartBoardClientPage() {
   const [expandedInsightCardId, setExpandedInsightCardId] = useState<string | null>(null);
   const dragXRef = useRef(0);
   const switchCardTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const streamGuideAdvancedRef = useRef(false);
 
   useEffect(() => {
     setHydrated(true);
@@ -66,7 +65,6 @@ export function HeartBoardClientPage() {
     notifyAiGenerateStartedForGuide();
     setExpandedInsightCardId(null);
     setCardOrder([]);
-    streamGuideAdvancedRef.current = false;
     setIsRegenerating(true);
     try {
       const response = await fetch("/api/heart-board/generate", {
@@ -77,7 +75,6 @@ export function HeartBoardClientPage() {
         body: JSON.stringify({
           weekId,
           posts: heartedPosts,
-          stream: true,
         }),
       });
 
@@ -85,66 +82,33 @@ export function HeartBoardClientPage() {
         throw new Error(`Failed to regenerate with Gemini (${response.status})`);
       }
 
-      const reader = response.body?.getReader();
-      if (!reader) {
-        throw new Error("No response body");
+      const payload = (await response.json()) as {
+        heartBoard: HeartBoard;
+        usedFallback?: boolean;
+        error?: string;
+      };
+
+      setAiDeckVisible(true);
+      setHeartBoard(payload.heartBoard);
+      saveGeneratedHeartBoard(
+        weekId,
+        heartedPosts.map((post) => post.id),
+        payload.heartBoard,
+      );
+      if (payload.usedFallback) {
+        console.warn("Gemini regeneration used fallback heart board.");
       }
-
-      const decoder = new TextDecoder();
-      let lineBuffer = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        lineBuffer += decoder.decode(value, { stream: true });
-        const lines = lineBuffer.split("\n");
-        lineBuffer = lines.pop() ?? "";
-        for (const line of lines) {
-          const trimmed = line.trim();
-          if (!trimmed) continue;
-          const msg = JSON.parse(trimmed) as
-            | { type: "partial"; heartBoard: HeartBoard }
-            | { type: "done"; heartBoard: HeartBoard; usedFallback?: boolean; error?: string };
-
-          if (msg.type === "partial" && msg.heartBoard.categories.length > 0) {
-            setAiDeckVisible(true);
-            setHeartBoard(msg.heartBoard);
-            if (!streamGuideAdvancedRef.current) {
-              streamGuideAdvancedRef.current = true;
-              notifyAiGenerateFinishedForGuide();
-            }
-          }
-
-          if (msg.type === "done") {
-            setAiDeckVisible(true);
-            setHeartBoard(msg.heartBoard);
-            saveGeneratedHeartBoard(
-              weekId,
-              heartedPosts.map((post) => post.id),
-              msg.heartBoard,
-            );
-            if (msg.usedFallback) {
-              console.warn("Gemini regeneration used fallback heart board.");
-            }
-            if (msg.error) {
-              console.warn("Gemini stream:", msg.error);
-            }
-            if (!streamGuideAdvancedRef.current) {
-              streamGuideAdvancedRef.current = true;
-              notifyAiGenerateFinishedForGuide();
-            }
-          }
-        }
+      if (payload.error) {
+        console.warn("Gemini:", payload.error);
       }
+      notifyAiGenerateFinishedForGuide();
     } catch (error) {
       console.error("Failed to regenerate heart board:", error);
       setHeartBoard(fallbackHeartBoard);
+      notifyAiGenerateFinishedForGuide();
     } finally {
       setIsRegenerating(false);
       setAiDeckVisible(true);
-      if (!streamGuideAdvancedRef.current) {
-        notifyAiGenerateFinishedForGuide();
-      }
     }
   };
 
