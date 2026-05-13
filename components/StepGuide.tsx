@@ -258,8 +258,7 @@ function StepGuideBubble({
       cleanupMeasurement();
       const update = () => {
         if (cancelled) return;
-        const r = target.getBoundingClientRect();
-        setRect(r.width > 0 || r.height > 0 ? r : null);
+        setRect(target.getBoundingClientRect());
       };
       update();
       ro = new ResizeObserver(update);
@@ -281,8 +280,6 @@ function StepGuideBubble({
     const tryAttach = (): boolean => {
       const target = findAnchor();
       if (!target) return false;
-      const r = target.getBoundingClientRect();
-      if (r.width === 0 && r.height === 0) return false;
       attach(target);
       return true;
     };
@@ -315,7 +312,7 @@ function StepGuideBubble({
     }, 100);
     const stopTimer = window.setTimeout(() => {
       if (retryTimer != null) window.clearInterval(retryTimer);
-    }, 4000);
+    }, 10000);
 
     return () => {
       cancelled = true;
@@ -326,7 +323,7 @@ function StepGuideBubble({
     };
   }, [mounted, finished, step, pathname, aiGuideGenerating]);
 
-  if (!mounted || finished || step < 1 || !rect || (rect.width === 0 && rect.height === 0)) return null;
+  if (!mounted || finished || step < 1 || !rect || rect.width === 0) return null;
   if (!isStepAllowedOnPath(step, pathname)) return null;
 
   const label =
